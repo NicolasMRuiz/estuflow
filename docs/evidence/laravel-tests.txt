@@ -1,0 +1,34 @@
+ Container estuflow-redis-1  Running
+ Container estuflow-test-postgres-1  Running
+ Container estuflow-redis-1  Waiting
+ Container estuflow-test-postgres-1  Waiting
+ Container estuflow-test-postgres-1  Healthy
+ Container estuflow-redis-1  Healthy
+
+   PASS  Tests\Feature\AuthenticationTest
+  ✓ registration normalizes email hashes password and regenerates sessi… 0.55s
+  ✓ invalid registration has spanish server errors                       0.02s
+  ✓ duplicate email is rejected after normalization                      0.21s
+  ✓ model also normalizes email outside forms                            0.01s
+  ✓ password confirmation is required                                    0.02s
+  ✓ correct login normalizes email and regenerates session               0.37s
+  ✓ incorrect credentials are rejected without password flashing         0.22s
+  ✓ login rate limit blocks even correct credentials after five failure… 1.23s
+  ✓ anonymous dashboard redirects to login                               0.02s
+  ✓ two accounts only see their own identity even with url input         0.03s
+  ✓ livewire dashboard always reads the authenticated user               0.02s
+  ✓ logout invalidates session regenerates csrf and blocks dashboard     0.02s
+  ✓ logout cannot be performed with get                                  0.02s
+  ✓ guest forms have labels csrf and no unimplemented flows              0.02s
+
+   PASS  Tests\Feature\InvalidInputTest
+  ✓ array email is a validation error for registration                   0.02s
+  ✓ array email is a validation error for login                          0.02s
+
+   PASS  Tests\Feature\TestingSafetyTest
+  ✓ reset guard rejects a development database                           0.01s
+  ✓ reset guard rejects a development host                               0.01s
+  ✓ reset guard rejects non testing environment
+
+  Tests:    19 passed (85 assertions)
+  Duration: 2.88s

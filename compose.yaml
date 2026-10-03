@@ -1,0 +1,115 @@
+name: estuflow
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: docker/app/Dockerfile
+  image: estuflow-app:php8.4
+  working_dir: /app
+  user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+  volumes:
+    - .:/app
+  init: true
+
+services:
+  app:
+    <<: *app
+    ports:
+      - "127.0.0.1:${APP_PORT:-8000}:8000"
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1:8000/up') === false ? 1 : 0);"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  postgres:
+    image: postgres:18-bookworm@sha256:3725f4e2499eef5134592b3b4ab79a543ed7f8e533b05b5b637af926630f6650
+    environment:
+      POSTGRES_DB: "${DB_DATABASE:-estuflow}"
+      POSTGRES_USER: "${DB_USERNAME:-estuflow}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD:?Run scripts/setup.sh first}"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:7.4-bookworm@sha256:c6eabf748fc7a61dbb5a705c78bcf3d6377b1127a97d0ce965c11c44ba46896f
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  node:
+    image: node:22-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c
+    working_dir: /app
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    volumes: [".:/app"]
+    environment: {npm_config_cache: /tmp/npm-cache}
+    profiles: [tools]
+    init: true
+
+  test-postgres:
+    image: postgres:18-bookworm@sha256:3725f4e2499eef5134592b3b4ab79a543ed7f8e533b05b5b637af926630f6650
+    environment:
+      POSTGRES_DB: estuflow_test
+      POSTGRES_USER: estuflow_test
+      POSTGRES_PASSWORD: "${TEST_DB_PASSWORD:?Run scripts/setup.sh first}"
+    volumes: ["test_postgres_data:/var/lib/postgresql"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U estuflow_test -d estuflow_test"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    profiles: [test]
+
+  test-app:
+    <<: *app
+    command: ["php", "artisan", "serve", "--env=testing", "--host=0.0.0.0", "--port=8000"]
+    environment:
+      APP_ENV: testing
+      APP_CONFIG_CACHE: bootstrap/cache/config-testing.php
+      DB_CONNECTION: pgsql
+      DB_HOST: test-postgres
+      DB_DATABASE: estuflow_test
+      DB_USERNAME: estuflow_test
+      DB_PASSWORD: "${TEST_DB_PASSWORD}"
+      CACHE_PREFIX: estuflow_test_cache_
+      REDIS_PREFIX: estuflow_test_
+    depends_on:
+      test-postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1:8000/up') === false ? 1 : 0);"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    profiles: [test]
+
+  browser:
+    build:
+      context: .
+      dockerfile: docker/browser/Dockerfile
+    image: estuflow-browser:node22
+    working_dir: /app
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    volumes: [".:/app"]
+    environment:
+      E2E_BASE_URL: http://test-app:8000
+      E2E_ISOLATED: "1"
+    init: true
+    shm_size: 1gb
+    profiles: [test]
+
+volumes:
+  postgres_data:
+  test_postgres_data:

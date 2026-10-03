@@ -1,0 +1,8 @@
+.git
+.env*
+node_modules
+vendor
+storage/logs
+test-results
+playwright-report
+docker/compose.cloud.yaml

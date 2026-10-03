@@ -1,0 +1,32 @@
+ Container estuflow-postgres-1  Running
+ Container estuflow-redis-1  Running
+ Container estuflow-redis-1  Waiting
+ Container estuflow-postgres-1  Waiting
+ Container estuflow-postgres-1  Healthy
+ Container estuflow-redis-1  Healthy
+ Container estuflow-redis-1  Running
+ Container estuflow-postgres-1  Running
+
+   INFO  Nothing to migrate.
+
+ Container estuflow-redis-1  Running
+ Container estuflow-postgres-1  Running
+PASS: PostgreSQL y tabla de sesiones.
+PASS: escritura/lectura de Redis; solo la clave temporal fue eliminada.
+ Container estuflow-redis-1  Running
+ Container estuflow-postgres-1  Running
+ Container estuflow-app-1  Recreate
+ Container estuflow-app-1  Recreated
+ Container estuflow-redis-1  Waiting
+ Container estuflow-postgres-1  Waiting
+ Container estuflow-redis-1  Healthy
+ Container estuflow-postgres-1  Healthy
+ Container estuflow-app-1  Starting
+ Container estuflow-app-1  Started
+ Container estuflow-redis-1  Waiting
+ Container estuflow-app-1  Waiting
+ Container estuflow-postgres-1  Waiting
+ Container estuflow-postgres-1  Healthy
+ Container estuflow-redis-1  Healthy
+ Container estuflow-app-1  Healthy
+PASS: formulario de login servido con protección CSRF.

@@ -1,0 +1,20 @@
+{
+  "name": "estuflow",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12 <23"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite --host 0.0.0.0",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "@tailwindcss/vite": "4.3.3",
+    "laravel-vite-plugin": "3.0.0",
+    "tailwindcss": "4.3.3",
+    "vite": "8.3.2"
+  }
+}

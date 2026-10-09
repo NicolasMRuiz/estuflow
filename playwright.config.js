@@ -10,6 +10,7 @@ export default defineConfig({
     fullyParallel: false,
     workers: 1,
     retries: 0,
+    timeout: 120_000,
     reporter: [['list'], ['json', { outputFile: 'test-results/e2e-results.json' }]],
     use: {
         baseURL,

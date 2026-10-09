@@ -22,9 +22,9 @@
                 <div class="nav-item pending" aria-disabled="true"><x-icon :name="$icon" size="21" /><span>{{ $label }}</span><span class="soon">Próximo</span></div>
             @endforeach
         </nav>
-        <div class="sidebar-bottom"><div class="sidebar-note"><x-icon name="spark" size="23" /><p>Cada camino es distinto.<br><strong>Este es el tuyo.</strong></p></div><span class="sidebar-version">EstuFlow · Primera entrega</span></div>
+        <div class="sidebar-bottom"><div class="sidebar-note"><x-icon name="spark" size="23" /><p>Cada camino es distinto.<br><strong>Este es el tuyo.</strong></p></div><span class="sidebar-version">EstuFlow · Tu espacio académico</span></div>
     </aside>
-    <main class="dashboard-main" id="contenido">{{ $slot }}</main>
+    <main class="dashboard-main" id="contenido" tabindex="-1">{{ $slot }}</main>
     @livewireScripts
 </body>
 </html>

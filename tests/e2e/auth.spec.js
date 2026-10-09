@@ -71,7 +71,7 @@ test('registro → verificación SMTP → dashboard → recuperación SMTP → n
     await expect(page.getByText('El email o la contraseña no son correctos.', { exact: true })).toHaveCount(1);
     await expect(page.getByLabel('Email', { exact: true })).toHaveAttribute('aria-invalid', 'false');
     await expect(page.getByLabel('Contraseña', { exact: true })).toHaveAttribute('aria-invalid', 'false');
-    await expect(page.getByLabel('Contraseña', { exact: true })).toHaveValue('');
+    expect(await page.getByLabel('Contraseña', { exact: true }).evaluate(input => input.value === '')).toBe(true);
     await login(page, { ...person, password: newPassword });
     await expect.poll(() => new URL(page.url()).pathname).toBe('/dashboard');
     await logout(page);

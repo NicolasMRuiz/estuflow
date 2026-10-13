@@ -131,7 +131,11 @@ services:
   test-worker:
     <<: *test-app
     command: ["php", "artisan", "queue:work", "database", "--env=testing", "--sleep=1", "--tries=3", "--timeout=30", "--backoff=15"]
-    healthcheck: {disable: true}
+    healthcheck:
+      test: ["CMD", "php", "artisan", "environment:check", "--env=testing"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
     depends_on:
       test-postgres: {condition: service_healthy}
       redis: {condition: service_healthy}

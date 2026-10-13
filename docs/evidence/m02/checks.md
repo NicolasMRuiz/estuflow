@@ -30,6 +30,7 @@ Los cuatro recorridos E2E comprueban registro → aviso pendiente → verificaci
 - `artisan serve` descartaba variables de Compose al crear el servidor PHP: se usa `--no-reload` en desarrollo/testing para conservar cola, SMTP y guardas de aislamiento.
 - `MAIL_URL` vacío anulaba el transporte en Laravel: ahora se trata como ausente. Se agregó una regresión que construye SMTP sin enviar a la red.
 - El error general contenía texto oculto de un resumen vacío: sólo se renderiza su contenido cuando hay varios campos inválidos.
+- Compose del runner AMD64 rechazaba esperar un worker sin healthcheck: el servicio comprueba PostgreSQL/sesiones/Redis, y el script detiene los procesos incluso si falla el arranque.
 - Se corrigieron expectativas de tests, aislamiento de contadores, un doble de sesión Socialite y el formato de la nueva regresión. Los resultados de la tabla son los obtenidos después de las correcciones.
 
 ## GitHub Actions
@@ -37,6 +38,8 @@ Los cuatro recorridos E2E comprueban registro → aviso pendiente → verificaci
 Fallo histórico confirmado en [run 37083754713](https://github.com/NicolasMRuiz/estuflow/actions/runs/37083754713): setup, check y PHPUnit PASS; E2E FAIL antes de los recorridos por `chrome_crashpad_handler: --database is required` y salida Chromium SIGTRAP. M02 configura directorios XDG escribibles para el UID del contenedor. Chromium ya inicia y completa E2E localmente; eso no acredita por sí solo un PASS AMD64 remoto.
 
 Las primeras corridas M02 no llegaron a probar la aplicación: [37993590470](https://github.com/NicolasMRuiz/estuflow/actions/runs/37993590470) falló en setup por cuota anónima de Docker Hub; [37993723180](https://github.com/NicolasMRuiz/estuflow/actions/runs/37993723180) aplicó correctamente el mirror, pero falló al descargar PHP por timeout de `auth.docker.io`, exit 125. Check, PHPUnit y E2E quedaron **SKIPPED**, no PASS. El artifact de esa corrida sólo contenía la captura baseline ya existente en Git.
+
+El 13 de octubre, [38406280846](https://github.com/NicolasMRuiz/estuflow/actions/runs/38406280846) sobre `bd42e3e` aprobó setup, check y PHPUnit (75 pruebas / 455 aserciones), pero E2E falló antes de lanzar Chromium: `test-worker has no healthcheck configured`. Se agregó readiness explícito al worker y cleanup ante fallos de arranque; el resultado de la nueva corrida se registra en la PR. El artifact del run fallido contiene las 22 capturas locales ya versionadas, no un recorrido E2E remoto aprobado.
 
 El workflow conserva todos los checks, TLS y digests, configura el caché público soportado por Google en el runner efímero y ejecuta setup → check → PHPUnit → E2E. Publica únicamente PNGs durante 14 días, incluso si falla un paso. El estado remoto del último commit se registra en la [PR en borrador #1](https://github.com/NicolasMRuiz/estuflow/pull/1) y en la entrega final, con enlace a su corrida real. Un PASS local no sustituye ese resultado.
 

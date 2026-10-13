@@ -29,6 +29,13 @@ export async function passwordInput(page, name, value) {
     }, value);
 }
 
+// Only compare booleans so a failed redirect cannot print a token-bearing URL.
+export async function expectPath(page, pathname) {
+    await expect.poll(() => new URL(page.url()).pathname === pathname, {
+        message: 'La navegación debe llegar a la pantalla prevista.',
+    }).toBe(true);
+}
+
 export async function register(page, person = account()) {
     await page.goto('/registro');
     await page.getByLabel('Tu nombre', { exact: true }).fill(person.name);
@@ -36,7 +43,7 @@ export async function register(page, person = account()) {
     await passwordInput(page, 'password', person.password);
     await passwordInput(page, 'password_confirmation', person.password);
     await page.locator('form[action$="/registro"] button[type="submit"]').click();
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/verificar-email');
+    await expectPath(page, '/verificar-email');
     await expect(page.getByRole('heading', { name: 'Verificá tu email.' })).toBeVisible();
     await expect(page.getByText(person.email, { exact: true })).toBeVisible();
     return person;
@@ -51,7 +58,7 @@ export async function login(page, person) {
 
 export async function logout(page) {
     await page.locator('form[action$="/logout"] button[type="submit"]').click();
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/login');
+    await expectPath(page, '/login');
 }
 
 function messageIsFor(message, email) {

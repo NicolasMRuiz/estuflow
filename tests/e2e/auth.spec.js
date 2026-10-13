@@ -2,26 +2,26 @@ import { test, expect } from '@playwright/test';
 import { randomBytes, randomUUID } from 'node:crypto';
 import {
     account, assertNoHorizontalScroll, capturedLink, cleanScreenshot,
-    expectPasswordChangeMail, login, logout, openSecurityLink, passwordInput,
+    expectPasswordChangeMail, expectPath, login, logout, openSecurityLink, passwordInput,
     register, requestRecovery,
 } from './support/auth.js';
 
 test('registro → verificación SMTP → dashboard → recuperación SMTP → nueva contraseña', async ({ page, request, browser }) => {
     const errors = [];
-    page.on('pageerror', error => errors.push(error.message));
+    page.on('pageerror', error => errors.push(error.name));
     const person = await register(page);
     await page.goto('/dashboard');
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/verificar-email');
+    await expectPath(page, '/verificar-email');
     await expect(page.getByRole('button', { name: 'Reenviar enlace' })).toBeDisabled();
     await expect(page.locator('[data-cooldown-message]')).toBeVisible();
     const verification = await capturedLink(request, person.email, '/verificar-email/');
     await logout(page);
     await login(page, person);
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/verificar-email');
+    await expectPath(page, '/verificar-email');
     await logout(page);
     await openSecurityLink(page, verification, '/login');
     await login(page, person);
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/dashboard');
+    await expectPath(page, '/dashboard');
     await expect(page.getByRole('heading', { name: `Hola, ${person.name}.` })).toBeVisible();
     await expect(page.getByText('Sin datos', { exact: true })).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
@@ -41,13 +41,13 @@ test('registro → verificación SMTP → dashboard → recuperación SMTP → n
     await expect(page.getByRole('heading', { name: `Hola, ${person.name}.` })).toBeVisible();
     await logout(page);
     await page.goto('/dashboard');
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/login');
+    await expectPath(page, '/login');
     await login(page, person);
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/dashboard');
+    await expectPath(page, '/dashboard');
     const priorSession = await browser.newContext({ baseURL: 'http://test-app:8000' });
     const priorPage = await priorSession.newPage();
     await login(priorPage, person);
-    await expect.poll(() => new URL(priorPage.url()).pathname).toBe('/dashboard');
+    await expectPath(priorPage, '/dashboard');
     await logout(page);
 
     const unknownStatus = await requestRecovery(page, `ausente-${randomUUID()}@example.test`);
@@ -60,11 +60,11 @@ test('registro → verificación SMTP → dashboard → recuperación SMTP → n
     await passwordInput(page, 'password', newPassword);
     await passwordInput(page, 'password_confirmation', newPassword);
     await page.locator('form[action$="/restablecer-contrasena"] button[type="submit"]').click();
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/login');
+    await expectPath(page, '/login');
     await expect(page.getByRole('status')).toBeVisible();
     await expectPasswordChangeMail(request, person.email, [person.password, newPassword]);
     await priorPage.goto('/dashboard');
-    await expect.poll(() => new URL(priorPage.url()).pathname).toBe('/login');
+    await expectPath(priorPage, '/login');
     await priorSession.close();
     await login(page, person);
     await expect(page.getByRole('alert')).toHaveText('El email o la contraseña no son correctos.');
@@ -73,7 +73,7 @@ test('registro → verificación SMTP → dashboard → recuperación SMTP → n
     await expect(page.getByLabel('Contraseña', { exact: true })).toHaveAttribute('aria-invalid', 'false');
     expect(await page.getByLabel('Contraseña', { exact: true }).evaluate(input => input.value === '')).toBe(true);
     await login(page, { ...person, password: newPassword });
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/dashboard');
+    await expectPath(page, '/dashboard');
     await logout(page);
     await openSecurityLink(page, reset, new URL(reset).pathname);
     await passwordInput(page, 'password', randomBytes(20).toString('hex'));
@@ -114,7 +114,7 @@ test('errores inline, corrección, foco y credenciales sin duplicación a 320 px
     await expect(page.getByRole('alert')).toBeHidden();
     await page.getByRole('link', { name: '¿Olvidaste la contraseña?' }).focus();
     await page.keyboard.press('Enter');
-    await expect.poll(() => new URL(page.url()).pathname).toBe('/olvide-mi-contrasena');
+    await expectPath(page, '/olvide-mi-contrasena');
     await cleanScreenshot(page, 'docs/evidence/m02/recuperacion-320x740.png', { fullPage: true });
     await page.locator('button[type="submit"]').click();
     await expect(page.getByLabel('Email', { exact: true })).toHaveAttribute('aria-invalid', 'true');
@@ -151,7 +151,7 @@ test('POST de registro, verificación, login y recuperación funcionan sin JavaS
         await expect(page.getByRole('heading', { name: `Hola, ${person.name}.` })).toBeVisible();
         await logout(page);
         await login(page, person);
-        await expect.poll(() => new URL(page.url()).pathname).toBe('/dashboard');
+        await expectPath(page, '/dashboard');
         await logout(page);
         await requestRecovery(page, person.email);
         const reset = await capturedLink(request, person.email, '/restablecer-contrasena/');
@@ -160,9 +160,9 @@ test('POST de registro, verificación, login y recuperación funcionan sin JavaS
         await passwordInput(page, 'password', newPassword);
         await passwordInput(page, 'password_confirmation', newPassword);
         await page.locator('form[action$="/restablecer-contrasena"] button[type="submit"]').click();
-        await expect.poll(() => new URL(page.url()).pathname).toBe('/login');
+        await expectPath(page, '/login');
         await login(page, { ...person, password: newPassword });
-        await expect.poll(() => new URL(page.url()).pathname).toBe('/dashboard');
+        await expectPath(page, '/dashboard');
     } finally {
         await context.close();
     }

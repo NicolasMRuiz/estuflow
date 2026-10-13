@@ -22,6 +22,8 @@ Ejecutar PHPUnit y E2E **secuencialmente**: ambos usan la misma base aislada de 
 
 El worker E2E usa exclusivamente el entorno `testing`, la cola `database` de `estuflow_test` y SMTP hacia `test-mailpit:1025`; no usa el worker ni el capturador de desarrollo. Compose fuerza MAIL_URL vacío, credenciales SMTP vacías y proveedores OAuth deshabilitados, incluso si `.env.testing` heredó otra configuración. `test-mailpit` tampoco publica puertos al host. Playwright consulta su API interna para recuperar emails realmente capturados por SMTP. No se emplean transportes de correo que escriban enlaces de seguridad en logs.
 
+El servidor usa `artisan serve --no-reload` para conservar las variables forzadas por Compose en su proceso PHP hijo. Sin esa opción, Laravel descarta variables al recargar `.env.testing` y puede sustituir SMTP/cola por sus valores antiguos. `config/mail.php` trata `MAIL_URL` vacío como ausente para que Laravel conserve el transporte SMTP; una regresión comprueba su construcción sin acceder a la red.
+
 Playwright rechaza cualquier `baseURL` diferente de `http://test-app:8000` y exige `E2E_ISOLATED=1`. El TestCase de Laravel verifica las guardas antes de cualquier reset. Ningún script ejecuta `down -v`, resetea desarrollo ni debe eliminar sus sesiones o usuarios. Las cuentas de prueba son ficticias.
 
 ## Cobertura de aplicación

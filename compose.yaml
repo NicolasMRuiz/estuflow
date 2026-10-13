@@ -91,7 +91,8 @@ services:
 
   test-app: &test-app
     <<: *app
-    command: ["php", "artisan", "serve", "--quiet", "--env=testing", "--host=0.0.0.0", "--port=8000"]
+    # Preserve Compose's isolated queue/mail/database overrides in the PHP child.
+    command: ["php", "artisan", "serve", "--quiet", "--no-reload", "--env=testing", "--host=0.0.0.0", "--port=8000"]
     environment:
       APP_ENV: testing
       APP_URL: http://test-app:8000

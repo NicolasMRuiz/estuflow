@@ -41,7 +41,7 @@ return [
         'smtp' => [
             'transport' => 'smtp',
             'scheme' => env('MAIL_SCHEME'),
-            'url' => env('MAIL_URL'),
+            'url' => env('MAIL_URL') ?: null,
             'host' => env('MAIL_HOST', 'mailpit'),
             'port' => env('MAIL_PORT', 1025),
             'username' => env('MAIL_USERNAME'),

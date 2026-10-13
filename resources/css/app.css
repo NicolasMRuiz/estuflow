@@ -93,7 +93,7 @@ h3 { font-weight:650; }
 .pending-caption { display:block; margin-top:19px; color:#657267; font-size:10px; border:1px solid #e5e9e2; border-radius:20px; padding:4px 10px; }
 .empty-state.compact { padding-top:22px; }
 .empty-state.compact .empty-symbol { width:54px; height:54px; border-radius:16px; margin-bottom:12px; }
-.dashboard-footer { display:flex; justify-content:space-between; gap:12px; color:#6c7977; font-size:10px; padding:25px 0 0; }
+.dashboard-footer { display:flex; justify-content:space-between; gap:12px; color:var(--muted); font-size:10px; padding:25px 0 0; }
 .dashboard-footer>span:last-child { font-weight:650; color:var(--navy); }
 .mobile-bar { display:none; }
 .auth-page { display:grid; grid-template-columns:minmax(0,44fr) minmax(0,56fr); min-height:100dvh; }
@@ -115,9 +115,9 @@ h3 { font-weight:650; }
 .auth-intro { font-size:15px; color:var(--muted); margin-bottom:28px; }
 .form-field { margin-bottom:19px; }
 .form-field label { display:block; font-size:13px; font-weight:600; margin-bottom:7px; }
-.form-field input { display:block; width:100%; background:white; padding:12px 14px; border:1px solid #cdd8d3; border-radius:8px; color:var(--navy); font-size:16px; min-height:48px; }
+.form-field input { display:block; width:100%; background:white; padding:12px 14px; border:1px solid #7b8b84; border-radius:8px; color:var(--navy); font-size:16px; min-height:48px; }
 .form-field input[aria-invalid=true] { border-color:#b54430; }
-.form-field input::placeholder { color:#788780; }
+.form-field input::placeholder { color:var(--muted); }
 .field-error,.field-hint { font-size:12px; margin-top:6px; }.field-error { color:#a93624; }.field-hint { color:var(--muted); }
 .button { border:0; display:flex; align-items:center; justify-content:center; gap:14px; border-radius:8px; padding:13px 18px; width:100%; font-weight:600; font-size:14px; min-height:48px; text-decoration:none; }
 .button.primary { background:#087963; color:white; margin-top:26px; }.button.primary:hover { background:#05624f; }
@@ -134,7 +134,7 @@ h3 { font-weight:650; }
 .cooldown-message { font-size:13px; color:var(--muted); margin-top:16px; }
 .auth-logout { text-align:center; margin-top:24px; }
 .text-button { border:0; background:transparent; color:var(--teal); padding:8px; font-size:13px; font-weight:600; text-decoration:underline; text-underline-offset:4px; }
-.button.secondary { background:white; color:var(--navy); border:1px solid #cdd8d3; margin-top:14px; }
+.button.secondary { background:white; color:var(--navy); border:1px solid #7b8b84; margin-top:14px; }
 .button.secondary:hover { background:#edf4ef; }
 .auth-divider { display:flex; align-items:center; gap:14px; margin:26px 0 18px; color:var(--muted); font-size:12px; }
 .auth-divider::before,.auth-divider::after { content:''; height:1px; background:#d9dfd8; flex:1; }

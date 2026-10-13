@@ -19,7 +19,7 @@ Bajo 801 px, la sidebar pasa a un menú en el flujo del documento. Se abre con e
 
 Las pantallas de autenticación mantienen dos columnas desde 801 px, con la historia de marca limitada a 620 px y centrada en su columna; el formulario nunca supera 440 px. En móvil queda una sola columna con la marca arriba. Las páginas pueden desplazarse verticalmente; no se recortan formularios para forzarlos a entrar en pantallas de poca altura. Los inputs tienen texto de 16 px y controles principales de al menos 48 px de alto.
 
-| Viewport CSS | Revisión prevista en E2E |
+| Viewport CSS | Revisión E2E ejecutada |
 | --- | --- |
 | 320×740 | Reflow, errores y navegación móvil |
 | 390×844 y 430×932 | Teléfonos |
@@ -33,6 +33,10 @@ Las pantallas de autenticación mantienen dos columnas desde 801 px, con la hist
 Se prueba también 640×360 CSS como el espacio de composición equivalente a una pantalla 1280×720 con zoom al 200 %. Ese ensayo de reflow no acredita haber automatizado el zoom del navegador ni el escalado del sistema operativo. La resolución física del monitor no determina por sí sola el viewport CSS.
 
 La inspección preliminar de M02 reprodujo el login real a 2560×1440 antes de cambiar CSS: columna de marca de aproximadamente 1126 px, formulario de 400 px e historia alineada al margen izquierdo de su columna. La captura permitió revisar esa composición. La hipótesis de desalineación del dashboard surgió del `margin-left` fijo junto al `max-width` sin centrado; esa lectura del código, por sí sola, **no acredita una reproducción visual del dashboard anterior**. La evidencia final debe distinguir la comparación anterior de la revisión de la interfaz ya corregida.
+
+El E2E del 13 de octubre reprodujo las reglas anteriores de ancho/posición sobre el markup M02: a 2560 px dejó 0 px libres junto a la sidebar y 610 px a la derecha. Las reglas actuales dejan 240 px a cada lado. `docs/evidence/m02/layout-qhd.json` registra medidas y alcance; la captura con reglas previas no representa la aplicación anterior completa ni el monitor físico de Nicolás.
+
+La revisión de contraste corrigió placeholders y pie del panel a `#5b6b75`, y bordes de campos a `#7b8b84`. Cálculos de luminancia: placeholder sobre blanco 5,52:1, borde sobre canvas 3,28:1, botón blanco/teal 5,35:1, navy/canvas 14,20:1 y error/fondo coral claro 5,85:1. Son comprobaciones de esos pares, no una certificación completa de accesibilidad.
 
 ## Formularios y errores
 
@@ -55,4 +59,4 @@ El JavaScript local valida al enviar, mueve el foco al primer campo inválido y 
 
 Las capturas M02 se guardan en `docs/evidence/m02/`, con login y dashboard a 390×844, 1440×900, 2560×1440 y 3840×2160, además de estados nuevos útiles para revisar. Deben inspeccionarse visualmente: ausencia de overflow no garantiza por sí sola una buena composición. Se usan cuentas ficticias, contraseñas vacías y capturas sin barra de URL que exponga firmas o tokens.
 
-El resultado real de los comandos, la revisión visual final y las limitaciones están en `docs/evidence/checks.md`; este documento describe la implementación y el alcance de revisión, no reemplaza esos resultados ni implica aceptación visual de Nicolás.
+El resultado real de los comandos, la revisión visual final y las limitaciones están en `docs/evidence/m02/checks.md`; este documento describe la implementación y el alcance de revisión, no reemplaza esos resultados ni implica aceptación visual de Nicolás.

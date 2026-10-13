@@ -12,4 +12,4 @@ ENV GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/app
 WORKDIR /app
 ENV COMPOSER_HOME=/tmp/composer
 EXPOSE 8000
-CMD ["php", "artisan", "serve", "--quiet", "--host=0.0.0.0", "--port=8000"]
+CMD ["php", "artisan", "serve", "--quiet", "--no-reload", "--host=0.0.0.0", "--port=8000"]

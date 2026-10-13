@@ -74,7 +74,7 @@ Límites de servidor: OAuth 30 solicitudes por minuto/IP; reautenticación 5 por
 
 `tests/Feature/OAuthTest.php` cubre botones condicionales, callback exacto, state y PKCE reales al generar autorización, rechazo de state por Socialite antes de acceder a red, cancelación, cuentas nuevas/existentes, aislamiento entre cuentas, email pendiente y vencimiento, ausencia de autovínculo por email, issuer/sub de Microsoft, nonce/audience/issuer incorrectos, reautenticación, vencimiento, sesión del iniciador, unicidad en PostgreSQL, password nullable y destinos internos seguros.
 
-Comando focal ejecutado en testing: `docker compose run --rm --no-deps test-app php artisan test --env=testing --filter=OAuthTest`: **PASS, 32 pruebas y 222 assertions**. PHPUnit/E2E deben ejecutarse secuencialmente porque comparten `estuflow_test`; el comando focal no sustituye los checks completos documentados en la evidencia de M02.
+La ejecución completa de `./scripts/test.sh` del 13 de octubre incluye **36 pruebas OAuth**, dentro de **75 pruebas y 455 aserciones aprobadas**. PHPUnit/E2E se ejecutan secuencialmente porque comparten `estuflow_test`; los checks completos se documentan en la evidencia de M02.
 
 Los callbacks de éxito y claims de Microsoft usan dobles locales: no acreditan una respuesta real del proveedor, firma JWT real, consentimiento, configuración de tenant, disponibilidad de email o políticas institucionales. Quedan **NO EJECUTADOS** los recorridos con Google y Microsoft reales hasta configurar aplicaciones/credenciales y cuentas de prueba autorizadas. CI no consulta proveedores ni envía correos externos.
 

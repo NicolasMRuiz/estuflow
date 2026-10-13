@@ -1,6 +1,6 @@
 # Progreso
 
-## M02 — 9 de octubre de 2026
+## M02 — implementación del 9 y cierre local del 13 de octubre de 2026
 
 Implementados los cinco bloques de la entrega:
 
@@ -10,7 +10,7 @@ Implementados los cinco bloques de la entrega:
 4. Google y Microsoft con Socialite, state/PKCE/nonce cuando corresponde, identidad estable única, password nullable, email pendiente en servidor, conflicto sin autovínculo, sección Métodos de acceso y vínculo con reautenticación. Deshabilitados hasta configurar aplicaciones reales.
 5. Errores inline accesibles y consistentes, credenciales incorrectas como único aviso general, foco y corrección de errores, POST sin JavaScript y escape de datos.
 
-Resultados ejecutados, capturas y estado de GitHub en [evidencia M02](evidence/m02/checks.md). Guías de [correo/Brevo](mail.md) y [Google/Microsoft](oauth.md). Las pruebas dobles y SMTP local no acreditan entrega Brevo ni OAuth real: esos recorridos quedan NO EJECUTADOS hasta configurar proveedores y cuentas autorizadas. No se desplegó hosting ni se hizo merge.
+Verificación local final: setup/start/check PASS, 75 pruebas con 455 aserciones y 4 recorridos E2E aprobados. Resultados, capturas y estado de GitHub en [evidencia M02](evidence/m02/checks.md). Guías de [correo/Brevo](mail.md) y [Google/Microsoft](oauth.md). Las pruebas dobles y SMTP local no acreditan entrega Brevo ni OAuth real: esos recorridos quedan NO EJECUTADOS hasta configurar proveedores y cuentas autorizadas. No se desplegó hosting ni se hizo merge.
 
 La entrega M01 se conserva en el historial y su evidencia previa en `docs/evidence/`; M02 no reinterpreta sus resultados como pruebas de las funciones nuevas. Las reglas permanentes están en AGENTS.md; commits/push requieren autorización explícita, otorgada para esta entrega.
 

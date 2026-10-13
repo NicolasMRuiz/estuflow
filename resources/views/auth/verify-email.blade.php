@@ -1,7 +1,7 @@
 <x-auth-layout title="Verificá tu email">
     <span class="eyebrow">UN PASO PARA CUIDAR TU CUENTA</span>
     <h2>Verificá tu email.</h2>
-    <p class="auth-intro">Te enviamos un enlace a <strong class="account-email">{{ auth()->user()->email }}</strong>. Abrilo para confirmar tu dirección y entrar a tu espacio.</p>
+    <p class="auth-intro">Te enviamos un enlace a esta dirección: <strong class="account-email">{{ auth()->user()->email }}</strong> Abrilo para confirmar tu dirección y entrar a tu espacio.</p>
     @if(session('status'))<div class="success-message" role="status">{{ session('status') }}</div>@endif
     <form method="POST" action="{{ route('verification.send') }}" novalidate data-auth-form data-cooldown="{{ $retryAfter ?? 0 }}">
         @csrf

@@ -11,6 +11,7 @@ use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Mail\MailManager;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Livewire\Livewire;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Tests\TestCase;
 
 class RecoveryVerificationTest extends TestCase
@@ -257,5 +259,13 @@ class RecoveryVerificationTest extends TestCase
         $user = User::factory()->create();
         $queue->push(new SendQueuedNotifications($user, new ResetPassword('private-raw-token'), ['mail']));
         $this->assertStringNotContainsString('private-raw-token', DB::table('jobs')->value('payload'));
+    }
+
+    public function test_empty_mail_url_preserves_the_isolated_smtp_transport(): void
+    {
+        $this->assertNull(config('mail.mailers.smtp.url'));
+        $transport = $this->app->make(MailManager::class)->mailer('smtp')->getSymfonyTransport();
+        $this->assertInstanceOf(EsmtpTransport::class, $transport);
+        $this->assertSame('test-mailpit', $transport->getStream()->getHost());
     }
 }

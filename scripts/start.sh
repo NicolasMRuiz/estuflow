@@ -2,6 +2,7 @@
 source "$(dirname "$0")/common.sh"
 docker compose up -d --wait postgres redis
 docker compose run --rm app php artisan migrate --force
+docker compose run --rm app php artisan catalog:import
 docker compose run --rm app php artisan environment:check
 docker compose up -d --wait mailpit worker app
 docker compose exec -T app php -r '

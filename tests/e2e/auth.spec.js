@@ -1,3 +1,4 @@
+import { configureAcademic } from './support/academic.js';
 import { test, expect } from '@playwright/test';
 import { randomBytes, randomUUID } from 'node:crypto';
 import {
@@ -21,9 +22,10 @@ test('registro → verificación SMTP → dashboard → recuperación SMTP → n
     await logout(page);
     await openSecurityLink(page, verification, '/login');
     await login(page, person);
+    await configureAcademic(page);
     await expectPath(page, '/dashboard');
     await expect(page.getByRole('heading', { name: `Hola, ${person.name}.` })).toBeVisible();
-    await expect(page.getByText('Sin datos', { exact: true })).toBeVisible();
+    await expect(page.getByText('0 de 23 materias aprobadas', { exact: true })).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
     // The same still-valid verification link is safe to open again.
     await openSecurityLink(page, verification, '/dashboard');
@@ -147,7 +149,8 @@ test('POST de registro, verificación, login y recuperación funcionan sin JavaS
         await expect(page.locator('#password-error')).toBeVisible();
         const person = await register(page, account('Persona Sin JavaScript'));
         const verification = await capturedLink(request, person.email, '/verificar-email/');
-        await openSecurityLink(page, verification, '/dashboard');
+        await openSecurityLink(page, verification, '/configuracion-academica');
+        await configureAcademic(page);
         await expect(page.getByRole('heading', { name: `Hola, ${person.name}.` })).toBeVisible();
         await logout(page);
         await login(page, person);

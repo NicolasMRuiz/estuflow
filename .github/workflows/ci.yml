@@ -29,11 +29,13 @@ jobs:
       - run: ./scripts/check.sh
       - run: ./scripts/test.sh
       - run: ./scripts/e2e.sh
-      - name: Capturas revisables M02
+      - name: Capturas revisables M02 y M03
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: estuflow-m02-capturas
-          path: docs/evidence/m02/*.png
+          name: estuflow-capturas
+          path: |
+            docs/evidence/m02/*.png
+            docs/evidence/m03/*.png
           retention-days: 14
           if-no-files-found: warn

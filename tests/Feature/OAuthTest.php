@@ -235,6 +235,7 @@ class OAuthTest extends TestCase
         $this->withSession($this->attempt())->get('/auth/google/callback?state=valid-state&code=fictitious')->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($owner);
         $this->assertSame('local@example.test', $owner->fresh()->email);
+        $this->get('/dashboard')->assertRedirect(route('academic.choose'));
         $this->assertDatabaseCount('users', 1);
     }
 

@@ -18,6 +18,18 @@ La entrega M01 se conserva en el historial y su evidencia previa en `docs/eviden
 
 PostgreSQL de desarrollo publicado exclusivamente en `127.0.0.1:5433`, configurable con `DB_FORWARD_PORT`; Laravel sigue en `postgres:5432`. Se conservaron volumen, identidad del clúster, tabla/usuarios y credenciales. Test-postgres y Redis permanecen internos. Configuración aplicada, app/worker reiniciados, Google visible/redirect comprobado sin consultar al proveedor y Brevo efectivo con STARTTLS obligatorio. Sin funcionalidades ni dependencias nuevas. [Guía DataGrip](datagrip.md) y [checks de la ampliación](evidence/m02/datagrip-config.md).
 
+## M03 — Mi carrera (13 de octubre de 2026)
+
+1. **M03-01:** catálogo trazable de 3 planes/71 materias, importador validado/transaccional/idempotente y planes inmutables; fuentes conservadas.
+2. **M03-02:** elección explícita después de verificar email, también para cuentas M02 existentes y OAuth.
+3. **M03-03:** borrador persistente por plan, cuatro estados, método de aprobación opcional y resumen/confirmación; todas pendientes es válido.
+4. **M03-04:** Mi carrera con filtros, detalle y edición propia HTTP/Livewire; cambio de plan confirmado conserva estados anteriores.
+5. **M03-05:** orientación por tres columnas, reglas del año anterior G/E y TODAS sin autorreferencia; promoción/sin método y ambigüedades por confirmar.
+6. **M03-06:** dashboard con carrera activa, conteos, avance real y acceso a cursando; responsive y POST sin JavaScript.
+7. **M03-07:** pruebas PostgreSQL/E2E, documentación y capturas. Resultados reales y estado CI en [evidencia M03](evidence/m03/checks.md).
+
+[Modelo, fuentes, importación y revisión manual](m03.md). M03 se apoya en la rama M02; la PR se mantiene en borrador para revisión, sin merge ni despliegue. Se preservan datos/configuración local.
+
 ## Pendiente de producto
 
-La aceptación visual final corresponde a Nicolás. No se implementó modelo académico, carrera, plan de estudios, materias, cursadas, correlativas, agenda ni CRUD. El dashboard mantiene estados vacíos y secciones futuras deshabilitadas. Esas funciones requieren requisitos y tarea aparte.
+Aceptación visual de Nicolás y confirmación académica de las ambigüedades documentadas. Faltan las otras nueve carreras sin fuente, agenda, calendario y planificador. Las integraciones Google/Brevo reales y Microsoft siguen con el estado informado en M02; los checks no las acreditan.

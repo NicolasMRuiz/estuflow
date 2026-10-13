@@ -19,7 +19,7 @@ PHP 8.4.26, Laravel 13.34.0, PostgreSQL 18.6, Redis 7.4.11, Node 22 y Vite 8.3.2
 | Brevo SMTP real | **NO EJECUTADO**: sin configuración externa ni destinatario autorizado para envío real. |
 | Google real | **NO EJECUTADO**: pendiente aplicación, credenciales y cuenta de prueba autorizada. |
 | Microsoft real | **NO EJECUTADO**: pendiente Entra, credenciales y cuentas personales/institucionales autorizadas. |
-| Zoom real del navegador al 200 % | **NO EJECUTADO**: control UI de Chrome no disponible/sin permisos; reflow equivalente de 640×360 sí comprobado por E2E. No se equiparan ambos ensayos. |
+| Zoom real del navegador al 200 % | **NO EJECUTADO**: el control de Chrome se interrumpió antes de la prueba; reflow equivalente de 640×360 sí comprobado por E2E. No se equiparan ambos ensayos. |
 
 PHPUnit y E2E se ejecutaron secuencialmente y únicamente sobre PostgreSQL `testing` / `test-postgres` / `estuflow_test`. PHPUnit usa caché array por proceso; E2E utiliza un prefijo Redis nuevo por corrida, sin flush. No se resetearon datos de desarrollo.
 
@@ -40,6 +40,8 @@ Fallo histórico confirmado en [run 37083754713](https://github.com/NicolasMRuiz
 Las primeras corridas M02 no llegaron a probar la aplicación: [37993590470](https://github.com/NicolasMRuiz/estuflow/actions/runs/37993590470) falló en setup por cuota anónima de Docker Hub; [37993723180](https://github.com/NicolasMRuiz/estuflow/actions/runs/37993723180) aplicó correctamente el mirror, pero falló al descargar PHP por timeout de `auth.docker.io`, exit 125. Check, PHPUnit y E2E quedaron **SKIPPED**, no PASS. El artifact de esa corrida sólo contenía la captura baseline ya existente en Git.
 
 El 13 de octubre, [38406280846](https://github.com/NicolasMRuiz/estuflow/actions/runs/38406280846) sobre `bd42e3e` aprobó setup, check y PHPUnit (75 pruebas / 455 aserciones), pero E2E falló antes de lanzar Chromium: `test-worker has no healthcheck configured`. Se agregó readiness explícito al worker y cleanup ante fallos de arranque; el resultado de la nueva corrida se registra en la PR. El artifact del run fallido contiene las 22 capturas locales ya versionadas, no un recorrido E2E remoto aprobado.
+
+**PASS remoto confirmado el 13 de octubre sobre `1d1a714`**: [corrida de PR 38407098223](https://github.com/NicolasMRuiz/estuflow/actions/runs/38407098223) y [push 38407090257](https://github.com/NicolasMRuiz/estuflow/actions/runs/38407090257). Setup, check, PHPUnit (75 pruebas / 455 aserciones), E2E (4 recorridos) y upload de capturas aprobaron en Linux AMD64. Esta corrida sí lanzó Chromium y recorrió los flujos; el fallo histórico no se oculta ni se presenta como aprobado. Las capturas generadas en CI quedan en el artifact para revisión; la inspección visual descrita aquí corresponde a las capturas locales.
 
 El workflow conserva todos los checks, TLS y digests, configura el caché público soportado por Google en el runner efímero y ejecuta setup → check → PHPUnit → E2E. Publica únicamente PNGs durante 14 días, incluso si falla un paso. El estado remoto del último commit se registra en la [PR en borrador #1](https://github.com/NicolasMRuiz/estuflow/pull/1) y en la entrega final, con enlace a su corrida real. Un PASS local no sustituye ese resultado.
 

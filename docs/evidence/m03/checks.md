@@ -56,6 +56,13 @@ Pendiente de aceptación: revisión visual de Nicolás, vigencia/plan aplicable 
 
 ## GitHub Actions
 
-La primera implementación `de80c83` pasó el [workflow de la PR](https://github.com/NicolasMRuiz/estuflow/actions/runs/38450889529), job [checks](https://github.com/NicolasMRuiz/estuflow/actions/runs/38450889529/job/115481179005), en Linux AMD64: setup, check, PHPUnit (102 pruebas/625 aserciones), E2E (7 recorridos, incluido zoom real) y artifact de capturas. Los logs/steps y el artifact se consultaron directamente en GitHub; no se infiere el resultado a partir del PASS local.
+Verificación consultada directamente en jobs, logs y artifacts de GitHub, en Linux AMD64. No se infiere a partir del PASS local.
 
-El commit posterior incorpora una corrección de presentación de errores Livewire, su prueba adicional y esta evidencia. Los resultados locales de la tabla corresponden a esa versión (103/634 y 7 E2E). El estado de CI del último commit se consulta en [Checks de PR #2](https://github.com/NicolasMRuiz/estuflow/pull/2/checks); se informará tras terminar su ejecución. No se confunden los resultados del primer commit ni los de M02 con los del último HEAD.
+| Commit de implementación | Push | Pull request | Resultado |
+| --- | --- | --- | --- |
+| `de80c83` | [Run](https://github.com/NicolasMRuiz/estuflow/actions/runs/38450859394) | [Run](https://github.com/NicolasMRuiz/estuflow/actions/runs/38450889529) | PASS: setup/check, 102 pruebas/625 aserciones, 7 E2E y artifact |
+| `8471cee` | [Run](https://github.com/NicolasMRuiz/estuflow/actions/runs/38451426933) | [Run](https://github.com/NicolasMRuiz/estuflow/actions/runs/38451438149) | PASS: setup/check, 103 pruebas/634 aserciones, 7 E2E y artifact |
+
+La segunda fila incluye la corrección de errores Livewire y su caso adicional. [Job checks](https://github.com/NicolasMRuiz/estuflow/actions/runs/38451438149/job/115483065082): PHPUnit 103/634 y E2E 7 aprobados (50,7 s). [Artifact estuflow-capturas](https://github.com/NicolasMRuiz/estuflow/actions/runs/38451438149/artifacts/11841575339), 4.697.462 bytes, retención 14 días; las 30 PNG M03 quedan además versionadas sin esa caducidad.
+
+[PR #2 en borrador](https://github.com/NicolasMRuiz/estuflow/pull/2), base M02. Los commits posteriores que sólo registren evidencia conservan este código verificado; el estado actualizado de cada HEAD está en [Checks de la PR](https://github.com/NicolasMRuiz/estuflow/pull/2/checks). No se presentan los resultados M02 como prueba de M03.

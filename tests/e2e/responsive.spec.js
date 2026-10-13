@@ -1,3 +1,4 @@
+import { configureAcademic } from './support/academic.js';
 import { test, expect } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import {
@@ -27,7 +28,8 @@ test('matriz responsive de nueve viewports, nuevas pantallas y navegación móvi
         }
     }
     const verification = await capturedLink(request, person.email, '/verificar-email/');
-    await openSecurityLink(verificationPage, verification, '/dashboard');
+    await openSecurityLink(verificationPage, verification, '/configuracion-academica');
+    await configureAcademic(verificationPage);
     await verificationPage.setViewportSize({ width: 2560, height: 1440 });
     const measureLayout = () => verificationPage.evaluate(() => {
         const sidebar = document.querySelector('.sidebar').getBoundingClientRect();

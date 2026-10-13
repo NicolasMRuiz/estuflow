@@ -1,6 +1,6 @@
 # Identidad, responsive y estados de autenticación
 
-Español rioplatense, tipografía del sistema y recursos locales. Alpine se carga únicamente mediante Livewire. Se conservan la marca, los estados vacíos académicos y la paleta:
+Español rioplatense, tipografía del sistema y recursos locales. Alpine se carga únicamente mediante Livewire. Se conservan la marca y la paleta:
 
 | Token | Valor | Uso |
 | --- | --- | --- |
@@ -15,7 +15,7 @@ Español rioplatense, tipografía del sistema y recursos locales. Alpine se carg
 
 El dashboard reserva el espacio de la sidebar mediante una variable compartida (`--sidebar-width`), y centra su contenedor de hasta 1800 px dentro del área restante. La sidebar es fija y puede desplazarse verticalmente en pantallas de poca altura. El contenido usa grids `minmax(0, …)`, tarjetas que pueden contraerse, márgenes adaptables y tipografía algo mayor desde 1920 px. No se escala la página con `transform`.
 
-Bajo 801 px, la sidebar pasa a un menú en el flujo del documento. Se abre con el botón de navegación, admite Enter/Espacio, Escape lo cierra y devuelve el foco al botón, e Inicio permite navegar y cerrar el menú. Hay un enlace de salto al contenido. Inicio y Métodos de acceso son destinos operativos; Mi carrera, Calendario, Materias y Planificador conservan «Próximo» y `aria-disabled`. No se simulan datos académicos.
+Bajo 801 px, la sidebar pasa a un menú en el flujo del documento. Se abre con el botón de navegación, admite Enter/Espacio, Escape lo cierra y devuelve el foco al botón, e Inicio permite navegar y cerrar el menú. Hay un enlace de salto al contenido. Inicio, Mi carrera y Métodos de acceso son destinos operativos. Calendario y Planificador conservan «Próximo» y `aria-disabled`. M03 usa exclusivamente datos del catálogo y progreso declarado.
 
 Las pantallas de autenticación mantienen dos columnas desde 801 px, con la historia de marca limitada a 620 px y centrada en su columna; el formulario nunca supera 440 px. En móvil queda una sola columna con la marca arriba. Las páginas pueden desplazarse verticalmente; no se recortan formularios para forzarlos a entrar en pantallas de poca altura. Los inputs tienen texto de 16 px y controles principales de al menos 48 px de alto.
 
@@ -60,3 +60,7 @@ El JavaScript local valida al enviar, mueve el foco al primer campo inválido y 
 Las capturas M02 se guardan en `docs/evidence/m02/`, con login y dashboard a 390×844, 1440×900, 2560×1440 y 3840×2160, además de estados nuevos útiles para revisar. Deben inspeccionarse visualmente: ausencia de overflow no garantiza por sí sola una buena composición. Se usan cuentas ficticias, contraseñas vacías y capturas sin barra de URL que exponga firmas o tokens.
 
 El resultado real de los comandos, la revisión visual final y las limitaciones están en `docs/evidence/m02/checks.md`; este documento describe la implementación y el alcance de revisión, no reemplaza esos resultados ni implica aceptación visual de Nicolás.
+
+## M03
+
+Elección explícita con radios, borrador por año, resumen, filtros GET y detalle con tres contextos de correlativas. Labels asociados a selects, errores inline y aviso de guardado con role=status; controles de 48 px y textos largos con reflow. Formularios básicos y navegación móvil alternativa funcionan sin JavaScript. Los estados se expresan con texto además del color. [Capturas y alcance de verificación](evidence/m03/checks.md).

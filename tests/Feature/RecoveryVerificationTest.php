@@ -66,6 +66,7 @@ class RecoveryVerificationTest extends TestCase
     public function test_livewire_update_rechecks_verification_after_initial_render(): void
     {
         $user = User::factory()->create();
+        $this->configureAcademic($user);
         $component = Livewire::actingAs($user)->test(Dashboard::class)->assertOk();
         $user->forceFill(['email_verified_at' => null])->save();
         auth()->setUser($user->fresh());

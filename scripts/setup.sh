@@ -14,4 +14,5 @@ docker compose run --rm node npm run build
 docker compose up -d --wait postgres redis
 # Pending migrations only. Never migrate:fresh/reset on development.
 docker compose run --rm app php artisan migrate --force
+docker compose run --rm app php artisan catalog:import
 docker compose run --rm app php artisan environment:check

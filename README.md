@@ -1,6 +1,6 @@
 # EstuFlow
 
-Organizador académico en español rioplatense. M02 implementa registro/login/logout, recuperación y verificación por email, acceso/vinculación Google y Microsoft, validación accesible y responsive hasta 4K. El dashboard conserva estados académicos vacíos; las secciones futuras no son enlaces operativos.
+Organizador académico en español rioplatense. M02 implementa registro/login/logout, recuperación y verificación por email, acceso/vinculación Google y Microsoft, validación accesible y responsive hasta 4K. M03 agrega tres planes documentados, configuración inicial recuperable, Mi carrera con estados y correlativas, y dashboard calculado con progreso personal. Calendario y Planificador siguen pendientes.
 
 ## Iniciar en Mac
 
@@ -22,11 +22,17 @@ Conectar a `127.0.0.1:5433`, base `estuflow`, usuario `estuflow`, contraseña **
 
 [Guía de conexión, cambio de puerto y comprobaciones](docs/datagrip.md). El volumen y las credenciales se conservan al recrear el contenedor. `test-postgres` y Redis no publican puertos.
 
+## Revisar M03
+
+Después de verificar el email, elegí carrera/plan, guardá tu situación por año y revisá el resumen antes de confirmar. Mi carrera permite filtros y edición; Inicio refleja sólo el plan activo. Cambiar de plan conserva el progreso anterior.
+
+[Guía completa M03](docs/m03.md): fuentes, modelo, importación sobre la base M02 existente, actualización sin perder datos, reglas pendientes y recorrido manual. [Checks y capturas M03](docs/evidence/m03/checks.md). `setup.sh` y `start.sh` importan el catálogo de forma idempotente después de aplicar únicamente migraciones pendientes.
+
 ## Revisar los cinco bloques de M02
 
 1. **Responsive:** revisar login, registro y panel en 320, 390, 430, 768, 1280, 1440, 1920, 2560 y 3840 px CSS; menú móvil con teclado/Escape, 200% de zoom y altura 720 px. Capturas y límites en [evidencia](docs/evidence/m02/checks.md).
 2. **Recuperación:** desde `/login`, «¿Olvidaste la contraseña?». Pedir enlace, abrir el correo en Mailpit, elegir contraseña confirmada y volver a ingresar. Se cierran sesiones anteriores sólo de esa cuenta; el enlace no verifica email.
-3. **Verificación:** crear cuenta en `/registro`; queda en `/verificar-email`. Abrir el enlace de Mailpit con esa cuenta para acceder al dashboard. Reenvío tiene espera visible de 60 segundos. Cuentas previas sin verificar también pasan por este aviso.
+3. **Verificación:** crear cuenta en `/registro`; queda en `/verificar-email`. Abrir el enlace de Mailpit con esa cuenta para configurar tu carrera y acceder al dashboard. Reenvío tiene espera visible de 60 segundos. Cuentas previas sin verificar también pasan por este aviso.
 4. **Google/Microsoft:** implementación completa con pruebas dobles; botones ocultos hasta configurar credenciales. [Activación OAuth](docs/oauth.md) detalla aplicaciones Web, audiencias, permisos y callbacks. Después de verificar, abrir `/metodos-de-acceso` para vincular tras confirmar identidad. No hay vinculación automática por email coincidente ni contraseña inventada.
 5. **Errores:** probar vacío/email inválido/confirmación diferente; mensajes inline y foco. Credenciales incorrectas tienen un solo aviso general. Funciona con POST normal sin JavaScript.
 
@@ -44,4 +50,4 @@ Ejecutar PHPUnit y E2E **secuencialmente**, comparten exclusivamente PostgreSQL 
 
 Para formato: `docker compose run --rm --no-deps app composer format`. Para readiness: `docker compose run --rm app php artisan environment:check`. No usar SQLite ni resetear desarrollo. Los scripts detienen los procesos de testing antes de resets; E2E genera capturas con cuentas ficticias y campos password vacíos.
 
-Documentación: [arquitectura](docs/architecture.md), [interfaz](docs/ui.md), [testing](docs/testing.md), [progreso](docs/progress.md), [correo](docs/mail.md), [OAuth](docs/oauth.md), [resultados y capturas M02](docs/evidence/m02/checks.md), [reglas de trabajo](AGENTS.md). Los lockfiles/digests fijan versiones. M02 no despliega hosting ni implementa modelo académico.
+Documentación: [arquitectura](docs/architecture.md), [interfaz](docs/ui.md), [testing](docs/testing.md), [progreso](docs/progress.md), [correo](docs/mail.md), [OAuth](docs/oauth.md), [resultados y capturas M02](docs/evidence/m02/checks.md), [reglas de trabajo](AGENTS.md). Los lockfiles/digests fijan versiones. No se hace merge ni despliegue automático.

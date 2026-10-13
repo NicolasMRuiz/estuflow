@@ -113,14 +113,17 @@ class AuthenticationTest extends TestCase
     {
         $first = User::factory()->create(['name' => 'Primera Persona']);
         $second = User::factory()->create(['name' => 'Segunda Persona']);
+        $this->configureAcademic($first);
+        $this->configureAcademic($second);
         $this->actingAs($first)->get('/dashboard?name=Segunda%20Persona&user_id='.$second->id)
-            ->assertOk()->assertSee('Primera Persona')->assertDontSee('Segunda Persona')->assertSee('Sin datos');
+            ->assertOk()->assertSee('Primera Persona')->assertDontSee('Segunda Persona')->assertSee('0 de 23 materias aprobadas');
         $this->actingAs($second)->get('/dashboard')->assertOk()->assertSee('Segunda Persona')->assertDontSee('Primera Persona');
     }
 
     public function test_livewire_dashboard_always_reads_the_authenticated_user(): void
     {
         $user = User::factory()->create(['name' => 'Persona Livewire']);
+        $this->configureAcademic($user);
         Livewire::actingAs($user)->test(Dashboard::class)->assertSee('Persona Livewire');
     }
 

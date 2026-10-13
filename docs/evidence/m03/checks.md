@@ -9,8 +9,8 @@ Implementación en Mac ARM64 con Docker Desktop, sobre M02 `9f31538`. Rama `code
 | `./scripts/setup.sh` | PASS: lockfiles existentes, migración aditiva, importación de 3 planes y readiness PostgreSQL/Redis |
 | `./scripts/start.sh` | PASS: migraciones pendientes/importación idempotente, servicios healthy y login con CSRF |
 | `./scripts/check.sh` | PASS: Composer validate strict, Pint, Larastan nivel 6 sin errores, build Vite |
-| `./scripts/test.sh` | PASS: 102 pruebas, 625 aserciones, PostgreSQL estuflow_test/test-postgres (15,03 s) |
-| `./scripts/e2e.sh` | PASS: 7 recorridos Chromium, 29,2 s, instancia/worker/test-mailpit aislados; posterior a PHPUnit |
+| `./scripts/test.sh` | PASS: 103 pruebas, 634 aserciones, PostgreSQL estuflow_test/test-postgres (15,50 s) |
+| `./scripts/e2e.sh` | PASS: 7 recorridos Chromium, 27,8 s, instancia/worker/test-mailpit aislados; posterior a PHPUnit |
 | `git diff --check` | PASS |
 | `.env` y `.env.testing` | PASS: comparación SHA-256 privada, bytes conservados; ambos ignorados |
 | Proveedores externos desde automatización | No consultados: mocks/fakes PHPUnit y SMTP test-mailpit E2E |
@@ -28,6 +28,7 @@ E2E mantiene recuperación/verificación SMTP y seguridad M02; añade elección 
 - La primera suite encontró que la validación de confirmación de cambio también exigía confirmar al elegir por primera vez. Se corrigió la condición y el recorrido pasa por HTTP y E2E.
 - Se asociaron errores de borrador a sus selects de materia y se agregaron mensajes españoles para elecciones/confirmaciones.
 - Larastan detectó condiciones de autorización no booleanas y una inferencia ambigua en la validación de resúmenes; se corrigieron sin ignorar reglas.
+- Se eliminó un error duplicado del editor Livewire; la prueba adicional rechaza promoción en una R, conserva el estado previo y permite luego aprobar sin especificar método.
 - La inspección de capturas detectó que TODAS se describía como celda vacía al no tener correlativas numéricas explícitas. Ahora esa columna enlaza textualmente a la regla especial; se conserva la distinción con columnas realmente vacías.
 
 ## Capturas y revisión visual
@@ -55,4 +56,6 @@ Pendiente de aceptación: revisión visual de Nicolás, vigencia/plan aplicable 
 
 ## GitHub Actions
 
-Pendiente de ejecutar sobre el commit publicado de M03. Se reemplazará este apartado con estado y enlaces reales de los jobs; los PASS de M02 no acreditan M03.
+La primera implementación `de80c83` pasó el [workflow de la PR](https://github.com/NicolasMRuiz/estuflow/actions/runs/38450889529), job [checks](https://github.com/NicolasMRuiz/estuflow/actions/runs/38450889529/job/115481179005), en Linux AMD64: setup, check, PHPUnit (102 pruebas/625 aserciones), E2E (7 recorridos, incluido zoom real) y artifact de capturas. Los logs/steps y el artifact se consultaron directamente en GitHub; no se infiere el resultado a partir del PASS local.
+
+El commit posterior incorpora una corrección de presentación de errores Livewire, su prueba adicional y esta evidencia. Los resultados locales de la tabla corresponden a esa versión (103/634 y 7 E2E). El estado de CI del último commit se consulta en [Checks de PR #2](https://github.com/NicolasMRuiz/estuflow/pull/2/checks); se informará tras terminar su ejecución. No se confunden los resultados del primer commit ni los de M02 con los del último HEAD.

@@ -132,6 +132,19 @@ class AcademicTest extends TestCase
         Livewire::actingAs($user)->test(CourseEditor::class, ['courseId' => $this->course('294')->id])->set('courseId', $this->course('215')->id);
     }
 
+    public function test_livewire_rejects_promotion_for_r_then_allows_unspecified_approval(): void
+    {
+        $user = User::factory()->create();
+        $this->configureAcademic($user);
+        $course = $this->course('296');
+        $component = Livewire::actingAs($user)->test(CourseEditor::class, ['courseId' => $course->id])
+            ->set('status', 'approved')->set('approvalMethod', 'promotion')->call('save')
+            ->assertHasErrors('entry.approval_method')->assertSee('aria-invalid="true"', false);
+        $this->assertDatabaseHas('course_progress', ['plan_course_id' => $course->id, 'status' => 'pending', 'approval_method' => null]);
+        $component->set('approvalMethod', 'unspecified')->call('save')->assertHasNoErrors()->assertRedirect(route('career.detail', $course->id));
+        $this->assertDatabaseHas('course_progress', ['plan_course_id' => $course->id, 'status' => 'approved', 'approval_method' => 'unspecified']);
+    }
+
     public function test_change_and_return_preserves_inactive_progress_and_excludes_it_from_dashboard(): void
     {
         $user = User::factory()->create();

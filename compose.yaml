@@ -45,6 +45,8 @@ services:
 
   postgres:
     image: postgres:18-bookworm@sha256:3725f4e2499eef5134592b3b4ab79a543ed7f8e533b05b5b637af926630f6650
+    ports:
+      - "127.0.0.1:${DB_FORWARD_PORT:-5433}:5432"
     environment:
       POSTGRES_DB: "${DB_DATABASE:-estuflow}"
       POSTGRES_USER: "${DB_USERNAME:-estuflow}"

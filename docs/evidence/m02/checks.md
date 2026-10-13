@@ -2,6 +2,8 @@
 
 Implementación iniciada el 9 de octubre y verificación final retomada el 13. Entorno local macOS Apple Silicon, Docker Linux ARM64 (`aarch64`); CI usa Linux AMD64. Las pruebas locales, los dobles OAuth y los proveedores reales se informan por separado. Las capturas no implican aceptación visual final de Nicolás.
 
+Seguimiento posterior del .env local configurado y del acceso DataGrip: [ampliación de configuración](datagrip-config.md). Los motivos de NO EJECUTADO de este cierre inicial se conservan como registro histórico.
+
 ## Entorno comprobado
 
 PHP 8.4.26, Laravel 13.34.0, PostgreSQL 18.6, Redis 7.4.11, Node 22 y Vite 8.3.2. Versiones exactas de Livewire, Socialite, Microsoft, Tailwind y Playwright en los lockfiles; imágenes fijadas por digest multiplataforma.

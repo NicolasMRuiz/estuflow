@@ -63,9 +63,23 @@ docker compose restart app worker
 ./scripts/start.sh
 ```
 
-5. Con un destinatario propio autorizado, solicitar verificación o recuperación y confirmar entrega, botón/enlace, caducidad y acceso. Revisar el registro transaccional de Brevo: aceptado por SMTP no equivale a recibido en bandeja. La prueba real no se ejecutó en esta entrega por falta de configuración externa.
+5. Con un destinatario propio autorizado, solicitar verificación o recuperación y confirmar entrega, botón/enlace, caducidad y acceso. Revisar el registro transaccional de Brevo: aceptado por SMTP no equivale a recibido en bandeja. La configuración local ya fue comprobada tras agregar las variables; la autenticación SMTP y entrega real siguen pendientes de la prueba manual. El remitente y el dominio deben estar verificados en Brevo; su formato local válido no acredita esa verificación.
 
 El plan Gratis consultado el 9/10/2026 permite **300 emails diarios**, compartidos con otros envíos de la cuenta; no se garantiza entrega inmediata al alcanzar la cuota. Consultar el panel antes de enviar pruebas.
+
+## Prueba manual desde la UI con Brevo configurado
+
+Estado local comprobado: SMTP `smtp-relay.brevo.com:587`, `MAIL_SCHEME=smtp`, STARTTLS automático y obligatorio, certificados validados, timeout 10 segundos, login/clave presentes y remitente configurado. `MAIL_URL` está ausente y la cola efectiva es `database`. Se limpió la caché y reiniciaron app/worker. Esto no valida credenciales contra Brevo, activación transaccional, remitente/dominio, cuota ni entrega. Microsoft permanece deshabilitado; Google está habilitado en local.
+
+Usar un buzón propio autorizado y abrir siempre [EstuFlow](http://localhost:8000). Estos pasos son manuales y envían correos reales con la configuración Brevo actual; no aparecerán en Mailpit.
+
+1. **Verificación:** registrar una cuenta con ese buzón en `/registro`. Debe quedar en `/verificar-email`, sin acceso al dashboard. Buscar el correo EstuFlow, también en spam, y abrir el botón con la misma cuenta iniciada. Debe entrar al dashboard. Para reenviar, esperar el cooldown de 60 segundos.
+2. **Recuperación:** cerrar sesión, ir a `/olvide-mi-contrasena` y pedir enlace para la misma dirección. La respuesta pública es genérica. Abrir el email de recuperación y elegir una contraseña nueva confirmada; vuelve a `/login` sin autenticar automáticamente. Comprobar que la contraseña anterior falla y la nueva permite ingresar. Otra sesión previa de esa cuenta debe cerrarse al volver a navegar.
+3. **Aviso de contraseña cambiada:** después del cambio anterior, comprobar un segundo email informativo, sin contraseña ni enlace de recuperación reutilizable. El enlace de reset usado debe rechazarse al intentar usarlo de nuevo.
+
+El login Google real también queda para Nicolás: «Continuar con Google» → cuenta autorizada → consentimiento → callback local. Una identidad nueva exige la verificación de email de EstuFlow mediante Brevo; un email local coincidente no se vincula automáticamente. [Detalles de OAuth](oauth.md).
+
+Si el correo no llega, revisar el estado de worker y los eventos transaccionales en Brevo; no publicar cuerpo, enlaces firmados, payloads ni secretos. Un estado SMTP aceptado no prueba llegada al buzón. Para volver al capturador, usar las variables locales de la primera sección y reiniciar app/worker; las pruebas automatizadas usan siempre fakes o test-mailpit, independientemente del .env local.
 
 ## Worker y diagnóstico
 

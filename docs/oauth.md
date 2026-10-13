@@ -1,6 +1,6 @@
 # Google y Microsoft en M02
 
-Estado: **implementado; prueba real pendiente de configuración**. Las pruebas de aplicación usan dobles y no consultan Google/Microsoft. Los dos proveedores permanecen deshabilitados si faltan credenciales, la bandera de activación o el callback exacto. No se crearon aplicaciones externas ficticias ni se verificó una cuenta institucional real.
+Estado: **implementado; Google configurado y habilitado en local, login real pendiente de prueba manual; Microsoft deshabilitado**. Las pruebas de aplicación usan dobles y no consultan Google/Microsoft. Los dos proveedores permanecen deshabilitados si faltan credenciales, la bandera de activación o el callback exacto. El botón Google aparece en login/registro y su endpoint local genera HTTP 302 hacia Google con callback exacto, scopes de identidad, state y PKCE S256. Se inspeccionó sin seguir la redirección ni contactar a Google. No se verificó un login externo ni una cuenta institucional real.
 
 ## Activación local
 
@@ -76,7 +76,7 @@ Límites de servidor: OAuth 30 solicitudes por minuto/IP; reautenticación 5 por
 
 La ejecución completa de `./scripts/test.sh` del 13 de octubre incluye **36 pruebas OAuth**, dentro de **75 pruebas y 455 aserciones aprobadas**. PHPUnit/E2E se ejecutan secuencialmente porque comparten `estuflow_test`; los checks completos se documentan en la evidencia de M02.
 
-Los callbacks de éxito y claims de Microsoft usan dobles locales: no acreditan una respuesta real del proveedor, firma JWT real, consentimiento, configuración de tenant, disponibilidad de email o políticas institucionales. Quedan **NO EJECUTADOS** los recorridos con Google y Microsoft reales hasta configurar aplicaciones/credenciales y cuentas de prueba autorizadas. CI no consulta proveedores ni envía correos externos.
+Los callbacks de éxito y claims de Microsoft usan dobles locales: no acreditan una respuesta real del proveedor, firma JWT real, consentimiento, configuración de tenant, disponibilidad de email o políticas institucionales. Queda **NO EJECUTADO** el login Google real, pendiente de prueba manual con cuenta autorizada pese a la configuración local aplicada. Microsoft sigue comentado/deshabilitado y pendiente de configuración y prueba real. CI no consulta proveedores ni envía correos externos.
 
 ## Referencias verificadas el 9 de octubre de 2026
 

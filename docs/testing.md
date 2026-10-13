@@ -24,7 +24,7 @@ El worker E2E usa exclusivamente el entorno `testing`, la cola `database` de `es
 
 El servidor usa `artisan serve --no-reload` para conservar las variables forzadas por Compose en su proceso PHP hijo. Sin esa opción, Laravel descarta variables al recargar `.env.testing` y puede sustituir SMTP/cola por sus valores antiguos. `config/mail.php` trata `MAIL_URL` vacío como ausente para que Laravel conserve el transporte SMTP; una regresión comprueba su construcción sin acceder a la red.
 
-Playwright rechaza cualquier `baseURL` diferente de `http://test-app:8000` y exige `E2E_ISOLATED=1`. El TestCase de Laravel verifica las guardas antes de cualquier reset. Ningún script ejecuta `down -v`, resetea desarrollo ni debe eliminar sus sesiones o usuarios. Las cuentas de prueba son ficticias.
+Playwright rechaza cualquier `baseURL` diferente de `http://test-app:8000` y exige `E2E_ISOLATED=1`. El TestCase de Laravel verifica las guardas antes de cualquier reset. PostgreSQL de desarrollo puede publicar loopback mediante `DB_FORWARD_PORT`; test-postgres y Redis siguen sin puertos publicados. Ningún script ejecuta `down -v`, resetea desarrollo ni debe eliminar sus sesiones o usuarios. Las cuentas de prueba son ficticias.
 
 ## Cobertura de aplicación
 

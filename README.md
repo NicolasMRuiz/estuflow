@@ -12,9 +12,15 @@ cd /Users/nicolasruiz/estuflow
 ./scripts/start.sh
 ```
 
-Abrir [EstuFlow](http://localhost:8000) y [correo local Mailpit](http://localhost:8025). `setup.sh` crea `.env`/`.env.testing` sólo si no existen, con secretos aleatorios, instala lockfiles y aplica sólo migraciones pendientes. Preserva archivos/datos. `start.sh` verifica readiness e inicia también worker/capturador. Bases y Redis quedan internos; web y bandeja sólo loopback. Nunca borrar volúmenes para solucionar un problema.
+Abrir [EstuFlow](http://localhost:8000) y [correo local Mailpit](http://localhost:8025). `setup.sh` crea `.env`/`.env.testing` sólo si no existen, con secretos aleatorios, instala lockfiles y aplica sólo migraciones pendientes. Preserva archivos/datos. `start.sh` verifica readiness e inicia también worker/capturador. PostgreSQL de desarrollo publica sólo loopback para DataGrip; test-postgres y Redis quedan internos. Web y bandeja también sólo loopback. Nunca borrar volúmenes para solucionar un problema.
 
 Si el puerto cambia, configurar `APP_PORT` y `APP_URL` en `.env`; el origen confiable también determina URLs de seguridad/callbacks. Para detener: `docker compose stop app worker mailpit` (preserva datos).
+
+## PostgreSQL desde DataGrip
+
+Conectar a `127.0.0.1:5433`, base `estuflow`, usuario `estuflow`, contraseña **DB_PASSWORD de .env local**. El puerto efectivo se define con `DB_FORWARD_PORT` (predeterminado 5433); Laravel sigue en `DB_HOST=postgres`, `DB_PORT=5432`. No poner la contraseña en una URL JDBC ni en documentación.
+
+[Guía de conexión, cambio de puerto y comprobaciones](docs/datagrip.md). El volumen y las credenciales se conservan al recrear el contenedor. `test-postgres` y Redis no publican puertos.
 
 ## Revisar los cinco bloques de M02
 
@@ -24,7 +30,7 @@ Si el puerto cambia, configurar `APP_PORT` y `APP_URL` en `.env`; el origen conf
 4. **Google/Microsoft:** implementación completa con pruebas dobles; botones ocultos hasta configurar credenciales. [Activación OAuth](docs/oauth.md) detalla aplicaciones Web, audiencias, permisos y callbacks. Después de verificar, abrir `/metodos-de-acceso` para vincular tras confirmar identidad. No hay vinculación automática por email coincidente ni contraseña inventada.
 5. **Errores:** probar vacío/email inválido/confirmación diferente; mensajes inline y foco. Credenciales incorrectas tienen un solo aviso general. Funciona con POST normal sin JavaScript.
 
-Correo externo: [activar Brevo, STARTTLS y diagnóstico](docs/mail.md). **Brevo, Google y Microsoft reales: NO EJECUTADOS por falta de configuración externa.** Las pruebas locales usan fakes y SMTP capturado aislado, nunca proveedores reales.
+Correo externo: [activar Brevo, STARTTLS y diagnóstico](docs/mail.md). **Google y Brevo ya están configurados en el .env local:** botón/redirect Google y configuración SMTP comprobados, pero login Google, autenticación/entrega Brevo y conexión DataGrip siguen pendientes de prueba manual. Microsoft permanece deshabilitado. [Resultado de esta ampliación](docs/evidence/m02/datagrip-config.md). Las pruebas locales usan fakes y SMTP capturado aislado, nunca proveedores reales.
 
 ## Checks
 

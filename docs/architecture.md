@@ -28,7 +28,7 @@ Identidad conocida ingresa en su cuenta. Nueva con email libre crea cuenta no ve
 
 ## Ejecución y mantenimiento
 
-Imágenes oficiales y Mailpit fijados por digest multiplataforma, sin forzar AMD64. Composer corre en imagen PHP de la app. Frontend usa Node 22. La web publica sólo loopback y el capturador sólo interfaz en loopback; bases/Redis/SMTP no publican puertos. `php artisan serve` es sólo desarrollo. No se borran volúmenes ni se ejecutan resets de desarrollo.
+Imágenes oficiales y Mailpit fijados por digest multiplataforma, sin forzar AMD64. Composer corre en imagen PHP de la app. Frontend usa Node 22. La web y la interfaz del capturador publican sólo loopback. PostgreSQL de desarrollo publica `127.0.0.1:${DB_FORWARD_PORT:-5433}:5432` para DataGrip; Laravel conserva `postgres:5432`. Test-postgres, Redis y SMTP del capturador no publican puertos. El volumen PostgreSQL y sus credenciales se conservan al recrear el servicio; ver [DataGrip](datagrip.md). `php artisan serve` es sólo desarrollo. No se borran volúmenes ni se ejecutan resets de desarrollo.
 
 Testing tiene servidor, usuario y volumen PostgreSQL diferentes; `TestingDatabase` valida entorno `testing`, driver `pgsql`, host `test-postgres`, base `estuflow_test` antes de migrar/reset. PHPUnit/E2E secuenciales, instancias web/worker/Mailpit aisladas. Los scripts detienen test-worker antes de reset. `environment:check` comprueba sesiones/PostgreSQL y una clave Redis UUID temporal; nunca flush.
 

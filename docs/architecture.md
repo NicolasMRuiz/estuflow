@@ -1,38 +1,35 @@
 # Arquitectura
 
-Monolito Laravel: controladores y Form Requests para registro/login/logout, modelo `User` y componente Livewire de página para el dashboard. Sin repositorios artificiales ni módulos vacíos. El dominio académico se incorporará cuando tenga requisitos aprobados.
+Monolito Laravel 13 / PHP 8.4 / Livewire 4 / Blade / Tailwind 4. PostgreSQL 18 conserva cuentas, sesiones cifradas, identidades OAuth, tokens hasheados de recuperación y trabajos cifrados de correo. Redis almacena caché/contadores con prefijos separados por ambiente. Alpine proviene exclusivamente de Livewire. Las versiones exactas quedan en Composer/npm lockfiles; M02 agrega únicamente Socialite y el adaptador Microsoft con sus dependencias.
 
-## Compatibilidad y stack
+## Autenticación y autorización
 
-Laravel 13 admite PHP 8.4; Livewire 4 admite Illuminate 13. Las dependencias exactas quedan en `composer.lock`. Blade, Tailwind 4 y Vite se instalan con Node 22 y `package-lock.json`. Alpine se carga solo con `@livewireScripts`, sin otra importación ni CDN.
+Controladores pequeños y Form Requests propios; no starter kit ni Fortify. Email normalizado con trim/minúsculas en formularios y modelo, unicidad PostgreSQL; password 10–128 caracteres, confirmación asociada al campo, hasher Argon2id del framework. Password es nullable para cuentas creadas con OAuth; el login local rechaza esas cuentas hasta establecer contraseña mediante el broker.
 
-Las imágenes oficiales se fijan por digest de índice multiplataforma. No se fuerza AMD64 en Compose. La ejecución real en la nube es Linux AMD64; una prueba en macOS Apple Silicon queda pendiente. Las extensiones PHP se compilan con dos trabajos. Composer corre en la misma imagen PHP que la aplicación y comprueba sus requisitos reales.
+Registro despacha `Registered`, inicia sesión limitada y lleva a `/verificar-email`. `User` implementa `MustVerifyEmail`. Dashboard y métodos exigen `auth` + `verified`; el render Livewire vuelve a comprobar ambos, incluyendo updates posteriores. Los usuarios existentes no se marcan verificados por migración. No se acepta `email_verified_at` del navegador. No se agregan dominios institucionales ni datos académicos.
 
-El servidor de desarrollo es `php artisan serve`, dentro de `app`. No es una configuración de producción. Solo la web publica puerto en loopback; PostgreSQL y Redis no exponen puertos del host. PostgreSQL 18 monta `/var/lib/postgresql`. Los volúmenes son `estuflow_postgres_data` y `estuflow_test_postgres_data`.
+Login tiene límite por combinación email normalizado/IP (5 fallos/60s) y por IP (30/min). Credenciales incorrectas muestran un único error general. Registro tiene 10 intentos/min/IP; recuperación 10/min/IP y 1/min/email normalizado, incluso inexistente; actualización de contraseña 10/min/IP; verificación 20/min/IP y reenvío 1/60s/cuenta. OAuth 30/min/IP; reautenticación 5/min/usuario+IP. Los errores de límite conservan sólo nombre/email e indican espera.
 
-Cuentas y sesiones cifradas residen en PostgreSQL. Redis almacena caché y contadores, sin ser el almacenamiento de datos personales. `environment:check` escribe/lee/borra solo una clave UUID temporal; no ejecuta flush.
+Login y registro regeneran sesión; logout es POST con CSRF, invalida sesión y renueva CSRF. Las redirecciones posteriores se restringen al `APP_URL` confiable. Las URLs de correo se generan forzando ese origen. Formularios no flashean passwords, confirmaciones ni tokens. Blade escapa datos, incluyendo nombres del proveedor. Servidor de desarrollo silencioso para no registrar URLs con tokens.
 
-## Autenticación
+## Recuperación y verificación
 
-Email: trim y minúsculas antes de validar; el modelo aplica la misma normalización al guardar. Unicidad en validación e índice PostgreSQL. Contraseñas de 10–128 caracteres con el cast `hashed` del framework y Argon2id. Sin criptografía propia.
+Rutas: GET/POST `/olvide-mi-contrasena`; GET `/restablecer-contrasena/{token}` y POST `/restablecer-contrasena`. El POST de solicitud devuelve la misma respuesta para cuentas presentes/ausentes y encola siempre un trabajo cifrado; éste hace la consulta/broker fuera del request público. Correo también encolado con SMTP, 3 intentos, backoff y timeout acotados. Backend `database`, worker Docker y Mailpit local; ver [configuración de correo](mail.md).
 
-Login admite cinco fallos por combinación de email normalizado e IP durante 60 segundos; también hay un límite por IP para evitar rotación de emails. Los mensajes no revelan existencia de cuentas. Registro/login regeneran el ID de sesión; logout POST usa la protección CSRF del framework, invalida la sesión y regenera el token.
+El broker almacena token hasheado, expira en 60 minutos, throttle 60 segundos y reemplaza el anterior. El cambio serializa por cuenta en transacción para impedir uso concurrente del mismo token, usa el hasher del modelo, rota remember token y elimina exclusivamente sesiones PostgreSQL de esa cuenta. Despacha `PasswordReset`, notifica cambio y vuelve al login sin autenticar ni verificar email.
 
-El dashboard exige `auth` y lee la identidad autenticada en cada render. Ninguna propiedad pública o parámetro de URL selecciona la cuenta mostrada. Blade escapa su nombre. No se exige email verificado. No existen rutas/enlaces de recuperación, verificación o perfil.
+Rutas de verificación: GET `/verificar-email`, POST `/verificar-email/reenviar`, GET `/verificar-email/{id}/{hash}`. Laravel genera firma temporal de 60 minutos; el callback verifica firma/expiración, ID autenticado y hash del email, serializa la transición en PostgreSQL, marca sólo esa cuenta y despacha `Verified` una vez. Errores tienen pantalla útil, reenvío y logout. Un invitado conserva el destino firmado y lo reanuda tras login. Es independiente del broker de recuperación.
 
-## Pruebas y mantenimiento
+## OAuth
 
-Testing usa otro servidor PostgreSQL, usuario y volumen. `TestingDatabase` rechaza operaciones fuera de `testing`, `pgsql`, host `test-postgres` y base `estuflow_test`, tanto al arrancar esa instancia como antes de reset y migraciones de tests.
+[Política, protecciones y activación](oauth.md). Socialite para Google, SocialiteProviders/Microsoft para Microsoft; Authorization Code con sesión, state y PKCE. No se persisten access/refresh tokens. Identidad única `(provider, issuer, subject)`, transacciones/constraints para callbacks repetidos o concurrentes. Google usa ID de userinfo; Microsoft usa issuer+sub de claims validados por adaptador y comprobaciones adicionales nonce/audiencia/tenant. No se implementa criptografía JWT propia.
 
-Los paquetes de sistema/Chromium provienen de repositorios Debian firmados. Las imágenes base y dependencias Composer/npm están fijadas; los paquetes de sistema pueden cambiar entre reconstrucciones. No se desactivan firmas ni TLS.
+Identidad conocida ingresa en su cuenta. Nueva con email libre crea cuenta no verificada; sin email utiliza identidad pendiente cifrada en sesión con vencimiento 10 minutos. Email coincidente no vincula automáticamente. Vinculación sólo desde cuenta autenticada/verificada, reautenticación reciente de 10 minutos por password o proveedor ya vinculado e intención ligada a cuenta en sesión; no cambia la cuenta ni traslada identidad. No hay desvinculación. Proveedores ocultos/deshabilitados hasta configuración válida.
 
-El helper de nube configura DNS/proxy/CA localmente y almacena en la caché de Composer los archivos del destino oficial de GitHub (`codeload.github.com`) en el commit exacto del lockfile. Comprueba integridad ZIP, referencia y cualquier checksum declarado sin cambiar el lockfile. Evita clones completos de todas las dependencias y conserva la verificación TLS. Ningún secreto se escribe en ese helper u override.
+## Ejecución y mantenimiento
 
-## Referencias oficiales consultadas
+Imágenes oficiales y Mailpit fijados por digest multiplataforma, sin forzar AMD64. Composer corre en imagen PHP de la app. Frontend usa Node 22. La web y la interfaz del capturador publican sólo loopback. PostgreSQL de desarrollo publica `127.0.0.1:${DB_FORWARD_PORT:-5433}:5432` para DataGrip; Laravel conserva `postgres:5432`. Test-postgres, Redis y SMTP del capturador no publican puertos. El volumen PostgreSQL y sus credenciales se conservan al recrear el servicio; ver [DataGrip](datagrip.md). `php artisan serve` es sólo desarrollo. No se borran volúmenes ni se ejecutan resets de desarrollo.
 
-- [Laravel 13: releases](https://github.com/laravel/docs/blob/13.x/releases.md).
-- [Skeleton oficial Laravel 13](https://github.com/laravel/laravel/tree/13.x).
-- [Livewire: instalación y Alpine incluido](https://github.com/livewire/livewire/blob/main/docs/installation.md).
-- Metadatos de `laravel/framework` y `livewire/livewire` publicados en Packagist y de Tailwind/Vite en npm.
-- [Imagen oficial PostgreSQL](https://hub.docker.com/_/postgres).
-- [Caché de archivos de Composer](https://github.com/composer/composer/blob/main/src/Composer/Downloader/FileDownloader.php).
+Testing tiene servidor, usuario y volumen PostgreSQL diferentes; `TestingDatabase` valida entorno `testing`, driver `pgsql`, host `test-postgres`, base `estuflow_test` antes de migrar/reset. PHPUnit/E2E secuenciales, instancias web/worker/Mailpit aisladas. Los scripts detienen test-worker antes de reset. `environment:check` comprueba sesiones/PostgreSQL y una clave Redis UUID temporal; nunca flush.
+
+El helper cloud configura DNS/proxy/CA local y descarga ZIP oficiales del commit exacto de los lockfiles, sin desactivar TLS/firmas/checksums. No se necesita en Mac. La ejecución Mac ARM64 y los resultados concretos están en [evidencia M02](evidence/m02/checks.md); CI Linux AMD64 se reporta por separado.

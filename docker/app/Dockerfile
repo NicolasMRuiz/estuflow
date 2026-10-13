@@ -8,7 +8,8 @@ RUN --mount=type=secret,id=cloud_ca,target=/usr/local/share/ca-certificates/clou
     && docker-php-ext-install -j2 pdo_pgsql mbstring zip intl bcmath pcntl \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+ENV GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=/app
 WORKDIR /app
 ENV COMPOSER_HOME=/tmp/composer
 EXPOSE 8000
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["php", "artisan", "serve", "--quiet", "--no-reload", "--host=0.0.0.0", "--port=8000"]

@@ -1,71 +1,47 @@
 # EstuFlow
 
-Primera entrega de un organizador académico: registro, login/logout y dashboard privado en español, con identidad propia y estados honestos sin datos académicos. Las secciones futuras no son enlaces operativos.
+Organizador académico en español rioplatense. M02 implementa registro/login/logout, recuperación y verificación por email, acceso/vinculación Google y Microsoft, validación accesible y responsive hasta 4K. El dashboard conserva estados académicos vacíos; las secciones futuras no son enlaces operativos.
 
-## Requisitos y arranque desde una carpeta nueva
+## Iniciar en Mac
 
-Docker Desktop con Docker Compose v2, funcionando. Compatible con el stack de Docker para macOS Apple Silicon, sin PHP, Composer ni Node globales. La ejecución real en Apple Silicon aún no fue realizada; esta entrega se verificó en Linux AMD64.
+Requisito: Docker Desktop con Compose v2 activo. No requiere PHP/Composer/Node globales.
 
 ```bash
-git clone --branch main https://github.com/NicolasMRuiz/estuflow.git
-cd estuflow
+cd /Users/nicolasruiz/estuflow
 ./scripts/setup.sh
 ./scripts/start.sh
 ```
 
-La URL local es `http://localhost:8000`; login en `/login`, registro en `/registro` y panel en `/dashboard`. La primera entrega se conserva en la rama `main` del repositorio; estos comandos preparan una instalación local nueva.
+Abrir [EstuFlow](http://localhost:8000) y [correo local Mailpit](http://localhost:8025). `setup.sh` crea `.env`/`.env.testing` sólo si no existen, con secretos aleatorios, instala lockfiles y aplica sólo migraciones pendientes. Preserva archivos/datos. `start.sh` verifica readiness e inicia también worker/capturador. PostgreSQL de desarrollo publica sólo loopback para DataGrip; test-postgres y Redis quedan internos. Web y bandeja también sólo loopback. Nunca borrar volúmenes para solucionar un problema.
 
-`setup.sh` genera `.env` y `.env.testing` únicamente si no existen, con claves/contraseñas aleatorias locales. Nunca imprime esos valores. Conserva los archivos existentes; si ya hay una base, aplica solo migraciones pendientes. Las variables `DB_PASSWORD`, `TEST_DB_PASSWORD` y las claves de app deben estar configuradas localmente; no compartir su contenido. `.env.example` y `.env.testing.example` no contienen secretos reales.
+Si el puerto cambia, configurar `APP_PORT` y `APP_URL` en `.env`; el origen confiable también determina URLs de seguridad/callbacks. Para detener: `docker compose stop app worker mailpit` (preserva datos).
 
-Si el puerto 8000 está ocupado, ajustar `APP_PORT` y `APP_URL` en el `.env` local. Compose publica únicamente la web en `127.0.0.1`; las bases y Redis quedan en la red interna. Para equipos compartidos/producción se requiere una configuración adicional con HTTPS, cookies seguras, debug desactivado y servidor web de producción.
+## PostgreSQL desde DataGrip
 
-## Comandos
+Conectar a `127.0.0.1:5433`, base `estuflow`, usuario `estuflow`, contraseña **DB_PASSWORD de .env local**. El puerto efectivo se define con `DB_FORWARD_PORT` (predeterminado 5433); Laravel sigue en `DB_HOST=postgres`, `DB_PORT=5432`. No poner la contraseña en una URL JDBC ni en documentación.
+
+[Guía de conexión, cambio de puerto y comprobaciones](docs/datagrip.md). El volumen y las credenciales se conservan al recrear el contenedor. `test-postgres` y Redis no publican puertos.
+
+## Revisar los cinco bloques de M02
+
+1. **Responsive:** revisar login, registro y panel en 320, 390, 430, 768, 1280, 1440, 1920, 2560 y 3840 px CSS; menú móvil con teclado/Escape, 200% de zoom y altura 720 px. Capturas y límites en [evidencia](docs/evidence/m02/checks.md).
+2. **Recuperación:** desde `/login`, «¿Olvidaste la contraseña?». Pedir enlace, abrir el correo en Mailpit, elegir contraseña confirmada y volver a ingresar. Se cierran sesiones anteriores sólo de esa cuenta; el enlace no verifica email.
+3. **Verificación:** crear cuenta en `/registro`; queda en `/verificar-email`. Abrir el enlace de Mailpit con esa cuenta para acceder al dashboard. Reenvío tiene espera visible de 60 segundos. Cuentas previas sin verificar también pasan por este aviso.
+4. **Google/Microsoft:** implementación completa con pruebas dobles; botones ocultos hasta configurar credenciales. [Activación OAuth](docs/oauth.md) detalla aplicaciones Web, audiencias, permisos y callbacks. Después de verificar, abrir `/metodos-de-acceso` para vincular tras confirmar identidad. No hay vinculación automática por email coincidente ni contraseña inventada.
+5. **Errores:** probar vacío/email inválido/confirmación diferente; mensajes inline y foco. Credenciales incorrectas tienen un solo aviso general. Funciona con POST normal sin JavaScript.
+
+Correo externo: [activar Brevo, STARTTLS y diagnóstico](docs/mail.md). **Google y Brevo ya están configurados en el .env local:** botón/redirect Google y configuración SMTP comprobados, pero login Google, autenticación/entrega Brevo y conexión DataGrip siguen pendientes de prueba manual. Microsoft permanece deshabilitado. [Resultado de esta ampliación](docs/evidence/m02/datagrip-config.md). Las pruebas locales usan fakes y SMTP capturado aislado, nunca proveedores reales.
+
+## Checks
+
+Ejecutar PHPUnit y E2E **secuencialmente**, comparten exclusivamente PostgreSQL `estuflow_test` del servicio `test-postgres`:
 
 ```bash
-# Preparar/refrescar dependencias usando lockfiles y comprobar servicios
-./scripts/setup.sh
-
-# Iniciar o detener procesos, preservando volúmenes
-./scripts/start.sh
-docker compose stop app
-
-# Formato, análisis estático y build
-./scripts/check.sh
-
-# Pruebas Laravel en PostgreSQL aislado
-./scripts/test.sh
-
-# Smoke E2E y capturas, solo contra datos ficticios de prueba
-./scripts/e2e.sh
-
-# Readiness: PostgreSQL, sesiones y operación temporal de Redis
-docker compose run --rm app php artisan environment:check
-
-# Aplicar formato de PHP
-docker compose run --rm --no-deps app composer format
+./scripts/check.sh   # Composer, Pint, Larastan nivel 6, build
+./scripts/test.sh    # PHPUnit PostgreSQL aislado
+./scripts/e2e.sh     # Chromium + worker + test-mailpit aislados
 ```
 
-Los scripts comprueban el daemon; si Docker falta o está detenido, iniciarlo manualmente. No instalan Docker ni cambian ajustes globales del host. No borrar volúmenes para solucionar un problema.
+Para formato: `docker compose run --rm --no-deps app composer format`. Para readiness: `docker compose run --rm app php artisan environment:check`. No usar SQLite ni resetear desarrollo. Los scripts detienen los procesos de testing antes de resets; E2E genera capturas con cuentas ficticias y campos password vacíos.
 
-En la nube administrada, los scripts detectan el override ignorado `docker/compose.cloud.yaml`, que configura proxy, DNS y CA. Para comandos Docker manuales en esa instancia, ejecutar primero `source scripts/common.sh`. El helper `python3 scripts/cloud-setup.py` prepara ese override y caché de archivos oficiales para evitar el endpoint GitHub bloqueado; se ejecuta únicamente en la nube. No es requisito de macOS.
-
-## Recorrido manual
-
-1. Abrir `/registro`, completar nombre, email y contraseña confirmada de 10–128 caracteres. El email se normaliza a minúsculas.
-2. Tras crear la cuenta, comprobar el saludo personal y los estados vacíos del dashboard.
-3. Usar **Cerrar sesión**; volver a `/dashboard` debe llevar a `/login`.
-4. Ingresar con el mismo email/contraseña para recuperar el panel. Un email duplicado o credenciales incorrectas producen errores en español.
-
-No se requiere email verificado ni se envían correos. No se implementaron recuperación, edición de perfil, modelo académico o CRUD.
-
-## Documentación y evidencia
-
-- `docs/architecture.md`: stack, seguridad y decisiones.
-- `docs/ui.md`: identidad, tokens, estados y responsive.
-- `docs/testing.md`: comandos, aislamiento y límites de las pruebas.
-- `docs/progress.md`: entrega actual y siguientes pasos.
-- `docs/evidence/checks.md`: resultados ejecutados y versiones.
-- `docs/evidence/dashboard-1440x900.png` y `dashboard-390x844.png`: cuenta ficticia; no implican aceptación visual de Nicolás.
-- `AGENTS.md`: reglas permanentes y comandos para trabajar en este checkout.
-
-Las versiones exactas PHP/Composer/Node/PostgreSQL/Redis están asociadas a los digests en Docker; Laravel/Livewire y las dependencias frontend quedan fijadas por sus lockfiles. `docs/evidence/checks.md` registra las versiones efectivamente ejecutadas.
+Documentación: [arquitectura](docs/architecture.md), [interfaz](docs/ui.md), [testing](docs/testing.md), [progreso](docs/progress.md), [correo](docs/mail.md), [OAuth](docs/oauth.md), [resultados y capturas M02](docs/evidence/m02/checks.md), [reglas de trabajo](AGENTS.md). Los lockfiles/digests fijan versiones. M02 no despliega hosting ni implementa modelo académico.

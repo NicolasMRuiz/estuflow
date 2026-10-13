@@ -1,15 +1,23 @@
 # Progreso
 
-Primera entrega: base Docker, registro/login/logout y dashboard privado EstuFlow con estados académicos vacíos. Incluye formularios en español, normalización de email, validación en servidor, hash, rate limit y manejo de sesión; diseño responsive con menú móvil; comandos de checks y E2E aislados, documentación y AGENTS.md.
+## M02 — implementación del 9 y cierre local del 13 de octubre de 2026
 
-Resultados ejecutados en `docs/evidence/checks.md`. La aceptación visual corresponde a Nicolás. Sin commits, push ni publicación automáticos.
+Implementados los cinco bloques de la entrega:
 
-## Próximas entregas
+1. Responsive de 320 px CSS a 4K, auth con medida máxima y composición adaptable; dashboard centrado dentro del área libre de sidebar, navegación móvil con teclado.
+2. Recuperación completa con Password Broker, token hasheado de 60 minutos, throttle de 60 segundos, trabajo asíncrono también para cuentas ausentes, notificaciones cifradas en cola PostgreSQL, worker Docker, Mailpit local y configuración Brevo STARTTLS. Reset rota remember token, invalida sólo sesiones propias, notifica y vuelve al login.
+3. Verificación con MustVerifyEmail, Registered/Verified, enlace firmado temporal, sesión limitada, reenvío con cooldown y restricciones auth+verified en HTTP/Livewire. Cuentas existentes no se verifican automáticamente.
+4. Google y Microsoft con Socialite, state/PKCE/nonce cuando corresponde, identidad estable única, password nullable, email pendiente en servidor, conflicto sin autovínculo, sección Métodos de acceso y vínculo con reautenticación. Google habilitado en local tras configurar .env; Microsoft permanece deshabilitado.
+5. Errores inline accesibles y consistentes, credenciales incorrectas como único aviso general, foco y corrección de errores, POST sin JavaScript y escape de datos.
 
-1. Revisar y aceptar esta base y su interfaz.
-2. Definir carrera, plan de estudios, materias y estados de cursada; implementar una primera operación real sobre carrera.
-3. Correlativas y reglas de progreso con denominadores definidos.
-4. Agenda, planificación y luego búsqueda/alertas/reporte según requisitos.
-5. Recuperación/verificación de email y perfil con flujo y transporte definidos.
+Verificación local final: setup/start/check PASS, 75 pruebas con 455 aserciones y 4 recorridos E2E aprobados. GitHub Actions también PASS en Linux AMD64 sobre `1d1a714`: setup, check, PHPUnit, E2E y artifact de capturas. Resultados, capturas y estado de GitHub en [evidencia M02](evidence/m02/checks.md). Guías de [correo/Brevo](mail.md) y [Google/Microsoft](oauth.md). Las pruebas dobles y SMTP local no acreditan entrega Brevo ni OAuth real: el login Google y la autenticación/entrega Brevo reales quedan NO EJECUTADOS, pendientes de prueba manual con cuentas autorizadas pese a su configuración local aplicada. Microsoft sigue deshabilitado. No se desplegó hosting ni se hizo merge.
 
-Estas secciones no representan funcionalidades implementadas. No hay un máximo artificial de tablas ni se amplía el alcance con tareas del plan anterior.
+La entrega M01 se conserva en el historial y su evidencia previa en `docs/evidence/`; M02 no reinterpreta sus resultados como pruebas de las funciones nuevas. Las reglas permanentes están en AGENTS.md; commits/push requieren autorización explícita, otorgada para esta entrega.
+
+## Ampliación local — DataGrip y configuración externa
+
+PostgreSQL de desarrollo publicado exclusivamente en `127.0.0.1:5433`, configurable con `DB_FORWARD_PORT`; Laravel sigue en `postgres:5432`. Se conservaron volumen, identidad del clúster, tabla/usuarios y credenciales. Test-postgres y Redis permanecen internos. Configuración aplicada, app/worker reiniciados, Google visible/redirect comprobado sin consultar al proveedor y Brevo efectivo con STARTTLS obligatorio. Sin funcionalidades ni dependencias nuevas. [Guía DataGrip](datagrip.md) y [checks de la ampliación](evidence/m02/datagrip-config.md).
+
+## Pendiente de producto
+
+La aceptación visual final corresponde a Nicolás. No se implementó modelo académico, carrera, plan de estudios, materias, cursadas, correlativas, agenda ni CRUD. El dashboard mantiene estados vacíos y secciones futuras deshabilitadas. Esas funciones requieren requisitos y tarea aparte.

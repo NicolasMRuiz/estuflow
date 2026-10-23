@@ -1,0 +1,2412 @@
+{
+  "schema_version": "1.0.0",
+  "prepared_on": "2026-10-13",
+  "institution": {
+    "name": "Instituto Tecnológico Beltrán",
+    "institute": "Instituto Superior de Formación Técnica N° 197",
+    "location": "Avellaneda"
+  },
+  "scope": {
+    "provided_careers": 3,
+    "provided_plans": 3,
+    "provided_courses": 71,
+    "institution_target_careers": 12,
+    "other_careers": "not_loaded_no_source_provided"
+  },
+  "source_semantics": {
+    "G": "General: permite rendir en modalidad libre según la fuente.",
+    "E": "Específica: no permite rendir en modalidad libre según la fuente.",
+    "R": "Regular: acredita mediante examen final.",
+    "P": "Promoción: puede acreditar sin examen final.",
+    "empty_requirement_cell": "Sin correlativas explícitas en esa columna; siguen aplicando las condiciones generales del año.",
+    "final_vs_promotion": "La equivalencia no está definida por estas fuentes. No inferirla ni bloquear la declaración personal.",
+    "hour_unit": "Hs. de la fuente, sin equivalencia cronológica/semanal definida.",
+    "rule_usage": "Orientación personal, no acreditación ni inscripción institucional."
+  },
+  "plans": [
+    {
+      "career_key": "TSAS",
+      "career_name": "Tecnicatura Superior en Análisis de Sistemas",
+      "plan_key": "TSAS-6790-19-INGRESO-2020",
+      "resolution": "6790/19",
+      "entry_cohort_from": 2020,
+      "entry_cohort_to": null,
+      "entry_cohort_to_status": "not_defined_by_source",
+      "duration_in_academic_years": 3,
+      "source": {
+        "filename": "Estructura Curricular y Correlatividades - TSAS - 2024.pdf",
+        "filename_year": 2024,
+        "sha256": "ff244f7b9eadc34c11fc3a4f8b763ff6974a09948b9c11a54b65b2662679d475",
+        "page_count": 1
+      },
+      "academic_year_entry_rules": [
+        {
+          "academic_year": 1,
+          "source_page": 1,
+          "source_text": "Es condición ineludible para la inscripción a materias\nde 1er año:\n1) Presentar la documentación solicitada para la\nmatriculación en los plazos establecidos en el\ncalendario académico, según reglamento.\n2) Haber realizado el curso de ingreso.\n3) Tramitar la libreta de estudiante.",
+          "kind": "administrative_conditions",
+          "conditions": [
+            "required_enrollment_documents_by_academic_calendar_deadline",
+            "entrance_course_completed",
+            "student_booklet_processed"
+          ],
+          "evaluation": "information_only_no_institutional_evidence_available"
+        },
+        {
+          "academic_year": 2,
+          "source_page": 1,
+          "source_text": "Es condición para la inscripción a materias de 2do año\ntener aprobadas en examen final al menos dos\nmaterias correspondientes a 1er año, de las cuales al\nmenos una debe ser del campo de la formación\nespecífica (Identificadas en la tabla con la letra \"E\").",
+          "kind": "previous_year_final_passes",
+          "previous_academic_year": 1,
+          "minimum_final_passed_courses": 2,
+          "minimum_specific_final_passed_courses": 1,
+          "measurement_time": "course_registration_date_in_academic_calendar",
+          "promotion_equivalence": "not_defined_by_source",
+          "evaluation": "advisory_only"
+        },
+        {
+          "academic_year": 3,
+          "source_page": 1,
+          "source_text": "Es condición para la inscripción a materias de 3er año\ntener aprobadas en examen final al menos dos\nmaterias correspondientes a 2do año, de las cuales al\nmenos una debe ser del campo de la formación\nespecífica (Identificadas en la tabla con la letra \"E\").",
+          "kind": "previous_year_final_passes",
+          "previous_academic_year": 2,
+          "minimum_final_passed_courses": 2,
+          "minimum_specific_final_passed_courses": 1,
+          "measurement_time": "course_registration_date_in_academic_calendar",
+          "promotion_equivalence": "not_defined_by_source",
+          "evaluation": "advisory_only"
+        }
+      ],
+      "courses": [
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:294",
+          "code": "294",
+          "academic_year": 1,
+          "catalog_order": 1,
+          "source_name": "Inglés I",
+          "display_name": "Inglés I",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 1,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:295",
+          "code": "295",
+          "academic_year": 1,
+          "catalog_order": 2,
+          "source_name": "Ciencia, Tecnología y Sociedad",
+          "display_name": "Ciencia, Tecnología y Sociedad",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 2,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:296",
+          "code": "296",
+          "academic_year": 1,
+          "catalog_order": 3,
+          "source_name": "Análisis Matemático I",
+          "display_name": "Análisis Matemático I",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 3,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:297",
+          "code": "297",
+          "academic_year": 1,
+          "catalog_order": 4,
+          "source_name": "Álgebra",
+          "display_name": "Álgebra",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 4,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:298",
+          "code": "298",
+          "academic_year": 1,
+          "catalog_order": 5,
+          "source_name": "Algoritmos y Estructuras de Datos I",
+          "display_name": "Algoritmos y Estructuras de Datos I",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 128,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 5,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:299",
+          "code": "299",
+          "academic_year": 1,
+          "catalog_order": 6,
+          "source_name": "Sistemas y Organizaciones",
+          "display_name": "Sistemas y Organizaciones",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 6,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:300",
+          "code": "300",
+          "academic_year": 1,
+          "catalog_order": 7,
+          "source_name": "Arquitectura de Computadores",
+          "display_name": "Arquitectura de Computadores",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 7,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:301",
+          "code": "301",
+          "academic_year": 1,
+          "catalog_order": 8,
+          "source_name": "Prácticas Profesionalizantes I",
+          "display_name": "Prácticas Profesionalizantes I",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 8,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:302",
+          "code": "302",
+          "academic_year": 2,
+          "catalog_order": 9,
+          "source_name": "Inglés II",
+          "display_name": "Inglés II",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "294"
+            ],
+            "to_enroll_requires_coursework": [
+              "294"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 9,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "294",
+            "to_enroll_requires_coursework": "294",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:303",
+          "code": "303",
+          "academic_year": 2,
+          "catalog_order": 10,
+          "source_name": "Análisis Matemático II",
+          "display_name": "Análisis Matemático II",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "296",
+              "297"
+            ],
+            "to_enroll_requires_coursework": [
+              "296"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 10,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "296,297",
+            "to_enroll_requires_coursework": "296",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:304",
+          "code": "304",
+          "academic_year": 2,
+          "catalog_order": 11,
+          "source_name": "Estadística",
+          "display_name": "Estadística",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "296",
+              "297"
+            ],
+            "to_enroll_requires_coursework": [
+              "296",
+              "297"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 11,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "296,297",
+            "to_enroll_requires_coursework": "296,297",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:305",
+          "code": "305",
+          "academic_year": 2,
+          "catalog_order": 12,
+          "source_name": "Ingenieria de Software I",
+          "display_name": "Ingeniería de Software I",
+          "editorial_corrections": [
+            {
+              "kind": "editorial_accent",
+              "from": "Ingenieria de Software I",
+              "to": "Ingeniería de Software I"
+            }
+          ],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "299"
+            ],
+            "to_enroll_requires_coursework": [
+              "299"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 12,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "299",
+            "to_enroll_requires_coursework": "299",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:306",
+          "code": "306",
+          "academic_year": 2,
+          "catalog_order": 13,
+          "source_name": "Algoritmos y Estructuras de Datos II",
+          "display_name": "Algoritmos y Estructuras de Datos II",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 128,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "298"
+            ],
+            "to_enroll_requires_coursework": [
+              "298"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 13,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "298",
+            "to_enroll_requires_coursework": "298",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:307",
+          "code": "307",
+          "academic_year": 2,
+          "catalog_order": 14,
+          "source_name": "Sistemas Operativos",
+          "display_name": "Sistemas Operativos",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "300"
+            ],
+            "to_enroll_requires_coursework": [
+              "300"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 14,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "300",
+            "to_enroll_requires_coursework": "300",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:308",
+          "code": "308",
+          "academic_year": 2,
+          "catalog_order": 15,
+          "source_name": "Base de Datos",
+          "display_name": "Base de Datos",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "298"
+            ],
+            "to_enroll_requires_coursework": [
+              "298"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 15,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "298",
+            "to_enroll_requires_coursework": "298",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:309",
+          "code": "309",
+          "academic_year": 2,
+          "catalog_order": 16,
+          "source_name": "Prácticas Profesionalizantes II",
+          "display_name": "Prácticas Profesionalizantes II",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 128,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "299",
+              "301"
+            ],
+            "to_enroll_requires_coursework": [
+              "299",
+              "301"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 16,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "299,301",
+            "to_enroll_requires_coursework": "299,301",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:310",
+          "code": "310",
+          "academic_year": 3,
+          "catalog_order": 17,
+          "source_name": "Inglés III",
+          "display_name": "Inglés III",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "302"
+            ],
+            "to_enroll_requires_coursework": [
+              "302"
+            ],
+            "to_enroll_requires_finals": [
+              "294"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 17,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "302",
+            "to_enroll_requires_coursework": "302",
+            "to_enroll_requires_finals": "294"
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:311",
+          "code": "311",
+          "academic_year": 3,
+          "catalog_order": 18,
+          "source_name": "Aspectos legales de la profesión",
+          "display_name": "Aspectos legales de la profesión",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "309"
+            ],
+            "to_enroll_requires_coursework": [
+              "309"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 18,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "309",
+            "to_enroll_requires_coursework": "309",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:312",
+          "code": "312",
+          "academic_year": 3,
+          "catalog_order": 19,
+          "source_name": "Seminario de actualización",
+          "display_name": "Seminario de actualización",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "309"
+            ],
+            "to_enroll_requires_coursework": [
+              "309"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 19,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "309",
+            "to_enroll_requires_coursework": "309",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:313",
+          "code": "313",
+          "academic_year": 3,
+          "catalog_order": 20,
+          "source_name": "Redes y Comunicaciones",
+          "display_name": "Redes y Comunicaciones",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "307"
+            ],
+            "to_enroll_requires_coursework": [
+              "307"
+            ],
+            "to_enroll_requires_finals": [
+              "300"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 20,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "307",
+            "to_enroll_requires_coursework": "307",
+            "to_enroll_requires_finals": "300"
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:314",
+          "code": "314",
+          "academic_year": 3,
+          "catalog_order": 21,
+          "source_name": "Ingenieria de Software II",
+          "display_name": "Ingeniería de Software II",
+          "editorial_corrections": [
+            {
+              "kind": "editorial_accent",
+              "from": "Ingenieria de Software II",
+              "to": "Ingeniería de Software II"
+            }
+          ],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "305"
+            ],
+            "to_enroll_requires_coursework": [
+              "305"
+            ],
+            "to_enroll_requires_finals": [
+              "299"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 21,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "305",
+            "to_enroll_requires_coursework": "305",
+            "to_enroll_requires_finals": "299"
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:315",
+          "code": "315",
+          "academic_year": 3,
+          "catalog_order": 22,
+          "source_name": "Algoritmos y Estructuras de Datos III",
+          "display_name": "Algoritmos y Estructuras de Datos III",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 128,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "306"
+            ],
+            "to_enroll_requires_coursework": [
+              "306"
+            ],
+            "to_enroll_requires_finals": [
+              "296",
+              "298"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 22,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "306",
+            "to_enroll_requires_coursework": "306",
+            "to_enroll_requires_finals": "296, 298"
+          }
+        },
+        {
+          "key": "TSAS-6790-19-INGRESO-2020:316",
+          "code": "316",
+          "academic_year": 3,
+          "catalog_order": 23,
+          "source_name": "Prácticas Profesionalizantes III",
+          "display_name": "Prácticas Profesionalizantes III",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 192,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [
+              "305",
+              "306",
+              "308",
+              "309"
+            ],
+            "to_enroll_requires_finals": [
+              "298",
+              "299"
+            ]
+          },
+          "special_rules": [
+            {
+              "kind": "all_other_plan_courses_final_passed",
+              "source_column": "to_take_final_requires_finals",
+              "source_cell": "TODAS***",
+              "source_note": "*** Es requisito tener aprobados los finales de todas las materias de la carrera para aprobarla Práctica del 3° año de la carrera.",
+              "scope": "all_courses_in_this_plan_except_this_course",
+              "self_reference_excluded": true,
+              "application_moment": "final_exam_vs_practice_accreditation_requires_confirmation",
+              "promotion_equivalence": "not_defined_by_source",
+              "evaluation": "advisory_only_pending_academic_confirmation"
+            }
+          ],
+          "source_page": 1,
+          "source_row": 23,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "TODAS***",
+            "to_enroll_requires_coursework": "305,306,308,\n309",
+            "to_enroll_requires_finals": "298, 299"
+          }
+        }
+      ],
+      "summary": {
+        "course_count": 23,
+        "calculated_total_hours": 1856,
+        "total_hours_basis": "sum_of_source_course_hours_not_a_printed_official_total",
+        "by_academic_year": [
+          {
+            "academic_year": 1,
+            "course_count": 8,
+            "calculated_hours": 576
+          },
+          {
+            "academic_year": 2,
+            "course_count": 8,
+            "calculated_hours": 640
+          },
+          {
+            "academic_year": 3,
+            "course_count": 7,
+            "calculated_hours": 640
+          }
+        ],
+        "listed_dependency_count_by_kind": {
+          "to_take_final_requires_finals": 17,
+          "to_enroll_requires_coursework": 20,
+          "to_enroll_requires_finals": 7
+        }
+      }
+    },
+    {
+      "career_key": "TECEN",
+      "career_name": "Tecnicatura Superior en Enfermería",
+      "plan_key": "TECEN-854-16-INGRESO-2019",
+      "resolution": "854/16",
+      "entry_cohort_from": 2019,
+      "entry_cohort_to": null,
+      "entry_cohort_to_status": "not_defined_by_source",
+      "duration_in_academic_years": 3,
+      "source": {
+        "filename": "Estructura Curricular y Correlatividades - TECEN - 2024.pdf",
+        "filename_year": 2024,
+        "sha256": "052f96bf15efc5eea6649e81db6edd4057ba0bbb0ced43bf4e24da011634bf16",
+        "page_count": 1
+      },
+      "academic_year_entry_rules": [
+        {
+          "academic_year": 1,
+          "source_page": 1,
+          "source_text": "Es condición ineludible para la inscripción a materias\nde 1er año:\n1) Presentar la documentación solicitada para la\nmatriculación en los plazos establecidos en el\ncalendario académico, según reglamento.\n2) Haber realizado el curso de ingreso.\n3) Tramitar la libreta de estudiante.",
+          "kind": "administrative_conditions",
+          "conditions": [
+            "required_enrollment_documents_by_academic_calendar_deadline",
+            "entrance_course_completed",
+            "student_booklet_processed"
+          ],
+          "evaluation": "information_only_no_institutional_evidence_available"
+        },
+        {
+          "academic_year": 2,
+          "source_page": 1,
+          "source_text": "Es condición para la inscripción a materias de 2do año\ntener aprobadas en examen final al menos dos\nmaterias correspondientes a 1er año, de las cuales al\nmenos una debe ser del campo de la formación\nespecífica (Identificadas en la tabla con la letra \"E\").",
+          "kind": "previous_year_final_passes",
+          "previous_academic_year": 1,
+          "minimum_final_passed_courses": 2,
+          "minimum_specific_final_passed_courses": 1,
+          "measurement_time": "course_registration_date_in_academic_calendar",
+          "promotion_equivalence": "not_defined_by_source",
+          "evaluation": "advisory_only"
+        },
+        {
+          "academic_year": 3,
+          "source_page": 1,
+          "source_text": "Es condición para la inscripción a materias de 3er año\ntener aprobadas en examen final al menos dos\nmaterias correspondientes a 2do año, de las cuales al\nmenos una debe ser del campo de la formación\nespecífica (Identificadas en la tabla con la letra \"E\").",
+          "kind": "previous_year_final_passes",
+          "previous_academic_year": 2,
+          "minimum_final_passed_courses": 2,
+          "minimum_specific_final_passed_courses": 1,
+          "measurement_time": "course_registration_date_in_academic_calendar",
+          "promotion_equivalence": "not_defined_by_source",
+          "evaluation": "advisory_only"
+        }
+      ],
+      "courses": [
+        {
+          "key": "TECEN-854-16-INGRESO-2019:215",
+          "code": "215",
+          "academic_year": 1,
+          "catalog_order": 1,
+          "source_name": "Psicología",
+          "display_name": "Psicología",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 32,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 1,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:216",
+          "code": "216",
+          "academic_year": 1,
+          "catalog_order": 2,
+          "source_name": "Teorías Socio Culturales de la Salud",
+          "display_name": "Teorías Socio Culturales de la Salud",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 32,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 2,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:217",
+          "code": "217",
+          "academic_year": 1,
+          "catalog_order": 3,
+          "source_name": "Condiciones y Medio Ambiente del Trabajo",
+          "display_name": "Condiciones y Medio Ambiente del Trabajo",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 3,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:218",
+          "code": "218",
+          "academic_year": 1,
+          "catalog_order": 4,
+          "source_name": "Salud Pública I",
+          "display_name": "Salud Pública I",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 4,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:219",
+          "code": "219",
+          "academic_year": 1,
+          "catalog_order": 5,
+          "source_name": "Biología Humana",
+          "display_name": "Biología Humana",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 128,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 5,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:220",
+          "code": "220",
+          "academic_year": 1,
+          "catalog_order": 6,
+          "source_name": "Fundamentos del Cuidado",
+          "display_name": "Fundamentos del Cuidado",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 6,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:221",
+          "code": "221",
+          "academic_year": 1,
+          "catalog_order": 7,
+          "source_name": "Cuidados de la Salud centrados en la comunidad y la familia",
+          "display_name": "Cuidados de la Salud centrados en la comunidad y la familia",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 96,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 7,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:222",
+          "code": "222",
+          "academic_year": 1,
+          "catalog_order": 8,
+          "source_name": "Práctica Profesionalizante I",
+          "display_name": "Práctica Profesionalizante I",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 256,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 8,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:327",
+          "code": "327",
+          "academic_year": 2,
+          "catalog_order": 9,
+          "source_name": "Comunicación en Ciencias de la Salud",
+          "display_name": "Comunicación en Ciencias de la Salud",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 32,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 9,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:328",
+          "code": "328",
+          "academic_year": 2,
+          "catalog_order": 10,
+          "source_name": "Inglés",
+          "display_name": "Inglés",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 32,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 10,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:329",
+          "code": "329",
+          "academic_year": 2,
+          "catalog_order": 11,
+          "source_name": "Introducción a la Metodología de la Investigación",
+          "display_name": "Introducción a la Metodología de la Investigación",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 11,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:330",
+          "code": "330",
+          "academic_year": 2,
+          "catalog_order": 12,
+          "source_name": "Nutrición y Dietoterapia",
+          "display_name": "Nutrición y Dietoterapia",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 32,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 12,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:331",
+          "code": "331",
+          "academic_year": 2,
+          "catalog_order": 13,
+          "source_name": "Salud Pública II",
+          "display_name": "Salud Pública II",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 96,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "218"
+            ],
+            "to_enroll_requires_coursework": [
+              "218"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 13,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "218",
+            "to_enroll_requires_coursework": "218",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:332",
+          "code": "332",
+          "academic_year": 2,
+          "catalog_order": 14,
+          "source_name": "Farmacología en Enfermería",
+          "display_name": "Farmacología en Enfermería",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 14,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:333",
+          "code": "333",
+          "academic_year": 2,
+          "catalog_order": 15,
+          "source_name": "Enfermería Materno Infantil",
+          "display_name": "Enfermería Materno Infantil",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "215",
+              "219",
+              "220",
+              "221"
+            ],
+            "to_enroll_requires_coursework": [
+              "215",
+              "219",
+              "220",
+              "221"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 15,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "215,219,220,\n221",
+            "to_enroll_requires_coursework": "215,219,220,\n221",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:334",
+          "code": "334",
+          "academic_year": 2,
+          "catalog_order": 16,
+          "source_name": "Enfermería del Adulto y del Adulto Mayor I",
+          "display_name": "Enfermería del Adulto y del Adulto Mayor I",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 96,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "215",
+              "219",
+              "220"
+            ],
+            "to_enroll_requires_coursework": [
+              "215",
+              "219",
+              "220"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 16,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "215,219,220",
+            "to_enroll_requires_coursework": "215,219,220",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:335",
+          "code": "335",
+          "academic_year": 2,
+          "catalog_order": 17,
+          "source_name": "Práctica Profesionalizante II",
+          "display_name": "Práctica Profesionalizante II",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 256,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "222"
+            ],
+            "to_enroll_requires_coursework": [
+              "222"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 17,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "222",
+            "to_enroll_requires_coursework": "222",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:336",
+          "code": "336",
+          "academic_year": 3,
+          "catalog_order": 18,
+          "source_name": "Organización y Gestión de servicios de Enfermería",
+          "display_name": "Organización y Gestión de servicios de Enfermería",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 18,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:337",
+          "code": "337",
+          "academic_year": 3,
+          "catalog_order": 19,
+          "source_name": "Aspectos Bioéticos y legales de la profesión",
+          "display_name": "Aspectos Bioéticos y legales de la profesión",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 32,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 19,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:338",
+          "code": "338",
+          "academic_year": 3,
+          "catalog_order": 20,
+          "source_name": "Enfermería en Salud Mental",
+          "display_name": "Enfermería en Salud Mental",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 20,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:339",
+          "code": "339",
+          "academic_year": 3,
+          "catalog_order": 21,
+          "source_name": "Enfermería del Adulto y del Adulto Mayor II",
+          "display_name": "Enfermería del Adulto y del Adulto Mayor II",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "330",
+              "332",
+              "334"
+            ],
+            "to_enroll_requires_coursework": [
+              "330",
+              "332",
+              "334"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 21,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "330,332,334",
+            "to_enroll_requires_coursework": "330,332,334",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:340",
+          "code": "340",
+          "academic_year": 3,
+          "catalog_order": 22,
+          "source_name": "Enfermería comunitaria y práctica educativa en Salud",
+          "display_name": "Enfermería comunitaria y práctica educativa en Salud",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 22,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:341",
+          "code": "341",
+          "academic_year": 3,
+          "catalog_order": 23,
+          "source_name": "Enfermería en Emergencias y Catástrofes",
+          "display_name": "Enfermería en Emergencias y Catástrofes",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 32,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 23,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TECEN-854-16-INGRESO-2019:342",
+          "code": "342",
+          "academic_year": 3,
+          "catalog_order": 24,
+          "source_name": "Módulo Práctica Profesionalizante III",
+          "display_name": "Módulo Práctica Profesionalizante III",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 356,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [
+              "335"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [
+            {
+              "kind": "all_other_plan_courses_final_passed",
+              "source_column": "to_take_final_requires_finals",
+              "source_cell": "TODAS ****",
+              "source_note": "*** Es requisito tener aprobados los finales de todas las materias de la carrera para aprobarla Práctica del 3° año de la carrera.",
+              "scope": "all_courses_in_this_plan_except_this_course",
+              "self_reference_excluded": true,
+              "application_moment": "final_exam_vs_practice_accreditation_requires_confirmation",
+              "promotion_equivalence": "not_defined_by_source",
+              "evaluation": "advisory_only_pending_academic_confirmation"
+            }
+          ],
+          "source_page": 1,
+          "source_row": 24,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "TODAS ****",
+            "to_enroll_requires_coursework": "335",
+            "to_enroll_requires_finals": ""
+          }
+        }
+      ],
+      "summary": {
+        "course_count": 24,
+        "calculated_total_hours": 2148,
+        "total_hours_basis": "sum_of_source_course_hours_not_a_printed_official_total",
+        "by_academic_year": [
+          {
+            "academic_year": 1,
+            "course_count": 8,
+            "calculated_hours": 736
+          },
+          {
+            "academic_year": 2,
+            "course_count": 9,
+            "calculated_hours": 736
+          },
+          {
+            "academic_year": 3,
+            "course_count": 7,
+            "calculated_hours": 676
+          }
+        ],
+        "listed_dependency_count_by_kind": {
+          "to_take_final_requires_finals": 12,
+          "to_enroll_requires_coursework": 13,
+          "to_enroll_requires_finals": 0
+        }
+      }
+    },
+    {
+      "career_key": "TSHSA",
+      "career_name": "Tecnicatura Superior en Higiene, Seguridad y Ambiente Laboral",
+      "plan_key": "TSHSA-INGRESO-2026",
+      "resolution": null,
+      "entry_cohort_from": 2026,
+      "entry_cohort_to": null,
+      "entry_cohort_to_status": "not_defined_by_source",
+      "duration_in_academic_years": 3,
+      "source": {
+        "filename": "Estructura Curricular y Correlatividades - TSHSA - 2026.pdf",
+        "filename_year": 2026,
+        "sha256": "dd052ececee23e0c9044b2b864851c929ae607dec2d21e67f2b800a630a7d347",
+        "page_count": 1
+      },
+      "academic_year_entry_rules": [
+        {
+          "academic_year": 1,
+          "source_page": 1,
+          "source_text": "Es condición ineludible para la inscripción a materias\nde 1er año:\n1) Presentar la documentación solicitada para la\nmatriculación en los plazos establecidos en el\ncalendario académico, según reglamento.\n2) Haber realizado el curso de ingreso.\n3) Tramitar la libreta de estudiante.",
+          "kind": "administrative_conditions",
+          "conditions": [
+            "required_enrollment_documents_by_academic_calendar_deadline",
+            "entrance_course_completed",
+            "student_booklet_processed"
+          ],
+          "evaluation": "information_only_no_institutional_evidence_available"
+        },
+        {
+          "academic_year": 2,
+          "source_page": 1,
+          "source_text": "Es condición para la inscripción a materias de 2do\naño tener aprobadas en examen final al menos dos\nmaterias correspondientes a 1er año, de las cuales al\nmenos una debe ser del campo de la formación\nespecífica (Identificadas en la tabla con la letra \"E\").",
+          "kind": "previous_year_final_passes",
+          "previous_academic_year": 1,
+          "minimum_final_passed_courses": 2,
+          "minimum_specific_final_passed_courses": 1,
+          "measurement_time": "course_registration_date_in_academic_calendar",
+          "promotion_equivalence": "not_defined_by_source",
+          "evaluation": "advisory_only"
+        },
+        {
+          "academic_year": 3,
+          "source_page": 1,
+          "source_text": "Es condición para la inscripción a materias de 3er año\ntener aprobadas en examen final al menos dos\nmaterias correspondientes a 2do año, de las cuales al\nmenos una debe ser del campo de la formación\nespecífica (Identificadas en la tabla con la letra \"E\").",
+          "kind": "previous_year_final_passes",
+          "previous_academic_year": 2,
+          "minimum_final_passed_courses": 2,
+          "minimum_specific_final_passed_courses": 1,
+          "measurement_time": "course_registration_date_in_academic_calendar",
+          "promotion_equivalence": "not_defined_by_source",
+          "evaluation": "advisory_only"
+        }
+      ],
+      "courses": [
+        {
+          "key": "TSHSA-INGRESO-2026:604",
+          "code": "604",
+          "academic_year": 1,
+          "catalog_order": 1,
+          "source_name": "Administración de las Organizaciones en Seguirdad",
+          "display_name": "Administración de las Organizaciones en Seguridad",
+          "editorial_corrections": [
+            {
+              "kind": "editorial_typo",
+              "from": "Administración de las Organizaciones en Seguirdad",
+              "to": "Administración de las Organizaciones en Seguridad",
+              "official_name_confirmation": "pending"
+            }
+          ],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 96,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 1,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:605",
+          "code": "605",
+          "academic_year": 1,
+          "catalog_order": 2,
+          "source_name": "Derecho de Trabajo",
+          "display_name": "Derecho de Trabajo",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 2,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:606",
+          "code": "606",
+          "academic_year": 1,
+          "catalog_order": 3,
+          "source_name": "Física para Seguridad 1",
+          "display_name": "Física para Seguridad 1",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 3,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:607",
+          "code": "607",
+          "academic_year": 1,
+          "catalog_order": 4,
+          "source_name": "Tecnologías de Representación para Seguridad",
+          "display_name": "Tecnologías de Representación para Seguridad",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 4,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:608",
+          "code": "608",
+          "academic_year": 1,
+          "catalog_order": 5,
+          "source_name": "Fundamentos de Matemática para Seguridad",
+          "display_name": "Fundamentos de Matemática para Seguridad",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 5,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:609",
+          "code": "609",
+          "academic_year": 1,
+          "catalog_order": 6,
+          "source_name": "Química para Seguridad 1",
+          "display_name": "Química para Seguridad 1",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 6,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:610",
+          "code": "610",
+          "academic_year": 1,
+          "catalog_order": 7,
+          "source_name": "Seguridad 1",
+          "display_name": "Seguridad 1",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 96,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 7,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:611",
+          "code": "611",
+          "academic_year": 1,
+          "catalog_order": 8,
+          "source_name": "Práctica Profesionalizante 1: Aproximación al Campo Laboral",
+          "display_name": "Práctica Profesionalizante 1: Aproximación al Campo Laboral",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 8,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:612",
+          "code": "612",
+          "academic_year": 2,
+          "catalog_order": 9,
+          "source_name": "Ergonomía",
+          "display_name": "Ergonomía",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "610",
+              "611"
+            ],
+            "to_enroll_requires_coursework": [
+              "604",
+              "605",
+              "610",
+              "611"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 9,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "610, 611",
+            "to_enroll_requires_coursework": "604, 605, 610, 611",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:613",
+          "code": "613",
+          "academic_year": 2,
+          "catalog_order": 10,
+          "source_name": "Física para Seguridad 2",
+          "display_name": "Física para Seguridad 2",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "606"
+            ],
+            "to_enroll_requires_coursework": [
+              "606",
+              "608"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 10,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "606",
+            "to_enroll_requires_coursework": "606, 608",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:614",
+          "code": "614",
+          "academic_year": 2,
+          "catalog_order": 11,
+          "source_name": "Higiene y Ambiente Laboral 1",
+          "display_name": "Higiene y Ambiente Laboral 1",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "610",
+              "611"
+            ],
+            "to_enroll_requires_coursework": [
+              "608",
+              "610",
+              "611"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 11,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "610, 611",
+            "to_enroll_requires_coursework": "608, 610, 611",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:615",
+          "code": "615",
+          "academic_year": 2,
+          "catalog_order": 12,
+          "source_name": "Medicina Laboral 1",
+          "display_name": "Medicina Laboral 1",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "605"
+            ],
+            "to_enroll_requires_coursework": [
+              "605",
+              "610"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 12,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "605",
+            "to_enroll_requires_coursework": "605, 610",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:616",
+          "code": "616",
+          "academic_year": 2,
+          "catalog_order": 13,
+          "source_name": "Psicología Laboral",
+          "display_name": "Psicología Laboral",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [
+              "604"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 13,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "604",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:617",
+          "code": "617",
+          "academic_year": 2,
+          "catalog_order": 14,
+          "source_name": "Química para Seguridad 2",
+          "display_name": "Química para Seguridad 2",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "609"
+            ],
+            "to_enroll_requires_coursework": [
+              "608",
+              "609"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 14,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "609",
+            "to_enroll_requires_coursework": "608, 609",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:618",
+          "code": "618",
+          "academic_year": 2,
+          "catalog_order": 15,
+          "source_name": "Seguridad 2",
+          "display_name": "Seguridad 2",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 96,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "605",
+              "610"
+            ],
+            "to_enroll_requires_coursework": [
+              "605",
+              "610",
+              "611"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 15,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "605, 610",
+            "to_enroll_requires_coursework": "605, 610, 611",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:619",
+          "code": "619",
+          "academic_year": 2,
+          "catalog_order": 16,
+          "source_name": "Capacitación Laboral",
+          "display_name": "Capacitación Laboral",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "610",
+              "611"
+            ],
+            "to_enroll_requires_coursework": [
+              "610",
+              "611"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 16,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "610, 611",
+            "to_enroll_requires_coursework": "610, 611",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:620",
+          "code": "620",
+          "academic_year": 2,
+          "catalog_order": 17,
+          "source_name": "Práctica Profesionalizante 2: Intervenciones en el Campo Profesional",
+          "display_name": "Práctica Profesionalizante 2: Intervenciones en el Campo Profesional",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 96,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "610",
+              "611"
+            ],
+            "to_enroll_requires_coursework": [
+              "607",
+              "608",
+              "610",
+              "611"
+            ],
+            "to_enroll_requires_finals": []
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 17,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "610, 611",
+            "to_enroll_requires_coursework": "607, 608, 610, 611",
+            "to_enroll_requires_finals": ""
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:621",
+          "code": "621",
+          "academic_year": 3,
+          "catalog_order": 18,
+          "source_name": "Inglés para Seguridad",
+          "display_name": "Inglés para Seguridad",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "P",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [
+              "614",
+              "620"
+            ],
+            "to_enroll_requires_finals": [
+              "610",
+              "611"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 18,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "",
+            "to_enroll_requires_coursework": "614, 620",
+            "to_enroll_requires_finals": "610, 611"
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:622",
+          "code": "622",
+          "academic_year": 3,
+          "catalog_order": 19,
+          "source_name": "Comunicación, Tecnología y Sociedad",
+          "display_name": "Comunicación, Tecnología y Sociedad",
+          "editorial_corrections": [],
+          "field_type": "G",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": true,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "619"
+            ],
+            "to_enroll_requires_coursework": [
+              "618",
+              "619",
+              "620"
+            ],
+            "to_enroll_requires_finals": [
+              "604",
+              "616"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 19,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "619",
+            "to_enroll_requires_coursework": "618, 619, 620",
+            "to_enroll_requires_finals": "604, 616"
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:623",
+          "code": "623",
+          "academic_year": 3,
+          "catalog_order": 20,
+          "source_name": "Medicina Laboral 2",
+          "display_name": "Medicina Laboral 2",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 64,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "615"
+            ],
+            "to_enroll_requires_coursework": [
+              "610",
+              "614",
+              "615"
+            ],
+            "to_enroll_requires_finals": [
+              "605",
+              "610"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 20,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "615",
+            "to_enroll_requires_coursework": "610, 614, 615",
+            "to_enroll_requires_finals": "605, 610"
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:624",
+          "code": "624",
+          "academic_year": 3,
+          "catalog_order": 21,
+          "source_name": "Control de la Contaminación",
+          "display_name": "Control de la Contaminación",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 96,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "614",
+              "617",
+              "618"
+            ],
+            "to_enroll_requires_coursework": [
+              "614",
+              "617"
+            ],
+            "to_enroll_requires_finals": [
+              "606",
+              "609"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 21,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "614, 617, 618",
+            "to_enroll_requires_coursework": "614, 617",
+            "to_enroll_requires_finals": "606, 609"
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:625",
+          "code": "625",
+          "academic_year": 3,
+          "catalog_order": 22,
+          "source_name": "Higiene y Ambiente Laboral 2",
+          "display_name": "Higiene y Ambiente Laboral 2",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 96,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "614"
+            ],
+            "to_enroll_requires_coursework": [
+              "612",
+              "614",
+              "620"
+            ],
+            "to_enroll_requires_finals": [
+              "606",
+              "609"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 22,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "614",
+            "to_enroll_requires_coursework": "612, 614, 620",
+            "to_enroll_requires_finals": "606, 609"
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:626",
+          "code": "626",
+          "academic_year": 3,
+          "catalog_order": 23,
+          "source_name": "Seguridad 3",
+          "display_name": "Seguridad 3",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 128,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [
+              "618"
+            ],
+            "to_enroll_requires_coursework": [
+              "618",
+              "619",
+              "620"
+            ],
+            "to_enroll_requires_finals": [
+              "604",
+              "606",
+              "609",
+              "610"
+            ]
+          },
+          "special_rules": [],
+          "source_page": 1,
+          "source_row": 23,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "618",
+            "to_enroll_requires_coursework": "618, 619, 620",
+            "to_enroll_requires_finals": "604, 606, 609, 610"
+          }
+        },
+        {
+          "key": "TSHSA-INGRESO-2026:627",
+          "code": "627",
+          "academic_year": 3,
+          "catalog_order": 24,
+          "source_name": "Práctica Profesionalizante 3: Diseño de Proyectos en Higiene, Seguridad y Ambiente Laboral",
+          "display_name": "Práctica Profesionalizante 3: Diseño de Proyectos en Higiene, Seguridad y Ambiente Laboral",
+          "editorial_corrections": [],
+          "field_type": "E",
+          "accreditation_instance": "R",
+          "hours": 192,
+          "free_exam_allowed_by_field_type": false,
+          "requirements": {
+            "to_take_final_requires_finals": [],
+            "to_enroll_requires_coursework": [
+              "612",
+              "614",
+              "618",
+              "619",
+              "620"
+            ],
+            "to_enroll_requires_finals": [
+              "606",
+              "607",
+              "608",
+              "609",
+              "610",
+              "611"
+            ]
+          },
+          "special_rules": [
+            {
+              "kind": "all_other_plan_courses_final_passed",
+              "source_column": "to_take_final_requires_finals",
+              "source_cell": "TODAS***",
+              "source_note": "*** Es requisito tener aprobados los finales de todas las materias de la carrera para aprobarla Práctica del 3° año de la carrera.",
+              "scope": "all_courses_in_this_plan_except_this_course",
+              "self_reference_excluded": true,
+              "application_moment": "final_exam_vs_practice_accreditation_requires_confirmation",
+              "promotion_equivalence": "not_defined_by_source",
+              "evaluation": "advisory_only_pending_academic_confirmation"
+            }
+          ],
+          "source_page": 1,
+          "source_row": 24,
+          "requirements_source_cells": {
+            "to_take_final_requires_finals": "TODAS***",
+            "to_enroll_requires_coursework": "612, 614, 618, 619, 620",
+            "to_enroll_requires_finals": "606, 607, 608, 609, 610, 611"
+          }
+        }
+      ],
+      "summary": {
+        "course_count": 24,
+        "calculated_total_hours": 1920,
+        "total_hours_basis": "sum_of_source_course_hours_not_a_printed_official_total",
+        "by_academic_year": [
+          {
+            "academic_year": 1,
+            "course_count": 8,
+            "calculated_hours": 576
+          },
+          {
+            "academic_year": 2,
+            "course_count": 9,
+            "calculated_hours": 640
+          },
+          {
+            "academic_year": 3,
+            "course_count": 7,
+            "calculated_hours": 704
+          }
+        ],
+        "listed_dependency_count_by_kind": {
+          "to_take_final_requires_finals": 20,
+          "to_enroll_requires_coursework": 44,
+          "to_enroll_requires_finals": 20
+        }
+      }
+    }
+  ]
+}

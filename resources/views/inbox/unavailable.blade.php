@@ -1,0 +1,1 @@
+<x-academic-layout title="Actividad no disponible"><x-academic-header title="Notificaciones" /><section class="academic-panel"><h1>Este evento ya no está disponible</h1><p>Puede haber sido eliminado. Sus recordatorios pendientes se cancelaron.</p><a class="academic-link" href="{{ route('inbox.index') }}">← Volver a notificaciones</a></section></x-academic-layout>

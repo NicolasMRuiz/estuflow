@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Support\InternalRedirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,10 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        $request->session()->put('auth.password_confirmed_at', time());
+        $request->session()->put('oauth.reauthenticated_user_id', $request->user()->id);
+
+        return InternalRedirect::afterLogin($request);
     }
 
     public function destroy(Request $request): RedirectResponse
@@ -24,6 +28,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('status', 'Cerraste sesión correctamente.');
+        return redirect()->route($request->boolean('recover') ? 'password.request' : 'login')->with('status', 'Cerraste sesión correctamente.');
     }
 }

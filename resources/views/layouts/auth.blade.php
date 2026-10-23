@@ -19,7 +19,7 @@
         </div>
         <p class="story-footer">EstuFlow · Tu espacio académico</p>
     </aside>
-    <main id="contenido" class="auth-main">
+    <main id="contenido" class="auth-main" tabindex="-1">
         <div class="auth-mobile-brand"><x-brand /></div>
         <div class="auth-card">{{ $slot }}</div>
         <p class="auth-footer">Tu cuenta es el comienzo. Lo demás, paso a paso.</p>

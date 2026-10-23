@@ -1,0 +1,12 @@
+{
+  "zoom": 2,
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "cssViewport": {
+    "width": 640,
+    "height": 360
+  },
+  "scope": "Chromium aislado, chrome.tabs.setZoom/getZoom. Capturas del viewport superior y final; no escalado físico de macOS."
+}

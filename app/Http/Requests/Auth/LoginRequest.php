@@ -10,6 +10,8 @@ use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
+    protected $redirectRoute = 'login';
+
     public function authorize(): bool
     {
         return true;
@@ -36,13 +38,13 @@ class LoginRequest extends FormRequest
         $key = hash('sha256', $this->string('email').'|'.$this->ip());
         if (RateLimiter::tooManyAttempts($key, 5)) {
             throw ValidationException::withMessages([
-                'email' => 'Demasiados intentos. Volvé a probar en '.RateLimiter::availableIn($key).' segundos.',
+                'auth' => 'Demasiados intentos. Volvé a probar en '.RateLimiter::availableIn($key).' segundos.',
             ]);
         }
 
         if (! Auth::attempt($this->only('email', 'password'))) {
             RateLimiter::hit($key, 60);
-            throw ValidationException::withMessages(['email' => 'El email o la contraseña no son correctos.']);
+            throw ValidationException::withMessages(['auth' => 'El email o la contraseña no son correctos.']);
         }
 
         RateLimiter::clear($key);

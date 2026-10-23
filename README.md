@@ -1,71 +1,61 @@
 # EstuFlow
 
-Primera entrega de un organizador académico: registro, login/logout y dashboard privado en español, con identidad propia y estados honestos sin datos académicos. Las secciones futuras no son enlaces operativos.
+Un espacio personal para organizar el recorrido académico: elegir carrera y plan, registrar el estado de las materias, consultar correlativas, planificar eventos con recordatorios, guardar notas y leer novedades. Mi perfil reúne datos personales, seguridad, accesos y configuración académica. El Planificador está pendiente.
 
-## Requisitos y arranque desde una carpeta nueva
+Laravel 13, PHP 8.4, Livewire 4, Blade y Tailwind 4; PostgreSQL 18 y Redis. Docker ejecuta PHP, Composer, Node, correo local y procesos en segundo plano.
 
-Docker Desktop con Docker Compose v2, funcionando. Compatible con el stack de Docker para macOS Apple Silicon, sin PHP, Composer ni Node globales. La ejecución real en Apple Silicon aún no fue realizada; esta entrega se verificó en Linux AMD64.
+## Preparar el equipo
+
+- **macOS:** Git, Bash y Docker Desktop en ejecución con Compose v2.
+- **Windows:** Docker Desktop con backend WSL2 y contenedores Linux; Ubuntu integrada. Los comandos del proyecto se ejecutan en **Bash dentro de Ubuntu/WSL**, desde su sistema de archivos Linux.
+- **Linux:** Git, Bash y Docker Engine con plugin Compose v2 —o Docker Desktop— y acceso al daemon.
+
+La [guía de instalación](docs/installation.md) incluye los pasos de PowerShell para preparar WSL2, requisitos y soluciones a fallos de arranque. No hace falta instalar PHP, Composer o Node en el anfitrión.
+
+## Primera instalación
+
+Mientras esta entrega esté en revisión, seleccionar su rama publicada:
 
 ```bash
-git clone --branch main https://github.com/NicolasMRuiz/estuflow.git
+git clone --branch codex/m05-perfil https://github.com/NicolasMRuiz/estuflow.git
 cd estuflow
 ./scripts/setup.sh
 ./scripts/start.sh
 ```
 
-La URL local es `http://localhost:8000`; login en `/login`, registro en `/registro` y panel en `/dashboard`. La primera entrega se conserva en la rama `main` del repositorio; estos comandos preparan una instalación local nueva.
+Abrir [EstuFlow](http://localhost:8000) y [Mailpit](http://localhost:8025). Crear una cuenta y verificarla desde el correo capturado en Mailpit. Después, configurar la carrera. Los puertos se pueden ajustar en el `.env` generado; [detalles](docs/installation.md#puertos-y-configuración).
 
-`setup.sh` genera `.env` y `.env.testing` únicamente si no existen, con claves/contraseñas aleatorias locales. Nunca imprime esos valores. Conserva los archivos existentes; si ya hay una base, aplica solo migraciones pendientes. Las variables `DB_PASSWORD`, `TEST_DB_PASSWORD` y las claves de app deben estar configuradas localmente; no compartir su contenido. `.env.example` y `.env.testing.example` no contienen secretos reales.
+Cada equipo crea su propia base y configuración privada: Git no traslada usuarios, contraseñas, volúmenes ni `.env` de otro equipo.
 
-Si el puerto 8000 está ocupado, ajustar `APP_PORT` y `APP_URL` en el `.env` local. Compose publica únicamente la web en `127.0.0.1`; las bases y Redis quedan en la red interna. Para equipos compartidos/producción se requiere una configuración adicional con HTTPS, cookies seguras, debug desactivado y servidor web de producción.
+## Actualizar, iniciar y parar
 
-## Comandos
+Con el checkout limpio y desde Bash:
 
 ```bash
-# Preparar/refrescar dependencias usando lockfiles y comprobar servicios
+./scripts/stop.sh
+git pull --ff-only
 ./scripts/setup.sh
-
-# Iniciar o detener procesos, preservando volúmenes
 ./scripts/start.sh
-docker compose stop app
-
-# Formato, análisis estático y build
-./scripts/check.sh
-
-# Pruebas Laravel en PostgreSQL aislado
-./scripts/test.sh
-
-# Smoke E2E y capturas, solo contra datos ficticios de prueba
-./scripts/e2e.sh
-
-# Readiness: PostgreSQL, sesiones y operación temporal de Redis
-docker compose run --rm app php artisan environment:check
-
-# Aplicar formato de PHP
-docker compose run --rm --no-deps app composer format
 ```
 
-Los scripts comprueban el daemon; si Docker falta o está detenido, iniciarlo manualmente. No instalan Docker ni cambian ajustes globales del host. No borrar volúmenes para solucionar un problema.
+`setup.sh` instala las dependencias fijadas, compila recursos y aplica migraciones pendientes e importación idempotente del catálogo. Conserva los archivos de entorno y sus claves. `start.sh` limpia la caché de configuración, aplica pendientes y recrea app, worker y scheduler para cargar el código/configuración actualizados; comprueba readiness y el login.
 
-En la nube administrada, los scripts detectan el override ignorado `docker/compose.cloud.yaml`, que configura proxy, DNS y CA. Para comandos Docker manuales en esa instancia, ejecutar primero `source scripts/common.sh`. El helper `python3 scripts/cloud-setup.py` prepara ese override y caché de archivos oficiales para evitar el endpoint GitHub bloqueado; se ejecuta únicamente en la nube. No es requisito de macOS.
+Para el uso diario: `./scripts/start.sh`. Para parar: `./scripts/stop.sh`; detiene web, worker, scheduler y Mailpit, conservando PostgreSQL y Redis. Los avisos requieren el equipo y esos procesos activos.
 
-## Recorrido manual
+## Uso y configuración
 
-1. Abrir `/registro`, completar nombre, email y contraseña confirmada de 10–128 caracteres. El email se normaliza a minúsculas.
-2. Tras crear la cuenta, comprobar el saludo personal y los estados vacíos del dashboard.
-3. Usar **Cerrar sesión**; volver a `/dashboard` debe llevar a `/login`.
-4. Ingresar con el mismo email/contraseña para recuperar el panel. Un email duplicado o credenciales incorrectas producen errores en español.
+- [Mi perfil y seguridad](docs/profile.md): nombre, doble confirmación de email, contraseña y carrera.
+- [Demostración CRUD en tres minutos](docs/demo.md): eventos y notas, con persistencia entre sesiones.
+- [Correo local y Brevo opcional](docs/mail.md), [Google/Microsoft opcionales](docs/oauth.md). Una instalación nueva usa Mailpit y proveedores deshabilitados; las credenciales personales no se distribuyen con Git. Microsoft sigue pendiente de prueba real.
+- [PostgreSQL desde DataGrip](docs/datagrip.md): conexión sólo en loopback, separada de las pruebas.
+- [Calendario, avisos y notas](docs/m04.md), [carrera y materias](docs/m03.md).
 
-No se requiere email verificado ni se envían correos. No se implementaron recuperación, edición de perfil, modelo académico o CRUD.
+## Verificación y documentación
 
-## Documentación y evidencia
+```bash
+./scripts/check.sh
+./scripts/test.sh
+./scripts/e2e.sh
+```
 
-- `docs/architecture.md`: stack, seguridad y decisiones.
-- `docs/ui.md`: identidad, tokens, estados y responsive.
-- `docs/testing.md`: comandos, aislamiento y límites de las pruebas.
-- `docs/progress.md`: entrega actual y siguientes pasos.
-- `docs/evidence/checks.md`: resultados ejecutados y versiones.
-- `docs/evidence/dashboard-1440x900.png` y `dashboard-390x844.png`: cuenta ficticia; no implican aceptación visual de Nicolás.
-- `AGENTS.md`: reglas permanentes y comandos para trabajar en este checkout.
-
-Las versiones exactas PHP/Composer/Node/PostgreSQL/Redis están asociadas a los digests en Docker; Laravel/Livewire y las dependencias frontend quedan fijadas por sus lockfiles. `docs/evidence/checks.md` registra las versiones efectivamente ejecutadas.
+Ejecutar PHPUnit y E2E secuencialmente; usan exclusivamente PostgreSQL de pruebas y correo/proveedores aislados. [Pruebas y aislamiento](docs/testing.md), [arquitectura](docs/architecture.md), [interfaz](docs/ui.md), [alcance y progreso](docs/progress.md) y [evidencia M05](docs/evidence/m05/checks.md).

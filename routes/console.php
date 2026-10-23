@@ -1,3 +1,5 @@
 <?php
 
-// Application commands are discovered from app/Console/Commands.
+use Illuminate\Support\Facades\Schedule;
+
+Schedule::command('m04:tick')->everyMinute()->withoutOverlapping(3);

@@ -1,0 +1,25 @@
+{
+  "scope": "Reglas previas de posicionamiento y ancho aplicadas temporalmente sobre markup M02; no representa la versión anterior completa ni reproduce el monitor físico del reporte.",
+  "previousRules": {
+    "viewport": {
+      "width": 2560,
+      "height": 1440
+    },
+    "sidebarWidth": 250,
+    "mainLeft": 250,
+    "mainWidth": 1700,
+    "remainingLeft": 0,
+    "remainingRight": 610
+  },
+  "currentRules": {
+    "viewport": {
+      "width": 2560,
+      "height": 1440
+    },
+    "sidebarWidth": 280,
+    "mainLeft": 520,
+    "mainWidth": 1800,
+    "remainingLeft": 240,
+    "remainingRight": 240
+  }
+}

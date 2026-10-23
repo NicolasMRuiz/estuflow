@@ -2,11 +2,17 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Support\InternalRedirect;
 use App\Support\TestingDatabase;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use SocialiteProviders\Manager\SocialiteWasCalled;
+use SocialiteProviders\Microsoft\Provider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,11 +23,30 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('testing')) {
             TestingDatabase::assertSafe();
         }
-        RateLimiter::for('registration', fn (Request $request) => Limit::perMinute(10)->by($request->ip())->response(
-            fn () => response('Demasiados registros. Esperá un minuto y volvé a intentar.', 429)
-        ));
-        RateLimiter::for('login-ip', fn (Request $request) => Limit::perMinute(30)->by($request->ip())->response(
-            fn () => response('Demasiados intentos. Esperá un minuto y volvé a intentar.', 429)
-        ));
+        Event::listen(function (SocialiteWasCalled $event): void {
+            $event->extendSocialite('microsoft', Provider::class);
+        });
+        // Security links and redirects never inherit an untrusted HTTP Host.
+        URL::forceRootUrl((string) config('app.url'));
+        URL::forceScheme(parse_url((string) config('app.url'), PHP_URL_SCHEME) ?: 'http');
+        $limited = fn (Request $request, array $headers) => InternalRedirect::back($request, $request->user()?->hasVerifiedEmail() ? 'access-methods.index' : ($request->user() ? 'verification.notice' : 'login'))->withErrors([
+            'auth' => 'Demasiados intentos. Volvé a probar en '.($headers['Retry-After'] ?? 60).' segundos.',
+        ])->withInput($request->only(['name', 'email']))->withHeaders($headers);
+        RateLimiter::for('registration', fn (Request $request) => Limit::perMinute(10)->by($request->ip())->response($limited));
+        RateLimiter::for('login-ip', fn (Request $request) => Limit::perMinute(30)->by($request->ip())->response($limited));
+        RateLimiter::for('password-email', function (Request $request) use ($limited): array {
+            $email = is_string($request->input('email')) ? User::normalizeEmail($request->input('email')) : '';
+
+            return [
+                Limit::perMinute(10)->by('reset-ip:'.$request->ip())->response($limited),
+                Limit::perMinute(1)->by('reset-email:'.hash('sha256', $email))->response($limited),
+            ];
+        });
+        RateLimiter::for('password-update', fn (Request $request) => Limit::perMinute(10)->by('reset-update:'.$request->ip())->response($limited));
+        RateLimiter::for('verification-ip', fn (Request $request) => Limit::perMinute(20)->by('verification:'.$request->ip())->response($limited));
+        RateLimiter::for('oauth', fn (Request $request) => Limit::perMinute(30)->by('oauth:'.$request->ip())->response($limited));
+        RateLimiter::for('profile', fn (Request $request) => Limit::perMinute(20)->by('profile:'.$request->user()?->id)->response($limited));
+        RateLimiter::for('email-change', fn (Request $request) => [Limit::perMinute(1)->by('email-change:'.$request->user()?->id)->response($limited), Limit::perHour(5)->by('email-change-hour:'.$request->user()?->id)->response($limited)]);
+        RateLimiter::for('reauth', fn (Request $request) => Limit::perMinute(5)->by('reauth:'.$request->user()?->getAuthIdentifier().'|'.$request->ip())->response($limited));
     }
 }

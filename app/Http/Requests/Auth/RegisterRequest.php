@@ -9,6 +9,8 @@ use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
 {
+    protected $redirectRoute = 'register';
+
     public function authorize(): bool
     {
         return true;
@@ -27,7 +29,8 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:254', Rule::unique(User::class)],
-            'password' => ['required', 'string', 'max:128', 'confirmed', Password::min(10)],
+            'password' => ['required', 'string', 'max:128', Password::min(10)],
+            'password_confirmation' => ['required', 'string', 'same:password'],
         ];
     }
 }

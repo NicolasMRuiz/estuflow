@@ -18,6 +18,7 @@ Reiniciar Windows si lo solicita. Abrir Ubuntu y crear el usuario/contraseña Li
 
 ```powershell
 wsl --update
+wsl --version
 wsl --set-default-version 2
 wsl --list --verbose
 ```

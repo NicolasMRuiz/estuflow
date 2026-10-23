@@ -6,7 +6,7 @@ Monolito Laravel 13 / PHP 8.4 / Livewire 4 / Blade / Tailwind 4. PostgreSQL 18 c
 
 Controladores pequeños y Form Requests propios; no starter kit ni Fortify. Email normalizado con trim/minúsculas en formularios y modelo, unicidad PostgreSQL; password 10–128 caracteres, confirmación asociada al campo, hasher Argon2id del framework. Password es nullable para cuentas creadas con OAuth; el login local rechaza esas cuentas hasta establecer contraseña mediante el broker.
 
-Registro despacha `Registered`, inicia sesión limitada y lleva a `/verificar-email`. `User` implementa `MustVerifyEmail`. Dashboard y métodos exigen `auth` + `verified`; el render Livewire vuelve a comprobar ambos, incluyendo updates posteriores. Los usuarios existentes no se marcan verificados por migración. No se acepta `email_verified_at` del navegador. No se agregan dominios institucionales ni datos académicos.
+Registro despacha `Registered`, inicia sesión limitada y lleva a `/verificar-email`. `User` implementa `MustVerifyEmail`. Dashboard y métodos exigen `auth` + `verified`; el render Livewire vuelve a comprobar ambos, incluyendo updates posteriores. Los usuarios existentes no se marcan verificados por migración. No se acepta `email_verified_at` del navegador. No se agregan dominios institucionales. M03 agrega catálogo y progreso académico separados de autenticación.
 
 Login tiene límite por combinación email normalizado/IP (5 fallos/60s) y por IP (30/min). Credenciales incorrectas muestran un único error general. Registro tiene 10 intentos/min/IP; recuperación 10/min/IP y 1/min/email normalizado, incluso inexistente; actualización de contraseña 10/min/IP; verificación 20/min/IP y reenvío 1/60s/cuenta. OAuth 30/min/IP; reautenticación 5/min/usuario+IP. Los errores de límite conservan sólo nombre/email e indican espera.
 
@@ -33,3 +33,9 @@ Imágenes oficiales y Mailpit fijados por digest multiplataforma, sin forzar AMD
 Testing tiene servidor, usuario y volumen PostgreSQL diferentes; `TestingDatabase` valida entorno `testing`, driver `pgsql`, host `test-postgres`, base `estuflow_test` antes de migrar/reset. PHPUnit/E2E secuenciales, instancias web/worker/Mailpit aisladas. Los scripts detienen test-worker antes de reset. `environment:check` comprueba sesiones/PostgreSQL y una clave Redis UUID temporal; nunca flush.
 
 El helper cloud configura DNS/proxy/CA local y descarga ZIP oficiales del commit exacto de los lockfiles, sin desactivar TLS/firmas/checksums. No se necesita en Mac. La ejecución Mac ARM64 y los resultados concretos están en [evidencia M02](evidence/m02/checks.md); CI Linux AMD64 se reporta por separado.
+
+## M03 · Datos académicos
+
+[Modelo y contrato](m03.md). Catálogo normalizado y planes inmutables; progreso aislado por usuario/plan mediante FK compuestas y un único plan activo. Configuración académica después de email verificado; middleware sólo en rutas académicas. Escrituras HTTP y Livewire usan AcademicProgress con bloqueo por usuario. Advisory evalúa datos cargados en memoria con relaciones eager, sin consultas por correlativa; no bloquea la declaración personal.
+
+M03 corregida el 23/10 distingue `is_candidate` de `is_active`: la carrera confirmada no se modifica durante la preparación de un cambio. El resumen queda ligado a la huella del candidato en sesión y se valida bajo bloqueo del usuario al confirmar. CareerBrowser ofrece edición inline con filtros persistentes; comparte AcademicProgress con el editor HTTP/Livewire de detalle. Presentación de nombres, conteos y estados separada de los datos fuente.

@@ -139,3 +139,66 @@ function initializeAuthForms() {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeAuthForms);
 else initializeAuthForms();
 document.addEventListener('livewire:navigated', initializeAuthForms);
+
+// Presentation only: bulk changes stay in the visible draft until a normal POST.
+function initializeAcademicForms() {
+    const firstError = document.querySelector('[data-academic-form] [aria-invalid="true"], [data-academic-error]');
+    if (firstError) {
+        for (let ancestor = firstError.parentElement; ancestor; ancestor = ancestor.parentElement) {
+            if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+        }
+        requestAnimationFrame(() => firstError.focus());
+    }
+    document.querySelectorAll('[data-academic-form]').forEach(form => {
+        if (form.dataset.academicInitialized) return;
+        form.dataset.academicInitialized = 'true';
+        form.addEventListener('submit', event => {
+            if (form.dataset.submitting) { event.preventDefault(); return; }
+            const chosen = event.submitter;
+            if (chosen?.name) {
+                const value = document.createElement('input');
+                value.type = 'hidden'; value.name = chosen.name; value.value = chosen.value;
+                form.append(value);
+            }
+            form.dataset.submitting = 'true';
+            form.setAttribute('aria-busy', 'true');
+            form.querySelectorAll('button[type="submit"]').forEach(button => { button.disabled = true; });
+        });
+    });
+    document.querySelectorAll('[data-year]').forEach(section => {
+        const controls = section.querySelector('[data-bulk-controls]');
+        if (!controls || controls.dataset.initialized) return;
+        controls.dataset.initialized = 'true'; controls.hidden = false;
+        const undo = controls.querySelector('[data-bulk-undo]');
+        const notice = controls.querySelector('[data-bulk-notice]');
+        let previous;
+        function setValue(select, value) {
+            select.value = value;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        controls.querySelector('[data-bulk-apply]').addEventListener('click', () => {
+            const fields = [...section.querySelectorAll('[data-status-select], [data-method-select]')];
+            previous = fields.map(select => [select, select.value]);
+            const state = controls.querySelector('[data-bulk-state]').value;
+            section.querySelectorAll('[data-status-select]').forEach(select => setValue(select, state));
+            section.querySelectorAll('[data-method-select]').forEach(select => setValue(select, 'unspecified'));
+            undo.hidden = false;
+            const count = section.querySelectorAll('[data-status-select]').length;
+            notice.textContent = `Cambiaste ${count} materias del año ${section.dataset.year}. Los cambios se aplicarán al guardar.`;
+        });
+        undo.addEventListener('click', () => {
+            previous?.forEach(([select, value]) => setValue(select, value));
+            previous = null; undo.hidden = true;
+            notice.textContent = `Restauraste los valores anteriores del año ${section.dataset.year}.`;
+        });
+    });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeAcademicForms);
+else initializeAcademicForms();
+document.addEventListener('livewire:navigated', initializeAcademicForms);
+window.addEventListener('career-focus', event => {
+    requestAnimationFrame(() => {
+        const target = document.querySelector(`#materia-${event.detail.courseId} [data-edit-course]`) || document.querySelector('#resultados');
+        target?.focus({ preventScroll: true });
+    });
+});

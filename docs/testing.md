@@ -58,3 +58,11 @@ CI y pruebas locales no consultan Google/Microsoft ni envían emails mediante Br
 Chromium se instala desde Debian en Docker y Playwright queda fijado en npm. WebKit/Safari y Firefox permanecen como comprobaciones futuras. La revisión de accesibilidad cubre estructura, labels, avisos, foco y teclado; no constituye una auditoría completa con lectores de pantalla.
 
 PHPUnit fuerza `CACHE_STORE=array` por proceso para no heredar límites de ejecuciones previas; sesiones y datos siguen en PostgreSQL aislado. E2E conserva Redis real con un `E2E_CACHE_PREFIX` nuevo por ejecución. No se hace flush de Redis ni se toca su prefijo de desarrollo.
+
+## M03
+
+PHPUnit cubre fidelidad/reconstrucción del catálogo, hashes PDF, idempotencia, entradas inválidas sin persistencia parcial, versiones inmutables y FK entre planes; elección/borrador/confirmación, aislamiento HTTP/Livewire, cambio y retorno, orientación incierta y dashboard 0/intermedio/100. Las pruebas M02 mantienen autenticación y ahora configuran una carrera cuando necesitan un dashboard completo. OAuth usa mocks; notificaciones fakes en PHPUnit y test-mailpit SMTP en E2E.
+
+`testing:prepare` importa el catálogo después de recrear exclusivamente estuflow_test. E2E añade el recorrido académico, persistencia y edición HTTP sin JavaScript. Capturas nuevas usan cuentas ficticias y quedan en docs/evidence/m03; no se publican correos, passwords, URLs firmadas ni storageState. Ejecutar PHPUnit antes de E2E, nunca en paralelo. Resultados y límites en [evidencia M03](evidence/m03/checks.md).
+
+La corrección M03 añade casos de cancelación/interrupción de cambio, selección del mismo plan, revisión desactualizada/ajena, migración desde un cambio antiguo incompleto y edición con filtros conservados. E2E verifica carga por año/deshacer, visibilidad de métodos, cancelación real y guardado contextual, y anillos 0/intermedio/100. La infraestructura existente se reutiliza; `./scripts/e2e.sh tests/e2e/academic.spec.js --grep ...` permite recorridos focalizados durante ajustes, antes de las suites completas del cierre. Las capturas nuevas viven en docs/evidence/m03-correction.

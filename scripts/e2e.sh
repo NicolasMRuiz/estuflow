@@ -7,4 +7,4 @@ docker compose --profile test up -d --wait test-postgres redis test-mailpit
 docker compose run --rm --no-deps test-app php artisan testing:prepare --env=testing
 trap 'docker compose --profile test stop test-worker test-app' EXIT
 docker compose --profile test up -d --wait test-app test-worker
-docker compose run --rm browser npm run test:e2e
+docker compose run --rm browser npm run test:e2e -- "$@"

@@ -15,6 +15,8 @@ class PrepareTesting extends Command
     {
         TestingDatabase::assertSafe();
 
-        return $this->call('migrate:fresh', ['--force' => true]);
+        $result = $this->call('migrate:fresh', ['--force' => true]);
+
+        return $result === self::SUCCESS ? $this->call('catalog:import') : $result;
     }
 }

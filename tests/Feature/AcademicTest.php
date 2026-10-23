@@ -80,7 +80,8 @@ class AcademicTest extends TestCase
         $this->get($url)->assertRedirect('/dashboard');
         $this->actingAs($user->fresh());
         $this->get('/dashboard')->assertRedirect(route('academic.choose'));
-        $this->get('/metodos-de-acceso')->assertOk();
+        $this->get('/metodos-de-acceso')->assertRedirect(route('profile.index'));
+        $this->get('/mi-perfil')->assertOk();
         $this->post('/logout')->assertRedirect('/login');
     }
 

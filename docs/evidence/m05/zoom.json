@@ -1,0 +1,12 @@
+{
+  "zoom": 2,
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "cssViewport": {
+    "width": 640,
+    "height": 360
+  },
+  "method": "Chromium tabs.setZoom/getZoom + CDP viewport screenshot; sin escalado de SO."
+}

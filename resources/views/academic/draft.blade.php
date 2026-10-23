@@ -1,5 +1,5 @@
 <x-academic-layout title="Mis materias">
-    <x-academic-header title="Tu carrera" />
+    <x-academic-header title="Tu carrera" :inline-errors="['entries.*', 'entries']" />
     <x-academic-steps :step="2" />
     <section class="academic-intro"><span class="eyebrow">A TU RITMO</span><h1>Mis materias</h1><p>{{ \App\Academic\Presentation::career($enrollment->plan) }}</p><p>Podés empezar con todas pendientes y editarlas después. «Final pendiente» significa que ya aprobaste la cursada.</p></section>
     <form method="POST" action="{{ route('academic.save') }}" novalidate data-academic-form data-academic-draft>@csrf

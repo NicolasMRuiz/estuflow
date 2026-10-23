@@ -1,10 +1,10 @@
-# PostgreSQL desde DataGrip en la Mac
+# PostgreSQL desde DataGrip en el equipo anfitrión
 
-El servicio `postgres` publica exclusivamente `127.0.0.1:${DB_FORWARD_PORT:-5433}:5432`. El puerto efectivo comprobado en este checkout es **5433**, libre antes de aplicarlo. No se expone a la red local ni a Internet. Laravel continúa usando `DB_HOST=postgres` y `DB_PORT=5432` dentro de Docker. `test-postgres` y Redis no publican puertos.
+El servicio `postgres` publica exclusivamente `127.0.0.1:${DB_FORWARD_PORT:-5433}:5432`. El default es **5433**; comprobar el puerto efectivo en cada instalación con `docker compose port postgres 5432`. La comprobación histórica del checkout macOS está en la evidencia M02. No se expone a la red local ni a Internet. Laravel continúa usando `DB_HOST=postgres` y `DB_PORT=5432` dentro de Docker. `test-postgres` y Redis no publican puertos.
 
 ## Datos de conexión
 
-| Campo | Valor efectivo |
+| Campo | Valor predeterminado |
 | --- | --- |
 | Host | `127.0.0.1` |
 | Puerto | `5433` |
@@ -22,11 +22,11 @@ SELECT current_database(), current_user, version();
 SELECT count(*) FROM users;
 ```
 
-La interfaz DataGrip y su Test Connection aún no se operaron en esta entrega. TCP desde la Mac y la consulta autenticada de Laravel son comprobaciones distintas; sólo la segunda valida una sesión PostgreSQL, por la red interna Docker. No se instaló un cliente psql en la Mac.
+TCP desde el anfitrión y una consulta autenticada PostgreSQL son comprobaciones distintas. DataGrip → Test Connection valida sus credenciales y acceso real; una consulta desde Laravel valida la red interna Docker. Las pruebas históricas de la Mac siguen registradas como tales en la evidencia M02.
 
 ## Aplicar o cambiar el puerto conservando datos
 
-`DB_FORWARD_PORT=5433` está en `.env.example` y se añadió al `.env` local sin alterar otros valores. Si está ocupado, elegir otro libre (por ejemplo 5434), actualizar **sólo** `DB_FORWARD_PORT` y recrear `postgres`:
+`DB_FORWARD_PORT=5433` está en `.env.example`; setup lo genera en instalaciones nuevas, sin reescribir archivos existentes. Si está ocupado, elegir otro libre (por ejemplo 5434), actualizar **sólo** `DB_FORWARD_PORT` y recrear `postgres`:
 
 ```bash
 docker compose config --quiet
@@ -35,8 +35,8 @@ docker compose port postgres 5432
 ./scripts/start.sh
 ```
 
-Usar el puerto que devuelve el tercer comando en DataGrip y registrar su valor efectivo. No cambiar `DB_PORT`, `DB_HOST`, credenciales ni nombre del volumen para resolver conflictos. Reiniciar app/worker si una conexión larga quedó interrumpida. El volumen existente `estuflow_postgres_data` se conserva; recrear el contenedor no reinicializa la base. No ejecutar resets de desarrollo ni borrar volúmenes.
+Usar el puerto que devuelve el tercer comando en DataGrip y registrar su valor efectivo. No cambiar `DB_PORT`, `DB_HOST`, credenciales ni nombre del volumen para resolver conflictos. Reiniciar app/worker si una conexión larga quedó interrumpida. El volumen del proyecto Compose se conserva; recrear el contenedor no reinicializa la base. No ejecutar resets de desarrollo ni borrar volúmenes.
 
-Para aplicar cambios de Google/Brevo: `docker compose run --rm --no-deps app php artisan config:clear` y `docker compose restart app worker`. [Pruebas manuales de correo y Google](mail.md#prueba-manual-desde-la-ui-con-brevo-configurado). `.env` y `.env.testing` siguen ignorados; no compartir sus valores.
+Para aplicar cambios de Google/Brevo: `./scripts/start.sh`. [Pruebas manuales de correo y Google](mail.md#prueba-manual-desde-la-ui-con-brevo-configurado). `.env` y `.env.testing` siguen ignorados; no compartir sus valores.
 
 [Resultados de esta ampliación](evidence/m02/datagrip-config.md).

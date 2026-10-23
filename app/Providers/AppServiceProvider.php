@@ -45,6 +45,8 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('password-update', fn (Request $request) => Limit::perMinute(10)->by('reset-update:'.$request->ip())->response($limited));
         RateLimiter::for('verification-ip', fn (Request $request) => Limit::perMinute(20)->by('verification:'.$request->ip())->response($limited));
         RateLimiter::for('oauth', fn (Request $request) => Limit::perMinute(30)->by('oauth:'.$request->ip())->response($limited));
+        RateLimiter::for('profile', fn (Request $request) => Limit::perMinute(20)->by('profile:'.$request->user()?->id)->response($limited));
+        RateLimiter::for('email-change', fn (Request $request) => [Limit::perMinute(1)->by('email-change:'.$request->user()?->id)->response($limited), Limit::perHour(5)->by('email-change-hour:'.$request->user()?->id)->response($limited)]);
         RateLimiter::for('reauth', fn (Request $request) => Limit::perMinute(5)->by('reauth:'.$request->user()?->getAuthIdentifier().'|'.$request->ip())->response($limited));
     }
 }

@@ -2,7 +2,7 @@
 
 M02 usa SMTP de Laravel/Symfony y una cola `database` en PostgreSQL. La solicitud de recuperación siempre encola un trabajo cifrado, exista o no la cuenta; la búsqueda y el broker se ejecutan en el worker. Las tres notificaciones de seguridad también son trabajos cifrados. No se incluyen contraseñas en correos ni se usa un fallback a logs. Los enlaces se generan desde `APP_URL`, nunca desde el Host recibido.
 
-## Recorrido local en la Mac
+## Recorrido local en el equipo anfitrión
 
 ```bash
 ./scripts/setup.sh
@@ -11,7 +11,7 @@ M02 usa SMTP de Laravel/Symfony y una cola `database` en PostgreSQL. La solicitu
 
 Abrir [EstuFlow](http://localhost:8000) y [Mailpit](http://localhost:8025). Mailpit captura realmente SMTP y sólo publica su interfaz en `127.0.0.1`; su puerto SMTP permanece en la red Docker. No reenvía a destinatarios reales. Sus mensajes son efímeros y contienen enlaces privados: no publicar capturas de la bandeja ni copiar enlaces en tickets.
 
-`start.sh` aplica migraciones pendientes, comprueba PostgreSQL/Redis, inicia web, Mailpit y worker. La cola de seguridad se fuerza a `database` en Compose, incluso para `.env` de M01 que decía `sync`. El antiguo `MAIL_MAILER=array` se interpreta como SMTP **sólo en local** para activar Mailpit sin sobrescribir ese archivo. PHPUnit sigue usando `array`/fakes; E2E fuerza SMTP a `test-mailpit`, con worker y PostgreSQL de testing. No comparten cola, bandeja ni datos con desarrollo.
+`start.sh` aplica migraciones pendientes, comprueba PostgreSQL/Redis, inicia web, Mailpit, worker y scheduler; recrea los procesos PHP para cargar la configuración vigente. La cola de seguridad se fuerza a `database` en Compose, incluso para `.env` de M01 que decía `sync`. El antiguo `MAIL_MAILER=array` se interpreta como SMTP **sólo en local** para activar Mailpit sin sobrescribir ese archivo. PHPUnit sigue usando `array`/fakes; E2E fuerza SMTP a `test-mailpit`, con worker y PostgreSQL de testing. No comparten cola, bandeja ni datos con desarrollo.
 
 Variables locales nuevas (sin secretos):
 
@@ -98,3 +98,7 @@ Si no hay correo: comprobar que worker esté activo; revisar cola fallida y cone
 Para un hosting futuro: `APP_URL=https://...` confiable por ambiente, debug desactivado, cookies seguras, worker supervisado, certificados válidos y remitente autenticado. M02 no despliega hosting.
 
 Referencias verificadas: [SMTP Brevo](https://help.brevo.com/hc/en-us/articles/7924908994450-Send-transactional-emails-using-Brevo-SMTP), [diagnóstico](https://help.brevo.com/hc/en-us/articles/115000188150-Troubleshooting-Issues-with-Brevo-SMTP), [cuota Gratis](https://help.brevo.com/hc/en-us/articles/208580669-FAQs-What-are-the-limits-of-the-Free-plan), [broker Laravel](https://laravel.com/framework/docs/passwords), [notificaciones](https://laravel.com/framework/docs/13.x/notifications).
+
+## Correo de perfil
+
+M05 agrega confirmaciones separadas para email actual/propuesto, trabajos cifrados ligados a la versión pendiente y aviso al email anterior. El perfil distingue cola, aceptación SMTP y fallo/no confirmación de envío. Ver [Mi perfil](profile.md); las pruebas siguen aisladas en test-mailpit. Para aplicar cambios de transporte, `./scripts/start.sh` limpia config y renueva app/worker/scheduler sin editar secretos.

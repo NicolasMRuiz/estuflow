@@ -32,7 +32,7 @@ PostgreSQL de desarrollo publicado exclusivamente en `127.0.0.1:5433`, configura
 
 ## Pendiente de producto
 
-M03 corregida fue aprobada por Nicolás según el alcance acordado de M04. Sigue pendiente la confirmación académica de las ambigüedades documentadas. Faltan las otras nueve carreras sin fuente, Planificador y perfil editable. Las integraciones Google/Brevo reales y Microsoft siguen con el estado informado en M02; los checks no las acreditan.
+M03 corregida fue aprobada por Nicolás según el alcance acordado de M04. Sigue pendiente la confirmación académica de las ambigüedades documentadas. Faltan las otras nueve carreras sin fuente y Planificador; el perfil se incorpora en M05. Las integraciones Google/Brevo reales y Microsoft siguen con el estado informado en M02; los checks no las acreditan.
 
 ## Corrección integral M03 · 23 de octubre de 2026
 
@@ -49,3 +49,16 @@ La presentación inicial de M03 no estaba aceptada. Se recupera la composición 
 6. **M04-06:** scheduler Compose/arranque/parada, pruebas aisladas, SMTP test-mailpit, capturas responsive/zoom y documentación.
 
 [Modelo, operación y recorrido manual](m04.md), [especificación](m04-spec.md) y [resultados reales](evidence/m04/checks.md). M04 requiere revisión visual de Nico; no modifica la aceptación M03 ni acredita entrega real de Brevo. Sin merge ni despliegue. Perfil, Planificador y reubicación de ajustes quedan para otra entrega.
+
+## M05 · Perfil y arranque multiplataforma · 23 de octubre de 2026
+
+M04 se considera funcional según Nicolás; sus refinamientos visuales generales siguen pendientes y esta entrega no rediseña esas pantallas.
+
+1. **M05-01:** Mi perfil con nombre único editable, guardar/cancelar, persistencia, saludo e inicial actualizados; sólo atributos autorizados de la cuenta actual.
+2. **M05-02:** email pendiente separado, reautenticación y confirmación POST de ambas direcciones, expiración/reenvío/cancelación, jobs cifrados versionados y colisión transaccional; contraseña local/OAuth-only, revocación de otras sesiones propias y tokens anteriores, avisos de seguridad.
+3. **M05-03:** accesos y carrera centralizados en perfil; rutas previas compatibles, retorno de OAuth a la operación iniciada y del cambio académico al perfil. Catálogo/progreso/eventos/notas/avisos/identidades conservados.
+4. **M05-04:** Bash común con requisitos claros, config limpia y procesos PHP recreados con readiness; instalación nueva/existente y guías macOS, Windows/WSL2 y Linux. Ejecución real de Windows pendiente, sin atribuirle resultados de Docker/CI.
+5. **M05-05:** README reescrito, [instalación](installation.md), [uso del perfil](profile.md) y [demostración CRUD](demo.md) con eventos/notas existentes.
+6. **M05-06:** regresión PostgreSQL/E2E, SMTP aislado, prueba concurrente real, capturas responsive/zoom, actualización acotada Vite 8.3.2 → 8.3.5 con lockfile y audit sin vulnerabilidades reportadas. [Resultados y límites](evidence/m05/checks.md).
+
+Rama `codex/m05-perfil` basada en M04 mientras su PR siga pendiente; entrega para revisión, sin merge ni despliegue. Google/Brevo reales y Microsoft no se acreditan con dobles/Mailpit. Windows/WSL2 y arquitecturas no ejecutadas se mantienen como NO EJECUTADO. Perfil funcional no equivale a aprobación visual general.

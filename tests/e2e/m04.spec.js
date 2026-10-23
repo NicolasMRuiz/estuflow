@@ -50,6 +50,18 @@ test('M04: evento completo, reprogramación persistente, SMTP, bandeja, carteler
     await page.goto(`/calendario/nuevo?date=${future()}&view=agenda`);
     await expect(page.getByLabel('Fecha de inicio', { exact: true })).toHaveValue(future());
     await eventForm(page, 'Examen de Redes');
+    await page.locator('form[data-event-form]').evaluate(form => {
+        for (const name of ['description[]', 'plan_course_id[]']) {
+            const input = document.createElement('input'); input.type = 'hidden'; input.name = name; input.value = 'valor no escalar de prueba'; form.append(input);
+        }
+    });
+    await page.getByRole('button', { name: 'Guardar evento', exact: true }).click();
+    await expect(page.locator('#description-error')).toHaveText('El campo descripción debe ser texto.');
+    await expect(page.locator('#plan_course_id-error')).toHaveText('El campo materia debe ser un número entero.');
+    await expect(page.locator('[name="title"]')).toHaveValue('Examen de Redes');
+    await page.goto(`/calendario/nuevo?date=${future()}&view=agenda`);
+    await eventForm(page, 'Examen de Redes');
+
     await page.getByLabel('24 horas antes', { exact: true }).check();
     await page.getByLabel('1 hora antes', { exact: true }).check();
     await page.getByLabel('También por email para este evento').check();

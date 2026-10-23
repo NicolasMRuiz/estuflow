@@ -11,9 +11,11 @@ Mac ARM64, Docker Desktop; PHP 8.4 / Laravel 13, PostgreSQL 18 y Chromium aislad
 | `setup.sh` | PASS: dependencias de lockfiles, migraciones pendientes, catálogo y readiness. |
 | `start.sh` / Compose config quiet | PASS: app, worker, scheduler, PostgreSQL y Redis operativos; scheduler sin puertos. |
 | `check.sh` | PASS: Composer strict, Pint, Larastan nivel 6 y Vite build. |
-| `test.sh` | PASS: **143 pruebas / 921 aserciones**, PostgreSQL estuflow_test/test-postgres. |
+| `test.sh` | PASS: **144 pruebas / 930 aserciones**, PostgreSQL estuflow_test/test-postgres. |
 | `e2e.sh` | PASS: **12 recorridos** (5 académicos + 3 autenticación + 3 M04 + 1 matriz responsive), posteriores a PHPUnit. |
 | GitHub Actions | PASS implementación `da92fb5`: push y pull_request; logs confirman 143/921 y 12 E2E. |
+
+La revisión final añadió una regresión para valores no escalares: errores de validación legibles, recuperación del formulario sin 500 y conservación de valores válidos, comprobados también en el navegador. Ese caso eleva el resultado local a 144/930; las corridas iniciales de implementación de abajo conservan su resultado histórico 143/921.
 
 PHPUnit incluye dos procesos reales concurrentes de `m04:tick --local-only`: una única notificación persistida. También comprueba versión, trabajo antiguo, eliminación, corte exacto de utilidad, recuperación, presupuesto, fallo/resultado SMTP incierto, propiedad/fechas/contexto, fuentes y notas. No consulta proveedores reales.
 
@@ -59,4 +61,4 @@ Las imágenes usan exclusivamente cuentas/contenido ficticios. No hay menús té
 
 Implementación `da92fb5b3073af56e9ae1c1e571732aaaeff8a00`: [push PASS](https://github.com/NicolasMRuiz/estuflow/actions/runs/40002894860) y [PR PASS](https://github.com/NicolasMRuiz/estuflow/actions/runs/40002920905), Linux AMD64. Se consultaron jobs/logs: setup, Composer/Pint/Larastan/build, **143 pruebas / 921 aserciones**, E2E **5 + 3 + 3 + 1 = 12**, y carga de capturas aprobados. [Artifact de esa corrida](https://github.com/NicolasMRuiz/estuflow/actions/runs/40002920905/artifacts/12523256875), retención 14 días; las 46 capturas versionadas M04 no dependen de esa caducidad.
 
-Este registro de resultados se agrega en un commit exclusivamente documental posterior. El resultado de Actions del HEAD final se mantiene en [la PR #3](https://github.com/NicolasMRuiz/estuflow/pull/3/checks), con su SHA exacto, separado de estas corridas de implementación. Los archivos locales de entorno se verificaron sin cambios y los procesos de testing quedaron detenidos. Worker/scheduler de desarrollo quedaron activos y saludables. Ninguna entrega real Brevo se acredita por estas pruebas.
+Este registro inicial se agregó en un commit documental posterior; luego se corrigió la recuperación ante valores no escalares y se repitieron las suites completas. El resultado de Actions del HEAD final se mantiene en [la PR #3](https://github.com/NicolasMRuiz/estuflow/pull/3/checks), con su SHA exacto, separado de estas corridas de implementación. Los archivos locales de entorno se verificaron sin cambios y los procesos de testing quedaron detenidos. Worker/scheduler de desarrollo quedaron activos y saludables. Ninguna entrega real Brevo se acredita por estas pruebas.

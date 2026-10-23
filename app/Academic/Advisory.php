@@ -57,7 +57,7 @@ class Advisory
         }
         $state = $definite >= $rule['minimum_final_passed_courses'] && $specificDefinite >= $rule['minimum_specific_final_passed_courses'] ? 'complete' : ($possible >= $rule['minimum_final_passed_courses'] && $specificPossible >= $rule['minimum_specific_final_passed_courses'] ? 'uncertain' : 'missing');
 
-        return ['state' => $state, 'text' => $rule['source_text'], 'observed' => "Declaraste {$definite} finales aprobados del año anterior, {$specificDefinite} de formación específica. El instituto evalúa esta condición a la fecha de inscripción.", 'ambiguous' => $possible - $definite];
+        return ['state' => $state, 'text' => $rule['source_text'], 'observed' => "Finales aprobados que declaraste del año anterior: {$definite}. De formación específica: {$specificDefinite}. El instituto evalúa esta condición a la fecha de inscripción.", 'ambiguous' => $possible - $definite];
     }
 
     /** @return array<string, mixed> */
@@ -78,7 +78,7 @@ class Advisory
             $others = $this->enrollment->plan->courses->reject(fn (PlanCourse $other): bool => $other->id === $course->id);
             $finals = $others->filter(fn (PlanCourse $other): bool => $this->evidence($other, true) === 'complete')->count();
             $ambiguous = $others->filter(fn (PlanCourse $other): bool => $this->evidence($other, true) === 'uncertain')->count();
-            $specials[] = ['state' => 'uncertain', 'source' => $special->source_data, 'observed' => $finals.' de '.$others->count().' finales declarados; '.$ambiguous.' aprobaciones con método por confirmar. Se excluye esta práctica.'];
+            $specials[] = ['state' => 'uncertain', 'source' => $special->source_data, 'observed' => 'Finales declarados de las demás materias: '.$finals.' de '.$others->count().'. Aprobaciones con método por confirmar: '.$ambiguous.'. Se excluye esta práctica.'];
         }
 
         return ['columns' => $columns, 'year' => $year, 'specials' => $specials, 'enrollment' => self::combine([$year['state'], $columns['to_enroll_requires_coursework']['state'], $columns['to_enroll_requires_finals']['state']]), 'final' => self::combine([$columns['to_take_final_requires_finals']['state'], ...array_column($specials, 'state')])];

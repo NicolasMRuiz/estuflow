@@ -32,10 +32,25 @@ Imágenes oficiales y Mailpit fijados por digest multiplataforma, sin forzar AMD
 
 Testing tiene servidor, usuario y volumen PostgreSQL diferentes; `TestingDatabase` valida entorno `testing`, driver `pgsql`, host `test-postgres`, base `estuflow_test` antes de migrar/reset. PHPUnit/E2E secuenciales, instancias web/worker/Mailpit aisladas. Los scripts detienen test-worker antes de reset. `environment:check` comprueba sesiones/PostgreSQL y una clave Redis UUID temporal; nunca flush.
 
-El helper cloud configura DNS/proxy/CA local y descarga ZIP oficiales del commit exacto de los lockfiles, sin desactivar TLS/firmas/checksums. No se necesita en Mac. La ejecución Mac ARM64 y los resultados concretos están en [evidencia M02](evidence/m02/checks.md); CI Linux AMD64 se reporta por separado.
+El helper cloud configura DNS/proxy/CA local y descarga ZIP oficiales del commit exacto de los lockfiles, sin desactivar TLS/firmas/checksums. No se necesita en instalaciones locales habituales. La ejecución Mac ARM64 y los resultados concretos están en [evidencia M02](evidence/m02/checks.md); CI Linux AMD64 se reporta por separado.
 
 ## M03 · Datos académicos
 
 [Modelo y contrato](m03.md). Catálogo normalizado y planes inmutables; progreso aislado por usuario/plan mediante FK compuestas y un único plan activo. Configuración académica después de email verificado; middleware sólo en rutas académicas. Escrituras HTTP y Livewire usan AcademicProgress con bloqueo por usuario. Advisory evalúa datos cargados en memoria con relaciones eager, sin consultas por correlativa; no bloquea la declaración personal.
 
 M03 corregida el 23/10 distingue `is_candidate` de `is_active`: la carrera confirmada no se modifica durante la preparación de un cambio. El resumen queda ligado a la huella del candidato en sesión y se valida bajo bloqueo del usuario al confirmar. CareerBrowser ofrece edición inline con filtros persistentes; comparte AcademicProgress con el editor HTTP/Livewire de detalle. Presentación de nombres, conteos y estados separada de los datos fuente.
+
+
+## M04 · Procesos locales y persistencia
+
+[Contrato operativo/modelo](m04.md). Se agregan eventos, notas, programación versionada, bandeja, copias de feriados y publicaciones/recipientes compartidos. Scheduler sin puertos ejecuta el chequeo cada minuto; worker database conserva el transporte M02. Leases temporales de fuente con token de intento impiden que una respuesta vieja sobrescriba un intento posterior. La identidad/idempotencia, intervalos y estados sobreviven a Redis. No hay consultas externas en requests de navegación; adaptadores externos no reciben URLs del estudiante. Pruebas usan servidor/worker/control CLI aislados y detienen los tres antes de resets.
+
+## M05 · Cuenta y operación multiplataforma
+
+`ProfileController` separa operaciones de nombre, email y contraseña; `ProfileRequest` rechaza campos fuera de cada operación. Perfil exige auth/verified sin middleware académico. `Reauthentication` comparte confirmación de identidad de 10 minutos, ligada al usuario, y destinos internos permitidos; OAuth guarda el destino en la intención original. El establecimiento de contraseña OAuth-only exige específicamente una confirmación por identidad vinculada, no una marca genérica de login.
+
+`pending_email_changes` agrega un único pendiente por cuenta, UUID de versión, direcciones actual/propuesta, hashes SHA-256 ligados a versión/propósito/ambas direcciones, expiración y estados de confirmación/envío. El GET no muta. El POST autenticado/CSRF bloquea usuario y pendiente; consume cada prueba una vez y cambia el email sólo con ambas. Se revalida disponibilidad y se captura la restricción única PostgreSQL ante carreras entre cuentas. Reenvío/reemplazo borran la versión previa; cancelar conserva el activo. `SendEmailChange` cifrado comprueba versión/destino/expiración bajo el mismo orden de locks; no envía versiones anuladas ni registra enlaces/excepciones SMTP. Estado sent significa aceptación del transporte, no entrega final.
+
+`AccountSecurity` rota remember token, elimina sólo otras sesiones de la cuenta y sus tokens de recuperación anteriores; renueva el ID de la sesión actual. Contraseña conserva el aviso M02; email notifica al destino anterior mediante trabajo cifrado. Identidades OAuth conocidas nunca sobrescriben datos propios. No se alteran progreso, eventos, avisos ni cadencias M04.
+
+Scripts Bash compartidos para macOS/Linux y Ubuntu dentro de WSL2; bootstrap PHP en contenedor, UID/GID del anfitrión, LF y digests multiplataforma. Setup conserva env/claves y aplica sólo pendientes; start detiene procesos PHP, limpia config y los recrea con readiness. [Operación por plataforma](installation.md) y [matriz real de ejecución](evidence/m05/checks.md).

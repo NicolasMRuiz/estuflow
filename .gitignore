@@ -33,3 +33,5 @@ Thumbs.db
 /.phpunit.cache/
 
 /.cache/
+
+/storage/framework/testing-m04/

@@ -2,7 +2,7 @@
     <x-academic-header title="Inicio" />
     <section class="welcome">
         <div><span class="eyebrow">UN PASO A LA VEZ</span><h1>Hola, <span>{{ $user->name }}</span><span class="greeting-dot">.</span></h1><p>Este es tu espacio para ordenar lo que viene.</p></div>
-        <div class="account-badge"><span class="account-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}</span><div><strong>Tu cuenta personal</strong><span>Tu camino, a tu ritmo</span></div></div>
+        <a class="account-badge" href="{{ route('profile.index') }}" aria-label="Mi perfil"><span class="account-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}</span><div><strong>Tu cuenta personal</strong><span>Tu camino, a tu ritmo</span></div></a>
     </section>
     <section class="intro-strip" aria-label="Tu carrera"><span class="intro-icon"><x-icon name="spark" size="24" /></span><div><strong>{{ \App\Academic\Presentation::career($enrollment->plan) }}</strong><p>{{ \App\Academic\Presentation::plan($enrollment->plan) }}</p></div><a class="intro-tag" href="{{ route('career.index') }}">MI CARRERA <span aria-hidden="true">↗</span></a></section>
     <div class="dashboard-grid">
@@ -11,7 +11,8 @@
             <div class="panel-foot state-totals" aria-label="Materias por estado">@foreach(\App\Academic\Presentation::PLURALS as $state => $label)<span><strong>{{ $counts[$state] }}</strong> {{ \App\Academic\Presentation::countLabel($state, $counts[$state]) }}</span>@endforeach</div>
         </x-dashboard-panel>
         <x-dashboard-panel title="Próximas actividades" eyebrow="LO QUE VIENE" icon="calendar" id="actividades-titulo">
-            <div class="empty-state"><span class="empty-symbol"><x-icon name="calendar" size="32" /></span><h3>Tu agenda está en blanco</h3><p>Acá habrá lugar para organizar lo que viene.</p><span class="pending-caption">Calendario · Próximamente</span></div>
+            @if($upcoming->isNotEmpty())<div class="activity-list dashboard-activities">@foreach($upcoming as $event)<a class="activity-row" href="{{ route('calendar.show', $event->id) }}"><span class="activity-date">{{ $event->start_date->format('d/m') }}<small>{{ \App\Calendar\Events::TYPES[$event->type] }}</small></span><div><strong>{{ $event->title }}</strong><p>{{ $event->all_day ? 'Día completo' : $event->starts_at->setTimezone(config('m04.timezone'))->format('H:i').' · Buenos Aires' }}</p></div><span aria-hidden="true">→</span></a>@endforeach</div><a class="academic-link" href="{{ route('calendar.index') }}">Ver calendario →</a>
+            @else<div class="empty-state"><span class="empty-symbol"><x-icon name="calendar" size="32" /></span><h3>Tu agenda está en blanco</h3><p>Organizá un examen, una entrega o tu próxima clase.</p><a class="academic-link" href="{{ route('calendar.create') }}">Crear evento →</a></div>@endif
         </x-dashboard-panel>
         <x-dashboard-panel title="Materias en curso" eyebrow="PASO A PASO" icon="layers" id="materias-titulo">
             @if($counts['in_progress'])<div class="dashboard-list"><p>{{ $counts['in_progress'] === 1 ? 'Tenés 1 materia en curso.' : 'Tenés '.$counts['in_progress'].' materias en curso.' }}</p><ul>@foreach($currentCourses as $course)<li><a href="{{ route('career.detail', $course->id) }}">{{ $course->display_name }}<x-icon name="arrow" size="17" /></a></li>@endforeach</ul><a class="academic-link" href="{{ route('career.index', ['status' => 'in_progress']) }}">Ver todas ({{ $counts['in_progress'] }}) <span aria-hidden="true">→</span></a></div>
@@ -22,5 +23,6 @@
             @else<div class="empty-state compact"><span class="empty-symbol"><x-icon name="check" size="32" /></span><h3>No tenés materias pendientes</h3><p>Podés consultar los requisitos de cualquier materia en tu carrera.</p><a class="academic-link" href="{{ route('career.index') }}">Explorar Mi carrera →</a></div>@endif
         </x-dashboard-panel>
     </div>
+    <section class="dashboard-notes" id="mis-notas" aria-labelledby="notas-titulo"><div class="page-heading"><div><span class="eyebrow">IDEAS A MANO</span><h2 id="notas-titulo">Mis notas</h2></div><x-action :href="route('notes.create')" variant="secondary">Nueva nota</x-action></div>@if($notes->isNotEmpty())@include('notes.cards')@else<p class="academic-hint">Un apunte, una idea, algo para recordar. Este lugar es tuyo.</p>@endif<a class="academic-link" href="{{ route('notes.index') }}">Ver todas mis notas →</a></section>
     <footer class="dashboard-footer"><span>Hecho para avanzar con claridad.</span><span>EstuFlow <span aria-hidden="true">↗</span></span></footer>
 </div>

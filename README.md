@@ -1,55 +1,61 @@
 # EstuFlow
 
-Organizador académico en español rioplatense. M02 implementa registro/login/logout, recuperación y verificación por email, acceso/vinculación Google y Microsoft, validación accesible y responsive hasta 4K. M03 agrega tres planes documentados, configuración inicial recuperable, Mi carrera con estados y correlativas, y dashboard calculado con progreso personal. Calendario y Planificador siguen pendientes.
+Un espacio personal para organizar el recorrido académico: elegir carrera y plan, registrar el estado de las materias, consultar correlativas, planificar eventos con recordatorios, guardar notas y leer novedades. Mi perfil reúne datos personales, seguridad, accesos y configuración académica. El Planificador está pendiente.
 
-## Iniciar en Mac
+Laravel 13, PHP 8.4, Livewire 4, Blade y Tailwind 4; PostgreSQL 18 y Redis. Docker ejecuta PHP, Composer, Node, correo local y procesos en segundo plano.
 
-Requisito: Docker Desktop con Compose v2 activo. No requiere PHP/Composer/Node globales.
+## Preparar el equipo
+
+- **macOS:** Git, Bash y Docker Desktop en ejecución con Compose v2.
+- **Windows:** Docker Desktop con backend WSL2 y contenedores Linux; Ubuntu integrada. Los comandos del proyecto se ejecutan en **Bash dentro de Ubuntu/WSL**, desde su sistema de archivos Linux.
+- **Linux:** Git, Bash y Docker Engine con plugin Compose v2 —o Docker Desktop— y acceso al daemon.
+
+La [guía de instalación](docs/installation.md) incluye los pasos de PowerShell para preparar WSL2, requisitos y soluciones a fallos de arranque. No hace falta instalar PHP, Composer o Node en el anfitrión.
+
+## Primera instalación
+
+Mientras esta entrega esté en revisión, seleccionar su rama publicada:
 
 ```bash
-cd /Users/nicolasruiz/estuflow
+git clone --branch codex/m05-perfil https://github.com/NicolasMRuiz/estuflow.git
+cd estuflow
 ./scripts/setup.sh
 ./scripts/start.sh
 ```
 
-Abrir [EstuFlow](http://localhost:8000) y [correo local Mailpit](http://localhost:8025). `setup.sh` crea `.env`/`.env.testing` sólo si no existen, con secretos aleatorios, instala lockfiles y aplica sólo migraciones pendientes. Preserva archivos/datos. `start.sh` verifica readiness e inicia también worker/capturador. PostgreSQL de desarrollo publica sólo loopback para DataGrip; test-postgres y Redis quedan internos. Web y bandeja también sólo loopback. Nunca borrar volúmenes para solucionar un problema.
+Abrir [EstuFlow](http://localhost:8000) y [Mailpit](http://localhost:8025). Crear una cuenta y verificarla desde el correo capturado en Mailpit. Después, configurar la carrera. Los puertos se pueden ajustar en el `.env` generado; [detalles](docs/installation.md#puertos-y-configuración).
 
-Si el puerto cambia, configurar `APP_PORT` y `APP_URL` en `.env`; el origen confiable también determina URLs de seguridad/callbacks. Para detener: `docker compose stop app worker mailpit` (preserva datos).
+Cada equipo crea su propia base y configuración privada: Git no traslada usuarios, contraseñas, volúmenes ni `.env` de otro equipo.
 
-## PostgreSQL desde DataGrip
+## Actualizar, iniciar y parar
 
-Conectar a `127.0.0.1:5433`, base `estuflow`, usuario `estuflow`, contraseña **DB_PASSWORD de .env local**. El puerto efectivo se define con `DB_FORWARD_PORT` (predeterminado 5433); Laravel sigue en `DB_HOST=postgres`, `DB_PORT=5432`. No poner la contraseña en una URL JDBC ni en documentación.
-
-[Guía de conexión, cambio de puerto y comprobaciones](docs/datagrip.md). El volumen y las credenciales se conservan al recrear el contenedor. `test-postgres` y Redis no publican puertos.
-
-## Revisar M03
-
-La [corrección del 23/10](docs/evidence/m03-correction/checks.md) recupera la composición M02, simplifica la carga y edición de materias y conserva la carrera confirmada mientras se prepara un cambio. Cancelar o interrumpir no activa el candidato.
-
-Después de verificar el email, elegí carrera/plan, guardá tu situación por año y revisá el resumen antes de confirmar. Mi carrera permite filtros y edición; Inicio refleja sólo el plan activo. Cambiar de plan conserva el progreso anterior.
-
-[Guía completa M03](docs/m03.md): fuentes, modelo, importación sobre la base M02 existente, actualización sin perder datos, reglas pendientes y recorrido manual. [Checks y capturas M03](docs/evidence/m03/checks.md). `setup.sh` y `start.sh` importan el catálogo de forma idempotente después de aplicar únicamente migraciones pendientes.
-
-## Revisar los cinco bloques de M02
-
-1. **Responsive:** revisar login, registro y panel en 320, 390, 430, 768, 1280, 1440, 1920, 2560 y 3840 px CSS; menú móvil con teclado/Escape, 200% de zoom y altura 720 px. Capturas y límites en [evidencia](docs/evidence/m02/checks.md).
-2. **Recuperación:** desde `/login`, «¿Olvidaste la contraseña?». Pedir enlace, abrir el correo en Mailpit, elegir contraseña confirmada y volver a ingresar. Se cierran sesiones anteriores sólo de esa cuenta; el enlace no verifica email.
-3. **Verificación:** crear cuenta en `/registro`; queda en `/verificar-email`. Abrir el enlace de Mailpit con esa cuenta para configurar tu carrera y acceder al dashboard. Reenvío tiene espera visible de 60 segundos. Cuentas previas sin verificar también pasan por este aviso.
-4. **Google/Microsoft:** implementación completa con pruebas dobles; botones ocultos hasta configurar credenciales. [Activación OAuth](docs/oauth.md) detalla aplicaciones Web, audiencias, permisos y callbacks. Después de verificar, abrir `/metodos-de-acceso` para vincular tras confirmar identidad. No hay vinculación automática por email coincidente ni contraseña inventada.
-5. **Errores:** probar vacío/email inválido/confirmación diferente; mensajes inline y foco. Credenciales incorrectas tienen un solo aviso general. Funciona con POST normal sin JavaScript.
-
-Correo externo: [activar Brevo, STARTTLS y diagnóstico](docs/mail.md). **Google y Brevo ya están configurados en el .env local:** botón/redirect Google y configuración SMTP comprobados, pero login Google, autenticación/entrega Brevo y conexión DataGrip siguen pendientes de prueba manual. Microsoft permanece deshabilitado. [Resultado de esta ampliación](docs/evidence/m02/datagrip-config.md). Las pruebas locales usan fakes y SMTP capturado aislado, nunca proveedores reales.
-
-## Checks
-
-Ejecutar PHPUnit y E2E **secuencialmente**, comparten exclusivamente PostgreSQL `estuflow_test` del servicio `test-postgres`:
+Con el checkout limpio y desde Bash:
 
 ```bash
-./scripts/check.sh   # Composer, Pint, Larastan nivel 6, build
-./scripts/test.sh    # PHPUnit PostgreSQL aislado
-./scripts/e2e.sh     # Chromium + worker + test-mailpit aislados
+./scripts/stop.sh
+git pull --ff-only
+./scripts/setup.sh
+./scripts/start.sh
 ```
 
-Para formato: `docker compose run --rm --no-deps app composer format`. Para readiness: `docker compose run --rm app php artisan environment:check`. No usar SQLite ni resetear desarrollo. Los scripts detienen los procesos de testing antes de resets; E2E genera capturas con cuentas ficticias y campos password vacíos.
+`setup.sh` instala las dependencias fijadas, compila recursos y aplica migraciones pendientes e importación idempotente del catálogo. Conserva los archivos de entorno y sus claves. `start.sh` limpia la caché de configuración, aplica pendientes y recrea app, worker y scheduler para cargar el código/configuración actualizados; comprueba readiness y el login.
 
-Documentación: [arquitectura](docs/architecture.md), [interfaz](docs/ui.md), [testing](docs/testing.md), [progreso](docs/progress.md), [correo](docs/mail.md), [OAuth](docs/oauth.md), [resultados y capturas M02](docs/evidence/m02/checks.md), [reglas de trabajo](AGENTS.md). Los lockfiles/digests fijan versiones. No se hace merge ni despliegue automático.
+Para el uso diario: `./scripts/start.sh`. Para parar: `./scripts/stop.sh`; detiene web, worker, scheduler y Mailpit, conservando PostgreSQL y Redis. Los avisos requieren el equipo y esos procesos activos.
+
+## Uso y configuración
+
+- [Mi perfil y seguridad](docs/profile.md): nombre, doble confirmación de email, contraseña y carrera.
+- [Demostración CRUD en tres minutos](docs/demo.md): eventos y notas, con persistencia entre sesiones.
+- [Correo local y Brevo opcional](docs/mail.md), [Google/Microsoft opcionales](docs/oauth.md). Una instalación nueva usa Mailpit y proveedores deshabilitados; las credenciales personales no se distribuyen con Git. Microsoft sigue pendiente de prueba real.
+- [PostgreSQL desde DataGrip](docs/datagrip.md): conexión sólo en loopback, separada de las pruebas.
+- [Calendario, avisos y notas](docs/m04.md), [carrera y materias](docs/m03.md).
+
+## Verificación y documentación
+
+```bash
+./scripts/check.sh
+./scripts/test.sh
+./scripts/e2e.sh
+```
+
+Ejecutar PHPUnit y E2E secuencialmente; usan exclusivamente PostgreSQL de pruebas y correo/proveedores aislados. [Pruebas y aislamiento](docs/testing.md), [arquitectura](docs/architecture.md), [interfaz](docs/ui.md), [alcance y progreso](docs/progress.md) y [evidencia M05](docs/evidence/m05/checks.md).

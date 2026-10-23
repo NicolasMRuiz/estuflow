@@ -202,3 +202,40 @@ window.addEventListener('career-focus', event => {
         target?.focus({ preventScroll: true });
     });
 });
+
+// New full-page forms keep keyboard focus in the task; cancel links target their opener.
+function focusM04Page() {
+    const invalid = document.querySelector('.m04-form [aria-invalid="true"]');
+    if (invalid) { invalid.focus(); return; }
+    const hash = window.location.hash;
+    const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : document.querySelector('[data-page-focus]');
+    if (target && !document.querySelector('[aria-invalid="true"]')) target.focus({ preventScroll: false });
+}
+document.addEventListener('DOMContentLoaded', focusM04Page);
+
+function initializeReminderOptions() {
+    const form = document.querySelector('[data-event-form]');
+    if (!form) return;
+    function updateOptions() {
+        const allDay = form.querySelector('[name="all_day"][type="checkbox"]').checked;
+        const date = form.querySelector('[name="start_date"]').value;
+        const time = form.querySelector('[name="start_time"]').value;
+        form.querySelectorAll('[data-preserved-reminder]').forEach(input => input.remove());
+        form.querySelectorAll('[data-reminder-offset]').forEach(input => {
+            const key = input.dataset.reminderOffset;
+            const morning = ['previous_morning', 'same_morning'].includes(key);
+            const start = new Date(`${date}T${allDay ? '09:00' : (time || '00:00')}:00-03:00`);
+            const offset = ['day', 'previous_morning'].includes(key) ? 86400000 : key === 'hour' ? 3600000 : 0;
+            const expired = Number.isFinite(start.getTime()) && start.getTime() - offset < Date.now();
+            input.disabled = morning !== allDay || expired;
+            input.closest('label').hidden = expired;
+            if (expired && input.checked && morning === allDay) {
+                const preserved = document.createElement('input');
+                preserved.type = 'hidden'; preserved.name = 'reminder_options[]'; preserved.value = key;
+                preserved.dataset.preservedReminder = 'true'; form.append(preserved);
+            }
+        });
+    }
+    form.addEventListener('change', updateOptions); updateOptions();
+}
+document.addEventListener('DOMContentLoaded', initializeReminderOptions);

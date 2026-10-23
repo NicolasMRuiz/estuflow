@@ -14,7 +14,7 @@ El adjunto de esta corrección disponible en la sesión contiene sólo texto. La
 | Dos selects y ayuda repetidos en todas las materias | Años plegables, método condicional, acción por año con deshacer, barra de acciones compartida | E2E: aplicar/deshacer sin guardar, guardar todos los años, recuperar tras login y volver desde resumen |
 | Botones con márgenes contradictorios y controles desproporcionados | Componentes compartidos, márgenes de barras, selector de detalle acotado y filtros móviles sin texto cortado | Capturas abiertas e inspeccionadas; reflow y controles alcanzables |
 | Edición poco reconocible y redirect innecesario | Ver detalle / Editar estado; editor inline con Guardar cambios / Cancelar y alternativa HTTP | E2E conserva filtro, actualiza conteos, anuncia salida del filtro y devuelve foco; sin JS conserva contexto |
-| Selección de otra carrera activada demasiado pronto | Candidato persistente separado de la confirmada; activación sólo al confirmar revisión vigente | PHPUnit/E2E: cancelar en pasos 2/3, logout intermedio, reanudar, confirmar, retornar y mismo plan |
+| Selección de otra carrera activada demasiado pronto | Candidato persistente separado de la confirmada; activación sólo al confirmar revisión vigente | PHPUnit/E2E: cancelar en los tres pasos, logout intermedio, reanudar, confirmar, retornar y mismo plan |
 | Riesgo de estado anterior al cancelar/reabrir editor | Binding de campos sin entanglement persistente y acciones inhabilitadas durante requests | Recorrido de navegador reproduce cancelar, reabrir, editar y guardar con filtro; verifica resultado persistido |
 | Errores técnicos/duplicados | Mensajes humanos junto al campo, año con error abierto y foco al control | Selección vacía y método inválido en E2E; sin `validation.*`, validación P/R del servidor |
 
@@ -75,4 +75,10 @@ Para aplicar, desde la rama de PR #2 y con cambios propios preservados: `git fet
 
 ## Publicación y CI
 
-PR #2 permanece en borrador con base M02 mientras #1 no esté integrada. El estado de esta corrección se verificará en los jobs del commit publicado y se agregará a la PR; no se reutilizan resultados antiguos de M03 como evidencia de este cambio.
+Corrección publicada en `e8b56f0aad0b1e044fdd332e0a84cfd76a944700`. GitHub Actions consultado directamente, con todos los pasos aprobados en Linux AMD64:
+
+- [Push](https://github.com/NicolasMRuiz/estuflow/actions/runs/39984375447): PASS.
+- [Pull request](https://github.com/NicolasMRuiz/estuflow/actions/runs/39984381459), [job checks](https://github.com/NicolasMRuiz/estuflow/actions/runs/39984381459/job/120519642903): PASS.
+- Setup, Composer/Pint/Larastan/build, PHPUnit y E2E completados; los logs confirman **109 pruebas / 703 aserciones y 9 E2E**. Capturas subidas como artifact `estuflow-capturas`, retención 14 días. Las imágenes nuevas y sus comparaciones quedan además versionadas aquí, sin esa caducidad.
+
+PR #2 sigue en borrador, base M02 mientras #1 no esté integrada. No se hizo merge ni despliegue. El commit posterior sólo registra estos resultados; el estado del HEAD actualizado está en [Checks de la PR](https://github.com/NicolasMRuiz/estuflow/pull/2/checks). Los PASS anteriores de M03 no se presentan como prueba de esta corrección.

@@ -130,10 +130,10 @@ test('matriz responsive de nueve viewports, nuevas pantallas y navegación móvi
                 if (viewport.width === 390) await cleanScreenshot(verifiedPage, 'docs/evidence/m02/dashboard-390-full.png', { fullPage: true });
             }
             await verifiedPage.goto('/metodos-de-acceso');
-            await expect(verifiedPage.getByRole('heading', { name: 'Métodos de acceso' })).toBeVisible();
+            await expect(verifiedPage.getByRole('heading', { name: 'Mi perfil', exact: true })).toBeVisible();
             await assertNoHorizontalScroll(verifiedPage);
             if (viewport.width === 390 || viewport.width === 1440) {
-                await cleanScreenshot(verifiedPage, `docs/evidence/m02/metodos-de-acceso-${viewport.width}x${viewport.height}.png`, { fullPage: true });
+                await cleanScreenshot(verifiedPage, `docs/evidence/m05/compatibilidad-accesos-${viewport.width}x${viewport.height}.png`, { fullPage: true });
             }
         }
         // A 1280×720 display at 200% yields 640×360 CSS px. This checks that

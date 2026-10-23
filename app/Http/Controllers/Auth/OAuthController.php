@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Account\Reauthentication;
 use App\Auth\OAuthAccountException;
 use App\Auth\OAuthAccounts;
 use App\Auth\OAuthProfile;
@@ -33,7 +34,7 @@ class OAuthController extends Controller
     {
         $this->verifiedUser($request);
         if (! AccessMethodsController::recentlyAuthenticated($request)) {
-            return to_route('access-methods.index')->withErrors(['oauth' => 'Confirmá tu identidad antes de vincular un proveedor.']);
+            return to_route(Reauthentication::destination($request))->withErrors(['oauth' => 'Confirmá tu identidad antes de vincular un proveedor.']);
         }
 
         return $this->begin($request, $provider, 'link');
@@ -55,6 +56,7 @@ class OAuthController extends Controller
             'provider' => $provider, 'intent' => $intent,
             'user_id' => $request->user()?->getAuthIdentifier(),
             'expires_at' => now()->addMinutes(10)->timestamp,
+            'return_to' => Reauthentication::destination($request),
         ]);
         $driver = $this->providers->driver($provider);
         $parameters = ['prompt' => $provider === 'microsoft' && $intent === 'reauthenticate' ? 'login' : 'select_account'];
@@ -70,7 +72,7 @@ class OAuthController extends Controller
     {
         abort_unless($this->providers->enabled($provider), 404);
         $attempt = $request->session()->pull('oauth.attempt');
-        $destination = $request->user() ? 'access-methods.index' : 'login';
+        $destination = $request->user() ? (in_array($attempt['return_to'] ?? null, ['profile.index', 'profile.email', 'profile.password'], true) ? $attempt['return_to'] : 'access-methods.index') : 'login';
         try {
             $state = $request->query('state');
             $expected = $request->session()->get('state');
@@ -93,16 +95,16 @@ class OAuthController extends Controller
                     if ($this->accounts->find($profile)?->user_id !== $user->id) {
                         throw new OAuthAccountException('Elegí un método que ya esté vinculado a tu cuenta para confirmar tu identidad.');
                     }
-                    AccessMethodsController::confirm($request, $user);
+                    Reauthentication::confirm($request, $user, provider: true);
 
-                    return to_route('access-methods.index')->with('status', 'Identidad confirmada. Ahora podés vincular otro proveedor durante 10 minutos.');
+                    return to_route($destination)->with('status', 'Identidad confirmada durante 10 minutos. Podés continuar.');
                 }
                 if (! AccessMethodsController::recentlyAuthenticated($request)) {
                     throw new OAuthAccountException('La confirmación de identidad venció. Confirmala de nuevo antes de vincular.');
                 }
                 $this->accounts->link($user, $profile);
 
-                return to_route('access-methods.index')->with('status', OAuthProviders::LABELS[$provider].' quedó vinculado a tu cuenta.');
+                return to_route($destination)->with('status', OAuthProviders::LABELS[$provider].' quedó vinculado a tu cuenta.');
             }
             if (($attempt['intent'] ?? null) !== 'login' || $request->user() !== null || ($attempt['user_id'] ?? null) !== null) {
                 throw new InvalidStateException;

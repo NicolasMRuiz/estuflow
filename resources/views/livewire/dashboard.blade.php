@@ -2,7 +2,7 @@
     <x-academic-header title="Inicio" />
     <section class="welcome">
         <div><span class="eyebrow">UN PASO A LA VEZ</span><h1>Hola, <span>{{ $user->name }}</span><span class="greeting-dot">.</span></h1><p>Este es tu espacio para ordenar lo que viene.</p></div>
-        <div class="account-badge"><span class="account-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}</span><div><strong>Tu cuenta personal</strong><span>Tu camino, a tu ritmo</span></div></div>
+        <a class="account-badge" href="{{ route('profile.index') }}" aria-label="Mi perfil"><span class="account-avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}</span><div><strong>Tu cuenta personal</strong><span>Tu camino, a tu ritmo</span></div></a>
     </section>
     <section class="intro-strip" aria-label="Tu carrera"><span class="intro-icon"><x-icon name="spark" size="24" /></span><div><strong>{{ \App\Academic\Presentation::career($enrollment->plan) }}</strong><p>{{ \App\Academic\Presentation::plan($enrollment->plan) }}</p></div><a class="intro-tag" href="{{ route('career.index') }}">MI CARRERA <span aria-hidden="true">↗</span></a></section>
     <div class="dashboard-grid">

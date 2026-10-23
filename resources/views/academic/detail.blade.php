@@ -1,5 +1,5 @@
 <x-academic-layout :title="$course->display_name">
-    <x-academic-header title="Mi carrera" />
+    <x-academic-header title="Mi carrera" :inline-errors="['entry.*', 'status', 'approval_method']" />
     <div class="detail-back"><a class="academic-link" href="{{ route('career.index', ['year' => $context['year'] ?? '', 'status' => $context['filter_status'] ?? '']) }}">← Volver a Mi carrera</a></div>
     <section class="academic-intro"><h1>{{ $course->display_name }}</h1><p>Año {{ $course->academic_year }} · {{ $course->hours }} horas · {{ $course->field_type === 'G' ? 'Formación general' : 'Formación específica' }}</p><p class="academic-hint">{{ $course->accreditation_instance === 'P' ? 'Se puede aprobar por promoción o por final.' : 'Se aprueba con examen final.' }} {{ $course->free_exam_allowed ? 'Admite examen libre.' : 'No admite examen libre.' }}</p></section>
     <section class="academic-panel"><livewire:course-editor :course-id="$course->id" :context="$context" /></section>

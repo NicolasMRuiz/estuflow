@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\NotesController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AcademicConfigured;
 use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,17 @@ Route::middleware(['guest', 'throttle:oauth'])->group(function (): void {
 });
 Route::get('/auth/{provider}/callback', [OAuthController::class, 'callback'])->middleware('throttle:oauth')->name('oauth.callback');
 Route::middleware(['auth', 'verified'])->group(function (): void {
+    Route::get('/mi-perfil', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/mi-perfil/nombre', [ProfileController::class, 'name'])->middleware('throttle:profile')->name('profile.name');
+    Route::get('/mi-perfil/email', [ProfileController::class, 'email'])->name('profile.email');
+    Route::post('/mi-perfil/email', [ProfileController::class, 'requestEmail'])->middleware('throttle:email-change')->name('profile.email.request');
+    Route::post('/mi-perfil/email/reenviar', [ProfileController::class, 'resend'])->middleware('throttle:email-change')->name('profile.email.resend');
+    Route::post('/mi-perfil/email/cancelar', [ProfileController::class, 'cancelEmail'])->middleware('throttle:profile')->name('profile.email.cancel');
+    Route::get('/mi-perfil/email/confirmar/{change}/{purpose}/{token}', [ProfileController::class, 'confirmation'])->whereUuid('change')->name('profile.email.confirm');
+    Route::post('/mi-perfil/email/confirmar/{change}/{purpose}/{token}', [ProfileController::class, 'confirm'])->middleware('throttle:profile')->whereUuid('change')->name('profile.email.apply');
+    Route::get('/mi-perfil/contrasena', [ProfileController::class, 'password'])->name('profile.password');
+    Route::post('/mi-perfil/contrasena', [ProfileController::class, 'updatePassword'])->middleware('throttle:reauth')->name('profile.password.update');
+    Route::get('/mi-perfil/carrera', [AcademicController::class, 'fromProfile'])->name('profile.career');
     Route::get('/configuracion-academica', [AcademicController::class, 'choose'])->name('academic.choose');
     Route::post('/configuracion-academica', [AcademicController::class, 'select'])->name('academic.select');
     Route::get('/configuracion-academica/materias', [AcademicController::class, 'draft'])->name('academic.draft');

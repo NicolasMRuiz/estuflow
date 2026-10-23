@@ -1,5 +1,5 @@
 <x-academic-layout title="Elegí tu carrera">
-    <x-academic-header title="Tu carrera" />
+    <x-academic-header title="Tu carrera" :inline-errors="['plan_id']" />
     <x-academic-steps :step="1" />
     <section class="academic-intro"><span class="eyebrow">TU PUNTO DE PARTIDA</span><h1>{{ $enrollment?->completed_at ? 'Cambiar carrera' : 'Elegí tu carrera' }}</h1><p>{{ $enrollment?->completed_at ? 'Tu carrera actual se conserva hasta que confirmes el cambio.' : 'Elegí la carrera y el plan que corresponden a tu recorrido.' }}</p></section>
     @if($candidate)<p class="academic-notice">Tenés un borrador de {{ \App\Academic\Presentation::career($candidate->plan) }}. <a href="{{ route('academic.draft') }}" class="academic-link">Retomar borrador →</a></p>@endif

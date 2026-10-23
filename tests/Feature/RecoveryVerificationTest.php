@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Jobs\RequestPasswordReset;
+use App\Jobs\SendEmailChange;
 use App\Livewire\Dashboard;
 use App\Models\User;
 use App\Notifications\PasswordChanged;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Tests\TestCase;
@@ -241,7 +243,8 @@ class RecoveryVerificationTest extends TestCase
     public function test_oauth_only_account_can_start_recovery_from_access_methods_after_logout(): void
     {
         $user = User::factory()->create(['password' => null]);
-        $this->actingAs($user)->get('/metodos-de-acceso')->assertOk()->assertSee('Cerrar sesión y recuperar acceso');
+        $this->actingAs($user)->get('/metodos-de-acceso')->assertRedirect(route('profile.index'));
+        $this->get('/mi-perfil')->assertOk()->assertSee('Establecer contraseña');
         $this->post('/logout', ['recover' => '1'])->assertRedirect('/olvide-mi-contrasena');
         $this->assertGuest();
     }
@@ -256,6 +259,9 @@ class RecoveryVerificationTest extends TestCase
         $this->assertStringNotContainsString($email, $payload);
         $job = json_decode($payload, true, flags: JSON_THROW_ON_ERROR);
         $this->assertStringContainsString($email, Crypt::decryptString($job['data']['command']));
+        DB::table('jobs')->delete();
+        $queue->push(new SendEmailChange((string) Str::uuid(), 'current', 'private-email-change-token'));
+        $this->assertStringNotContainsString('private-email-change-token', DB::table('jobs')->value('payload'));
         DB::table('jobs')->delete();
         $user = User::factory()->create();
         $queue->push(new SendQueuedNotifications($user, new ResetPassword('private-raw-token'), ['mail']));

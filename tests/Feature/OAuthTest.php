@@ -433,7 +433,8 @@ class OAuthTest extends TestCase
     {
         $user = User::factory()->create(['password' => null]);
         $this->identity($user);
-        $this->actingAs($user)->get('/metodos-de-acceso')->assertOk()->assertSee('Métodos de acceso')->assertSee('Cerrar sesión y recuperar acceso')->assertSee('Vinculado a tu cuenta.');
+        $this->actingAs($user)->get('/metodos-de-acceso')->assertRedirect(route('profile.index'));
+        $this->get('/mi-perfil')->assertOk()->assertSee('Métodos de acceso')->assertSee('Establecer contraseña')->assertSee('Vinculado a tu cuenta.');
         $this->post('/logout', ['recover' => '1'])->assertRedirect(route('password.request'));
         $this->assertGuest();
         $this->assertDatabaseHas('oauth_identities', ['user_id' => $user->id, 'provider' => 'google']);
@@ -466,5 +467,53 @@ class OAuthTest extends TestCase
             ->post('/auth/completar-email', ['email' => 'occupied@example.test'])
             ->assertRedirect(route('oauth.email'))->assertSessionHasErrors('oauth');
         $this->assertDatabaseCount('oauth_identities', 0);
+    }
+
+    public function test_profile_provider_reauthentication_returns_to_initiated_operation_and_confirms_only_linked_account(): void
+    {
+        $user = User::factory()->create(['password' => null]);
+        $this->identity($user);
+        $this->mockProvider();
+        $this->actingAs($user)->get('/mi-perfil/contrasena')->assertOk();
+        $this->withSession([...$this->attempt('google', 'reauthenticate', $user), 'oauth.attempt' => [...$this->attempt('google', 'reauthenticate', $user)['oauth.attempt'], 'return_to' => 'profile.password'], 'profile.operation' => 'email'])
+            ->get('/auth/google/callback?state=valid-state&code=fictitious')
+            ->assertRedirect(route('profile.password'))->assertSessionHas('profile.provider_confirmation.user_id', $user->id);
+        $this->post('/mi-perfil/contrasena', ['password' => 'new-fictitious-profile-password', 'password_confirmation' => 'new-fictitious-profile-password'])->assertRedirect(route('profile.index'));
+        $this->assertDatabaseHas('oauth_identities', ['user_id' => $user->id, 'subject' => 'stable-subject']);
+    }
+
+    public function test_profile_wrong_provider_identity_cannot_establish_local_password(): void
+    {
+        $user = User::factory()->create(['password' => null]);
+        $other = User::factory()->create();
+        $this->identity($user, subject: 'own-identity');
+        $this->identity($other);
+        $this->mockProvider();
+        $this->actingAs($user)->withSession([...$this->attempt('google', 'reauthenticate', $user), 'oauth.attempt' => [...$this->attempt('google', 'reauthenticate', $user)['oauth.attempt'], 'return_to' => 'profile.password']])
+            ->get('/auth/google/callback?state=valid-state&code=fictitious')->assertRedirect(route('profile.password'))->assertSessionHasErrors('oauth')->assertSessionMissing('profile.provider_confirmation');
+        $this->post('/mi-perfil/contrasena', ['password' => 'new-fictitious-profile-password', 'password_confirmation' => 'new-fictitious-profile-password'])->assertSessionHasErrors('account');
+        $this->assertNull($user->fresh()->password);
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_oauth_known_identity_never_overwrites_edited_profile_even_with_different_email(): void
+    {
+        $user = User::factory()->create(['name' => 'Nombre propio editado', 'email' => 'changed@example.test']);
+        $this->identity($user);
+        User::factory()->create(['email' => 'oauth@example.test']);
+        $this->mockProvider();
+        $this->withSession($this->attempt())->get('/auth/google/callback?state=valid-state&code=fictitious')->assertRedirect(route('dashboard'));
+        $this->assertSame('changed@example.test', $user->fresh()->email);
+        $this->assertSame('Nombre propio editado', $user->fresh()->name);
+        $this->assertAuthenticatedAs($user);
+        $this->assertDatabaseCount('oauth_identities', 1);
+    }
+
+    public function test_profile_password_reauthentication_returns_to_email_and_does_not_store_external_destination(): void
+    {
+        $user = User::factory()->create(['password' => 'current-fictitious-password']);
+        $this->actingAs($user)->get('/mi-perfil/email');
+        $this->post('/metodos-de-acceso/reautenticar', ['password' => 'current-fictitious-password', 'return_to' => 'https://foreign.example'])->assertRedirect(route('profile.email'));
+        $this->assertAuthenticatedAs($user);
     }
 }

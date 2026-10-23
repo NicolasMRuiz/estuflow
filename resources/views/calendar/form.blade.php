@@ -1,5 +1,5 @@
 <x-academic-layout :title="$event->exists ? 'Editar evento' : 'Nuevo evento'">
-<x-academic-header title="Calendario" />
+<x-academic-header title="Calendario" :inline-errors="['title', 'type', 'description', 'place', 'start_date', 'end_date', 'start_time', 'end_time', 'plan_course_id', 'email_reminders', 'reminder_options', 'reminder_options.*']" />
 <div class="detail-back"><a class="academic-link" href="{{ $event->exists ? route('calendar.show', ['event' => $event->id] + $context) : route('calendar.index', $context) }}#{{ $event->exists ? 'editar-evento' : 'nuevo-evento' }}">← Volver sin guardar</a></div>
 <section class="academic-intro"><h1 tabindex="-1" data-page-focus>{{ $event->exists ? 'Editar evento' : 'Nuevo evento' }}</h1><p>Lo que necesitás recordar, en un solo lugar.</p></section>
 <form method="POST" action="{{ $event->exists ? route('calendar.update', $event->id) : route('calendar.store') }}" class="academic-panel m04-form" data-event-form data-academic-form novalidate x-data="{ allDay: {{ old('all_day', $event->all_day) ? 'true' : 'false' }} }">@csrf @include('calendar.context')

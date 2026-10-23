@@ -14,6 +14,22 @@ class AcademicController extends Controller
 {
     public function __construct(private AcademicProgress $progress) {}
 
+    public function fromProfile(Request $request): RedirectResponse
+    {
+        if ($this->progress->active($request->user())?->completed_at) {
+            $request->session()->put('academic.return', 'profile');
+        } else {
+            $request->session()->forget('academic.return');
+        }
+
+        return to_route('academic.choose');
+    }
+
+    private function destination(Request $request, string $fallback): string
+    {
+        return $request->session()->pull('academic.return') === 'profile' ? 'profile.index' : $fallback;
+    }
+
     public function choose(Request $request): View
     {
         return view('academic.choose', ['plans' => StudyPlan::with('career')->withCount('courses')->orderBy('id')->get(), 'enrollment' => $this->progress->active($request->user()), 'candidate' => $this->progress->candidate($request->user())]);
@@ -25,7 +41,7 @@ class AcademicController extends Controller
         $selected = $this->progress->select($request->user(), (int) $data['plan_id']);
         $request->session()->forget('academic.review');
 
-        return to_route($selected->is_candidate ? 'academic.draft' : 'career.index');
+        return to_route($selected->is_candidate ? 'academic.draft' : $this->destination($request, 'career.index'));
     }
 
     public function draft(Request $request): View|RedirectResponse
@@ -64,7 +80,7 @@ class AcademicController extends Controller
         $this->progress->finish($request->user(), (int) $data['candidate_id'], $request->session()->get('academic.review'));
         $request->session()->forget('academic.review');
 
-        return to_route('dashboard')->with('status', 'Tu carrera quedó configurada.');
+        return to_route($this->destination($request, 'dashboard'))->with('status', 'Tu carrera quedó configurada.');
     }
 
     public function cancel(Request $request): RedirectResponse
@@ -72,7 +88,7 @@ class AcademicController extends Controller
         $this->progress->cancel($request->user());
         $request->session()->forget('academic.review');
 
-        return to_route($this->progress->active($request->user())?->completed_at ? 'career.index' : 'academic.choose')->with('status', 'Cancelaste el cambio. Tu carrera se conserva.');
+        return to_route($this->destination($request, $this->progress->active($request->user())?->completed_at ? 'career.index' : 'academic.choose'))->with('status', 'Cancelaste el cambio. Tu carrera se conserva.');
     }
 
     public function career(Request $request): View

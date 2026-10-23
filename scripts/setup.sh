@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 source "$(dirname "$0")/common.sh"
-docker info >/dev/null
 if [[ -n "${CODEX_ENVIRONMENT_ID:-}" && -n "${HTTPS_PROXY:-}" ]]; then
   python3 scripts/cloud-setup.py
   source scripts/common.sh
@@ -11,6 +10,8 @@ docker compose build app
 docker compose run --rm --no-deps app composer install --no-interaction --prefer-dist
 docker compose run --rm node npm ci
 docker compose run --rm node npm run build
+docker compose stop app worker scheduler
+docker compose run --rm --no-deps app php artisan config:clear
 docker compose up -d --wait postgres redis
 # Pending migrations only. Never migrate:fresh/reset on development.
 docker compose run --rm app php artisan migrate --force

@@ -45,7 +45,7 @@ Para un hosting futuro usar HTTPS, una aplicación/credenciales por ambiente cua
 | `GET /auth/{google\|microsoft}/redirect` | Invitado: inicia acceso con proveedor. |
 | `GET /auth/{google\|microsoft}/callback` | Valida sesión, state e intención; procesa el código de autorización. |
 | `GET/POST /auth/completar-email` | Invitado: completa una identidad pendiente guardada en el servidor. |
-| `GET /metodos-de-acceso` | Cuenta autenticada y verificada: muestra contraseña y proveedores vinculados. |
+| `GET /metodos-de-acceso` | Redirige a Mi perfil, que integra contraseña y proveedores vinculados. |
 | `POST /metodos-de-acceso/reautenticar` | Reautentica mediante la contraseña actual. |
 | `POST /metodos-de-acceso/{provider}/reautenticar` | Reautentica mediante una identidad previamente vinculada. |
 | `POST /metodos-de-acceso/{provider}/vincular` | Inicia un vínculo para el usuario actual después de reautenticación reciente. |
@@ -54,7 +54,7 @@ Una identidad conocida ingresa siempre a su propietario local. El email o nombre
 
 Cuando no hay un email utilizable se pide uno en una pantalla breve. La identidad y su nombre permanecen en la sesión cifrada de PostgreSQL; el navegador únicamente envía el email. El paso vence a los 10 minutos y comenzar otro intento reemplaza el pendiente. Una coincidencia con un email local existente no vincula cuentas: la persona debe usar su método actual o recuperar acceso y luego vincular desde Métodos de acceso.
 
-Las cuentas creadas con OAuth pueden establecer una contraseña mediante el Password Broker y un enlace válido enviado a su email. Métodos de acceso ofrece «Cerrar sesión y recuperar acceso» mediante POST con CSRF y lleva al formulario de recuperación. Ese cambio conserva identidades vinculadas y no sustituye la verificación. Login local rechaza cuentas con password nulo. No hay desvinculación en M02.
+Las cuentas creadas con OAuth pueden establecer una contraseña mediante el Password Broker y un enlace válido enviado a su email. M05 ofrece Establecer contraseña dentro de Mi perfil tras reautenticar con un proveedor ya vinculado; también conserva el broker de recuperación desde el login. Ese cambio conserva identidades vinculadas y no sustituye la verificación. Login local rechaza cuentas con password nulo. No hay desvinculación en M02.
 
 Para vincular se exige cuenta verificada y una confirmación de identidad de los últimos 10 minutos. Login reciente cuenta como confirmación; posteriormente se usa la contraseña actual o una redirección nueva con un proveedor ya vinculado. Microsoft solicita `prompt=login` durante reautenticación; Google ofrece selección explícita de cuenta. Una identidad diferente no confirma la cuenta ni cambia su sesión. Se guarda en servidor el usuario iniciador, proveedor, intención y vencimiento. El callback debe conservar ese usuario y la vigencia de su confirmación, y nunca traslada un vínculo desde otra cuenta.
 
@@ -86,3 +86,7 @@ Los callbacks de éxito y claims de Microsoft usan dobles locales: no acreditan 
 - [Google OpenID Connect](https://developers.google.com/identity/openid-connect/openid-connect).
 - [Microsoft: registro de aplicaciones](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app) y [OIDC](https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc).
 - [Marca Google](https://developers.google.com/identity/branding-guidelines) y [marca Microsoft](https://learn.microsoft.com/en-us/entra/identity-platform/howto-add-branding-in-apps). El logo local `public/images/google-g.png` procede del [asset oficial de Google](https://developers.google.com/static/identity/images/g-logo.png); Microsoft conserva su pictograma de cuatro colores. No se cargan logos ni scripts remotos al abrir EstuFlow.
+
+## Mi perfil (M05)
+
+Los POST/callbacks existentes se reutilizan. La intención OAuth conserva el destino permitido por servidor de la operación iniciada (perfil/email/contraseña); el callback vuelve allí aunque se visite otra pantalla en paralelo. Una identidad conocida conserva nombre/email editados, sin sobrescritura por el proveedor ni autovinculación por email. [Flujos y pruebas manuales](profile.md).

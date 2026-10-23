@@ -2,12 +2,16 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Account\Reauthentication;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ConfirmAccessPasswordRequest extends FormRequest
 {
-    protected $redirectRoute = 'access-methods.index';
+    protected function getRedirectUrl(): string
+    {
+        return route(Reauthentication::destination($this));
+    }
 
     public function authorize(): bool
     {

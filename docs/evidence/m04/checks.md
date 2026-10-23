@@ -1,6 +1,6 @@
 # M04 · Evidencia del 23/10/2026
 
-Base: M03 corregida/aprobada, `39c22b2`, PR #2 aún abierta en borrador. Rama de entrega `codex/m04-calendario`, PR dependiente de M03, sin merge ni despliegue. [Modelo y operación](../../m04.md) · [Especificación](../../m04-spec.md).
+Base: M03 corregida/aprobada, `39c22b2`, PR #2 aún abierta en borrador. Rama de entrega `codex/m04-calendario`, [PR #3 en borrador](https://github.com/NicolasMRuiz/estuflow/pull/3) dependiente de M03, sin merge ni despliegue. [Modelo y operación](../../m04.md) · [Especificación](../../m04-spec.md).
 
 ## Checks locales
 
@@ -13,7 +13,7 @@ Mac ARM64, Docker Desktop; PHP 8.4 / Laravel 13, PostgreSQL 18 y Chromium aislad
 | `check.sh` | PASS: Composer strict, Pint, Larastan nivel 6 y Vite build. |
 | `test.sh` | PASS: **143 pruebas / 921 aserciones**, PostgreSQL estuflow_test/test-postgres. |
 | `e2e.sh` | PASS: **12 recorridos** (5 académicos + 3 autenticación + 3 M04 + 1 matriz responsive), posteriores a PHPUnit. |
-| GitHub Actions | Pendiente de publicación y corrida del HEAD. |
+| GitHub Actions | PASS implementación `da92fb5`: push y pull_request; logs confirman 143/921 y 12 E2E. |
 
 PHPUnit incluye dos procesos reales concurrentes de `m04:tick --local-only`: una única notificación persistida. También comprueba versión, trabajo antiguo, eliminación, corte exacto de utilidad, recuperación, presupuesto, fallo/resultado SMTP incierto, propiedad/fechas/contexto, fuentes y notas. No consulta proveedores reales.
 
@@ -53,3 +53,10 @@ Capturas normales desde scroll cero; las de zoom real 200 % usan chrome.tabs.set
 **Nota:** Nueva nota → escribir dos líneas → [consultar](crud-nota-creada.png) → editar y guardar → cerrar/abrir sesión → [la nota editada persiste en Inicio](crud-nota-editada-persistida.png). Eliminar/cancelar conserva; confirmar elimina → [listado vacío](crud-nota-eliminada.png). Las pruebas comprueban además que cambiar carrera conserva eventos/notas y rechazan IDs de otra cuenta.
 
 Las imágenes usan exclusivamente cuentas/contenido ficticios. No hay menús técnicos de CRUD ni acciones simuladas.
+
+
+## GitHub Actions comprobado
+
+Implementación `da92fb5b3073af56e9ae1c1e571732aaaeff8a00`: [push PASS](https://github.com/NicolasMRuiz/estuflow/actions/runs/40002894860) y [PR PASS](https://github.com/NicolasMRuiz/estuflow/actions/runs/40002920905), Linux AMD64. Se consultaron jobs/logs: setup, Composer/Pint/Larastan/build, **143 pruebas / 921 aserciones**, E2E **5 + 3 + 3 + 1 = 12**, y carga de capturas aprobados. [Artifact de esa corrida](https://github.com/NicolasMRuiz/estuflow/actions/runs/40002920905/artifacts/12523256875), retención 14 días; las 46 capturas versionadas M04 no dependen de esa caducidad.
+
+Este registro de resultados se agrega en un commit exclusivamente documental posterior. El resultado de Actions del HEAD final se mantiene en [la PR #3](https://github.com/NicolasMRuiz/estuflow/pull/3/checks), con su SHA exacto, separado de estas corridas de implementación. Los archivos locales de entorno se verificaron sin cambios y los procesos de testing quedaron detenidos. Worker/scheduler de desarrollo quedaron activos y saludables. Ninguna entrega real Brevo se acredita por estas pruebas.

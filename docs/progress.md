@@ -32,8 +32,20 @@ PostgreSQL de desarrollo publicado exclusivamente en `127.0.0.1:5433`, configura
 
 ## Pendiente de producto
 
-Aceptación visual de Nicolás y confirmación académica de las ambigüedades documentadas. Faltan las otras nueve carreras sin fuente, agenda, calendario y planificador. Las integraciones Google/Brevo reales y Microsoft siguen con el estado informado en M02; los checks no las acreditan.
+M03 corregida fue aprobada por Nicolás según el alcance acordado de M04. Sigue pendiente la confirmación académica de las ambigüedades documentadas. Faltan las otras nueve carreras sin fuente, Planificador y perfil editable. Las integraciones Google/Brevo reales y Microsoft siguen con el estado informado en M02; los checks no las acreditan.
 
 ## Corrección integral M03 · 23 de octubre de 2026
 
-La presentación inicial de M03 no estaba aceptada. Se recupera la composición M02 con datos reales y anillo proporcional; controles coherentes, lenguaje de estudiante, tres pasos compactos y edición cotidiana con filtros conservados. El cambio de carrera ahora mantiene la selección confirmada hasta confirmar el candidato; cancelación, interrupción y retorno conservan estados. Catálogo/reglas/autenticación/configuración externa permanecen. [Evidencia nueva](evidence/m03-correction/checks.md); la aprobación visual final corresponde a Nicolás.
+La presentación inicial de M03 no estaba aceptada. Se recupera la composición M02 con datos reales y anillo proporcional; controles coherentes, lenguaje de estudiante, tres pasos compactos y edición cotidiana con filtros conservados. El cambio de carrera ahora mantiene la selección confirmada hasta confirmar el candidato; cancelación, interrupción y retorno conservan estados. Catálogo/reglas/autenticación/configuración externa permanecen. [Evidencia nueva](evidence/m03-correction/checks.md); Nicolás aprobó esta corrección como base de M04.
+
+
+## M04 · Calendario y organización personal · 23 de octubre de 2026
+
+1. **M04-01:** eventos propios con CRUD HTTP, mes/agenda, fechas UTC/civiles, materia opcional y preservación tras cambiar carrera.
+2. **M04-02:** feriados compartidos por año, copia/validación atómica y cadencia de 15 días transcurridos; fallos conservan lo anterior.
+3. **M04-03:** programación persistente/versionada, avisos internos deduplicados, email opt-in con presupuesto y política SMTP acotada; bandeja propia paginada/filtrable.
+4. **M04-04:** adaptador del HTML real, baseline sin avisos históricos, identidad independiente del título, audiencia persistente y fan-out recuperable sin emails masivos.
+5. **M04-05:** notas personales persistentes con CRUD confirmado y hasta tres en Inicio, debajo de las cuatro tarjetas aprobadas.
+6. **M04-06:** scheduler Compose/arranque/parada, pruebas aisladas, SMTP test-mailpit, capturas responsive/zoom y documentación.
+
+[Modelo, operación y recorrido manual](m04.md), [especificación](m04-spec.md) y [resultados reales](evidence/m04/checks.md). M04 requiere revisión visual de Nico; no modifica la aceptación M03 ni acredita entrega real de Brevo. Sin merge ni despliegue. Perfil, Planificador y reubicación de ajustes quedan para otra entrega.

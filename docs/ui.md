@@ -15,7 +15,7 @@ Español rioplatense, tipografía del sistema y recursos locales. Alpine se carg
 
 El dashboard reserva el espacio de la sidebar mediante una variable compartida (`--sidebar-width`), y centra su contenedor de hasta 1800 px dentro del área restante. La sidebar es fija y puede desplazarse verticalmente en pantallas de poca altura. El contenido usa grids `minmax(0, …)`, tarjetas que pueden contraerse, márgenes adaptables y tipografía algo mayor desde 1920 px. No se escala la página con `transform`.
 
-Bajo 801 px, la sidebar pasa a un menú en el flujo del documento. Se abre con el botón de navegación, admite Enter/Espacio, Escape lo cierra y devuelve el foco al botón, e Inicio permite navegar y cerrar el menú. Hay un enlace de salto al contenido. Inicio, Mi carrera y Métodos de acceso son destinos operativos. Calendario y Planificador conservan «Próximo» y `aria-disabled`. M03 usa exclusivamente datos del catálogo y progreso declarado.
+Bajo 801 px, la sidebar pasa a un menú en el flujo del documento. Se abre con el botón de navegación, admite Enter/Espacio, Escape lo cierra y devuelve el foco al botón, e Inicio permite navegar y cerrar el menú. Hay un enlace de salto al contenido. Inicio, Mi carrera, Calendario y Métodos de acceso son destinos operativos. Sólo Planificador conserva «Próximo» y `aria-disabled`. M03 usa exclusivamente datos del catálogo y progreso declarado.
 
 Las pantallas de autenticación mantienen dos columnas desde 801 px, con la historia de marca limitada a 620 px y centrada en su columna; el formulario nunca supera 440 px. En móvil queda una sola columna con la marca arriba. Las páginas pueden desplazarse verticalmente; no se recortan formularios para forzarlos a entrar en pantallas de poca altura. Los inputs tienen texto de 16 px y controles principales de al menos 48 px de alto.
 
@@ -78,3 +78,12 @@ Mi carrera tiene cabecera y conteos compactos, filtros alineados y acciones Ver 
 Un cambio de carrera se prepara como candidato persistente. La selección confirmada, su finalización y dashboard siguen disponibles hasta confirmar el resumen. Cancelar en cualquier paso conserva la selección previa; interrumpir y volver a ingresar permite retomar el candidato. Elegir el mismo plan no reinicia la configuración. Ver contrato y migración en [M03](m03.md).
 
 El flujo sin JavaScript usa detalles nativos, formularios POST y enlaces al editor por página. El método es opcional y permanece disponible en esa alternativa. La carga por año y edición inline son mejoras progresivas; ninguna regla académica se delega al navegador. [Evidencia de corrección](evidence/m03-correction/checks.md) con recorridos, capturas comparables y límites reales de la inspección.
+
+
+## M04 · Organización personal
+
+La composición M03 corregida fue aprobada por Nico. M04 mantiene saludo/cuenta/franja y orden de las cuatro tarjetas; conecta Próximas actividades y añade Mis notas debajo, máximo tres. Campana local con contador, navegación Calendario activa y bandeja con filtros/acciones POST. Las novedades institucionales se consultan desde la bandeja; no se inventan avisos ni eventos.
+
+Calendario ofrece Mes en escritorio y Agenda en móvil, con cambio explícito disponible sin JS. Semana lunes–domingo, tipos textuales, selector/filtro/contexto, máximo tres elementos por día y Ver N más. Formulario de página con título/foco, labels, mensajes inline y Cancelar que retorna al control; detalle y confirmación de eliminación. Buenos Aires se explica junto a horarios; Día completo usa fechas inclusivas y dos opciones reales de 09:00. Email es opt-in, nunca implícito.
+
+Notas tipo post-it con texto escapado/saltos de línea, sin arrastre, tareas, vencimientos ni nueva planificación. Listado y CRUD HTTP paginados. Nuevas capturas y revisión en `docs/evidence/m04`, 320/390/1440/2560/3840 y zoom real Chromium 200 %. No constituyen auditoría de lector de pantalla ni escalado físico del monitor.

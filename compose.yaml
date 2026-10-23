@@ -37,6 +37,26 @@ services:
       postgres: {condition: service_healthy}
       redis: {condition: service_healthy}
       mailpit: {condition: service_started}
+    healthcheck:
+      test: ["CMD", "php", "artisan", "environment:check"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  scheduler:
+    <<: *app
+    command: ["php", "artisan", "schedule:work", "--no-interaction"]
+    environment:
+      QUEUE_CONNECTION: database
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "php", "artisan", "environment:check"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
     restart: unless-stopped
 
   mailpit:
@@ -133,6 +153,19 @@ services:
   test-worker:
     <<: *test-app
     command: ["php", "artisan", "queue:work", "database", "--env=testing", "--sleep=1", "--tries=3", "--timeout=30", "--backoff=15"]
+    healthcheck:
+      test: ["CMD", "php", "artisan", "environment:check", "--env=testing"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    depends_on:
+      test-postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      test-mailpit: {condition: service_started}
+
+  test-control:
+    <<: *test-app
+    command: ["php", "artisan", "testing:m04-control", "--env=testing"]
     healthcheck:
       test: ["CMD", "php", "artisan", "environment:check", "--env=testing"]
       interval: 3s

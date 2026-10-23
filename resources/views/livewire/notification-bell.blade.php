@@ -1,0 +1,1 @@
+<a href="{{ route('inbox.index') }}" class="notification-bell" wire:poll.60s.visible aria-label="Notificaciones: {{ $unread }} sin leer"><x-icon name="bell" size="21" /><span class="bell-label">Notificaciones</span>@if($unread)<span class="unread-count">{{ $unread > 99 ? '99+' : $unread }}</span>@endif</a>

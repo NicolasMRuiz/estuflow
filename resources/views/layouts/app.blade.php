@@ -18,10 +18,10 @@
         <div class="sidebar-brand"><x-brand /><span class="sidebar-subtitle">Tu espacio académico</span></div>
         <nav aria-label="Navegación principal">
             <span class="nav-label">MI ESPACIO</span>
-            @foreach(['dashboard' => ['Inicio', 'home'], 'career.index' => ['Mi carrera', 'book']] as $name => [$label, $icon])
-                <a href="{{ route($name) }}" @if(request()->routeIs($name) || ($name === 'career.index' && request()->routeIs('career.*'))) aria-current="page" @endif class="nav-item {{ request()->routeIs($name) || ($name === 'career.index' && request()->routeIs('career.*')) ? 'active' : '' }}" @click="menuOpen = false"><x-icon :name="$icon" size="21" /><span>{{ $label }}</span></a>
+            @foreach(['dashboard' => ['Inicio', 'home'], 'career.index' => ['Mi carrera', 'book'], 'calendar.index' => ['Calendario', 'calendar']] as $name => [$label, $icon])
+                <a href="{{ route($name) }}" @if(request()->routeIs($name) || ($name === 'career.index' && request()->routeIs('career.*')) || ($name === 'calendar.index' && request()->routeIs('calendar.*'))) aria-current="page" @endif class="nav-item {{ request()->routeIs($name) || ($name === 'career.index' && request()->routeIs('career.*')) || ($name === 'calendar.index' && request()->routeIs('calendar.*')) ? 'active' : '' }}" @click="menuOpen = false"><x-icon :name="$icon" size="21" /><span>{{ $label }}</span></a>
             @endforeach
-            @foreach(['Calendario' => 'calendar', 'Planificador' => 'route'] as $label => $icon)
+            @foreach(['Planificador' => 'route'] as $label => $icon)
                 <div class="nav-item pending" aria-disabled="true"><x-icon :name="$icon" size="21" /><span>{{ $label }}</span><span class="soon">Próximo</span></div>
             @endforeach
         </nav>

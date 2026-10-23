@@ -1,6 +1,6 @@
 # EstuFlow
 
-Organizador académico en español rioplatense. M02 implementa registro/login/logout, recuperación y verificación por email, acceso/vinculación Google y Microsoft, validación accesible y responsive hasta 4K. M03 agrega tres planes documentados, configuración inicial recuperable, Mi carrera con estados y correlativas, y dashboard calculado con progreso personal. Calendario y Planificador siguen pendientes.
+Organizador académico en español rioplatense. M02 implementa registro/login/logout, recuperación y verificación por email, acceso/vinculación Google y Microsoft, validación accesible y responsive hasta 4K. M03 agrega tres planes documentados, configuración inicial recuperable, Mi carrera con estados y correlativas, y dashboard calculado con progreso personal. M04 agrega calendario personal, feriados compartidos, recordatorios, notificaciones, cartelera y notas. Planificador sigue pendiente.
 
 ## Iniciar en Mac
 
@@ -12,15 +12,21 @@ cd /Users/nicolasruiz/estuflow
 ./scripts/start.sh
 ```
 
-Abrir [EstuFlow](http://localhost:8000) y [correo local Mailpit](http://localhost:8025). `setup.sh` crea `.env`/`.env.testing` sólo si no existen, con secretos aleatorios, instala lockfiles y aplica sólo migraciones pendientes. Preserva archivos/datos. `start.sh` verifica readiness e inicia también worker/capturador. PostgreSQL de desarrollo publica sólo loopback para DataGrip; test-postgres y Redis quedan internos. Web y bandeja también sólo loopback. Nunca borrar volúmenes para solucionar un problema.
+Abrir [EstuFlow](http://localhost:8000) y [correo local Mailpit](http://localhost:8025). `setup.sh` crea `.env`/`.env.testing` sólo si no existen, con secretos aleatorios, instala lockfiles y aplica sólo migraciones pendientes. Preserva archivos/datos. `start.sh` verifica readiness e inicia también worker, scheduler y capturador. PostgreSQL de desarrollo publica sólo loopback para DataGrip; test-postgres y Redis quedan internos. Web y bandeja también sólo loopback. Nunca borrar volúmenes para solucionar un problema.
 
-Si el puerto cambia, configurar `APP_PORT` y `APP_URL` en `.env`; el origen confiable también determina URLs de seguridad/callbacks. Para detener: `docker compose stop app worker mailpit` (preserva datos).
+Si el puerto cambia, configurar `APP_PORT` y `APP_URL` en `.env`; el origen confiable también determina URLs de seguridad/callbacks. Para detener: `./scripts/stop.sh` (preserva datos).
 
 ## PostgreSQL desde DataGrip
 
 Conectar a `127.0.0.1:5433`, base `estuflow`, usuario `estuflow`, contraseña **DB_PASSWORD de .env local**. El puerto efectivo se define con `DB_FORWARD_PORT` (predeterminado 5433); Laravel sigue en `DB_HOST=postgres`, `DB_PORT=5432`. No poner la contraseña en una URL JDBC ni en documentación.
 
 [Guía de conexión, cambio de puerto y comprobaciones](docs/datagrip.md). El volumen y las credenciales se conservan al recrear el contenedor. `test-postgres` y Redis no publican puertos.
+
+## Revisar M04
+
+[Guía M04](docs/m04.md): calendario/agenda con CRUD completo, fechas de Buenos Aires, recordatorios reprogramables, bandeja propia, cartelera compartida y notas. Se conserva el dashboard M03 aprobado. Las fuentes se leen sólo desde el proceso periódico; navegar usa PostgreSQL local. Scheduler y worker deben estar activos para avisos automáticos. El presupuesto propio de correo es de 250 recordatorios/día y requiere opt-in por evento.
+
+Para actualizar sin perder datos: `./scripts/setup.sh`, `./scripts/start.sh` y `docker compose restart worker scheduler` si esos procesos ya estaban ejecutando una versión anterior. [Resultados, capturas y límites](docs/evidence/m04/checks.md). El diagnóstico público de sólo lectura es `docker compose exec -T app php artisan m04:diagnose`; no guarda ni envía avisos.
 
 ## Revisar M03
 

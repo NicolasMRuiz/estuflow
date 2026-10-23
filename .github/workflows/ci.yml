@@ -37,5 +37,6 @@ jobs:
           path: |
             docs/evidence/m02/*.png
             docs/evidence/m03/*.png
+            docs/evidence/m03-correction/**/*.png
           retention-days: 14
           if-no-files-found: warn

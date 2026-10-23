@@ -37,3 +37,5 @@ El helper cloud configura DNS/proxy/CA local y descarga ZIP oficiales del commit
 ## M03 · Datos académicos
 
 [Modelo y contrato](m03.md). Catálogo normalizado y planes inmutables; progreso aislado por usuario/plan mediante FK compuestas y un único plan activo. Configuración académica después de email verificado; middleware sólo en rutas académicas. Escrituras HTTP y Livewire usan AcademicProgress con bloqueo por usuario. Advisory evalúa datos cargados en memoria con relaciones eager, sin consultas por correlativa; no bloquea la declaración personal.
+
+M03 corregida el 23/10 distingue `is_candidate` de `is_active`: la carrera confirmada no se modifica durante la preparación de un cambio. El resumen queda ligado a la huella del candidato en sesión y se valida bajo bloqueo del usuario al confirmar. CareerBrowser ofrece edición inline con filtros persistentes; comparte AcademicProgress con el editor HTTP/Livewire de detalle. Presentación de nombres, conteos y estados separada de los datos fuente.

@@ -1,0 +1,46 @@
+{
+  "scope": "Chromium headless aislado; zoom real de pestaña via chrome.tabs.setZoom/getZoom. No prueba el escalado físico de macOS ni otros navegadores.",
+  "zoom": 2,
+  "before": {
+    "width": 1280,
+    "height": 720
+  },
+  "measurements": [
+    {
+      "screen": "elegir-plan",
+      "width": 640,
+      "height": 360,
+      "documentWidth": 640
+    },
+    {
+      "screen": "situacion-inicial",
+      "width": 640,
+      "height": 360,
+      "documentWidth": 640
+    },
+    {
+      "screen": "resumen",
+      "width": 640,
+      "height": 360,
+      "documentWidth": 640
+    },
+    {
+      "screen": "dashboard",
+      "width": 640,
+      "height": 360,
+      "documentWidth": 640
+    },
+    {
+      "screen": "mi-carrera",
+      "width": 640,
+      "height": 360,
+      "documentWidth": 640
+    },
+    {
+      "screen": "detalle-practica",
+      "width": 640,
+      "height": 360,
+      "documentWidth": 640
+    }
+  ]
+}

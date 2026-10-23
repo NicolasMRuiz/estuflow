@@ -5,15 +5,18 @@ namespace Tests\Feature;
 use App\Academic\AcademicProgress;
 use App\Academic\Advisory;
 use App\Academic\CatalogImporter;
+use App\Livewire\CareerBrowser;
 use App\Livewire\CourseEditor;
 use App\Livewire\Dashboard;
 use App\Models\AcademicEnrollment;
 use App\Models\PlanCourse;
 use App\Models\StudyPlan;
 use App\Models\User;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
@@ -45,6 +48,12 @@ class AcademicTest extends TestCase
         app(AcademicProgress::class)->save($user, [$this->course($code)->id => ['status' => $status, 'approval_method' => $method]]);
     }
 
+    private function confirmSelection(User $user): void
+    {
+        $this->get(route('academic.summary'))->assertOk();
+        $this->post(route('academic.finish'), ['candidate_id' => app(AcademicProgress::class)->candidate($user)->id])->assertRedirect('/dashboard');
+    }
+
     public function test_existing_verified_account_requires_explicit_choice_then_review_before_dashboard(): void
     {
         $user = User::factory()->create();
@@ -55,8 +64,8 @@ class AcademicTest extends TestCase
         $this->get('/dashboard')->assertRedirect(route('academic.draft'));
         $this->assertNull(app(AcademicProgress::class)->active($user)->completed_at);
         $this->get(route('academic.summary'))->assertSee('Pendiente')->assertSee('Revisá tu recorrido');
-        $this->post(route('academic.finish'))->assertSessionHasErrors('confirm');
-        $this->post(route('academic.finish'), ['confirm' => 1])->assertRedirect('/dashboard');
+        $this->post(route('academic.finish'))->assertSessionHasErrors('candidate_id');
+        $this->confirmSelection($user);
         $this->get('/dashboard')->assertOk()->assertSee('0 de 23 materias aprobadas')->assertSee('0 %');
     }
 
@@ -85,7 +94,7 @@ class AcademicTest extends TestCase
         $this->post('/login', ['email' => $user->email, 'password' => 'clave-ficticia-segura'])->assertRedirect('/dashboard');
         $this->get('/dashboard')->assertRedirect(route('academic.draft'));
         $this->get(route('academic.draft'))->assertSee('value="promotion" selected', false);
-        $this->post(route('academic.finish'), ['confirm' => 1]);
+        $this->confirmSelection($user);
         $this->get('/dashboard')->assertSee('1 de 23 materias aprobadas')->assertSee('4 %');
     }
 
@@ -96,13 +105,14 @@ class AcademicTest extends TestCase
         $this->actingAs($user);
         $id = $this->course('294')->id;
         $foreign = $this->course('215')->id;
-        $this->post(route('academic.save'), ['entries' => [$id => ['status' => 'approved'], $foreign => ['status' => 'approved']]])->assertNotFound();
+        $this->post(route('academic.save'), ['entries' => [$id => ['status' => 'approved'], $foreign => ['status' => 'approved']]])->assertForbidden();
         $this->assertDatabaseHas('course_progress', ['plan_course_id' => $id, 'status' => 'pending']);
         $this->post(route('career.update', $foreign), ['status' => 'approved'])->assertNotFound();
         $this->post(route('career.update', $this->course('296')->id), ['status' => 'approved', 'approval_method' => 'promotion'])->assertSessionHasErrors();
         $this->post(route('career.update', $id), ['status' => 'invented'])->assertSessionHasErrors();
         $this->post(route('career.update', $id), ['status' => 'approved', 'user_id' => 999])->assertSessionHasErrors('user_id');
-        $this->post(route('academic.select'), ['plan_id' => $this->plan('TECEN')->id])->assertSessionHasErrors('confirm_change');
+        $this->post(route('academic.select'), ['plan_id' => $this->plan('TECEN')->id])->assertRedirect(route('academic.draft'));
+        $this->assertSame($this->plan()->id, app(AcademicProgress::class)->active($user)->study_plan_id);
     }
 
     public function test_livewire_owns_course_and_rechecks_account_plan_and_verification_on_update(): void
@@ -117,9 +127,10 @@ class AcademicTest extends TestCase
         Livewire::actingAs($one)->test(CourseEditor::class, ['courseId' => $this->course('215')->id])->assertNotFound();
         $component = Livewire::actingAs($one)->test(CourseEditor::class, ['courseId' => $id]);
         app(AcademicProgress::class)->select($one, $this->plan('TECEN')->id);
+        app(AcademicProgress::class)->finish($one);
         $component->set('status', 'regularized')->call('save')->assertNotFound();
-        Livewire::actingAs($one)->test(Dashboard::class)->assertForbidden();
-        $one->update(['email_verified_at' => null]);
+        Livewire::actingAs($one)->test(Dashboard::class)->assertOk();
+        $one->forceFill(['email_verified_at' => null])->save();
         auth()->setUser($one->fresh());
         Livewire::test(CourseEditor::class, ['courseId' => $id])->assertForbidden();
     }
@@ -151,10 +162,10 @@ class AcademicTest extends TestCase
         $original = $this->configureAcademic($user);
         $this->setState($user, '294', 'approved', 'promotion');
         $this->actingAs($user)->post(route('academic.select'), ['plan_id' => $this->plan('TECEN')->id, 'confirm_change' => 1])->assertRedirect(route('academic.draft'));
-        $this->post(route('academic.finish'), ['confirm' => 1]);
+        $this->confirmSelection($user);
         $this->get('/dashboard')->assertSee('0 de 24 materias aprobadas')->assertDontSee('1 de 23');
         $this->post(route('academic.select'), ['plan_id' => $original->study_plan_id, 'confirm_change' => 1]);
-        $this->post(route('academic.finish'), ['confirm' => 1]);
+        $this->confirmSelection($user);
         $this->get('/dashboard')->assertSee('1 de 23 materias aprobadas');
         $this->assertSame(1, AcademicEnrollment::where('user_id', $user->id)->where('is_active', true)->count());
         $this->assertDatabaseCount('course_progress', 47);
@@ -168,8 +179,8 @@ class AcademicTest extends TestCase
         $this->setState($user, '294', 'approved', 'promotion');
         $this->setState($user, '295', 'regularized');
         $this->setState($user, '298', 'in_progress');
-        $this->get('/dashboard')->assertSee('4 %')->assertSee('1 materias cursando')->assertSee('Algoritmos y Estructuras de Datos I');
-        $this->get('/mi-carrera?year=1&status=in_progress')->assertSee('298 · Algoritmos')->assertDontSee('294 · Inglés I');
+        $this->get('/dashboard')->assertSee('4 %')->assertSee('Tenés 1 materia en curso.')->assertSee('Algoritmos y Estructuras de Datos I');
+        $this->get('/mi-carrera?year=1&status=in_progress')->assertSee('Algoritmos y Estructuras de Datos I')->assertDontSee('Inglés I');
         $this->post(route('career.update', $this->course('294')->id), ['status' => 'pending', 'approval_method' => 'promotion']);
         $this->assertDatabaseHas('course_progress', ['academic_enrollment_id' => $enrollment->id, 'plan_course_id' => $this->course('294')->id, 'approval_method' => null]);
         foreach ($enrollment->plan->courses as $course) {
@@ -253,8 +264,123 @@ class AcademicTest extends TestCase
         $this->actingAs($user)->get('/mi-carrera')->assertOk();
         $this->assertLessThan(25, count(DB::getQueryLog()));
         DB::flushQueryLog();
-        $this->get(route('career.detail', $this->course('316')->id))->assertOk()->assertSee('TODAS')->assertSee('Por confirmar');
+        $this->get(route('career.detail', $this->course('316')->id))->assertOk()->assertSee('Las demás materias del plan')->assertSee('Por confirmar');
         $this->assertLessThan(65, count(DB::getQueryLog()));
         DB::disableQueryLog();
+    }
+
+    public function test_cancel_and_interruption_of_switch_preserve_confirmed_selection_and_candidate_draft(): void
+    {
+        $user = User::factory()->create(['password' => 'clave-ficticia-segura']);
+        $original = $this->configureAcademic($user);
+        $this->setState($user, '294', 'approved', 'promotion');
+        $completed = $original->fresh()->completed_at;
+        $this->actingAs($user)->post(route('academic.select'), ['plan_id' => $this->plan('TECEN')->id]);
+        $candidate = app(AcademicProgress::class)->candidate($user);
+        $id = $this->course('215')->id;
+        $this->post(route('academic.save'), ['entries' => [$id => ['status' => 'approved', 'approval_method' => 'promotion']]])->assertSessionHas('status');
+        $this->get('/dashboard')->assertOk()->assertSee('1 de 23 materias aprobadas');
+        $this->assertEquals($completed, $original->fresh()->completed_at);
+        $this->assertFalse($candidate->fresh()->is_active);
+        $this->post('/logout');
+        $this->post('/login', ['email' => $user->email, 'password' => 'clave-ficticia-segura']);
+        $this->get('/dashboard')->assertOk()->assertSee('1 de 23 materias aprobadas');
+        $this->get(route('academic.draft'))->assertOk()->assertSee('value="promotion" selected', false);
+        $this->post(route('academic.cancel'))->assertRedirect(route('career.index'));
+        $this->assertNull(app(AcademicProgress::class)->candidate($user));
+        $this->assertSame($original->id, app(AcademicProgress::class)->active($user)->id);
+        $this->assertEquals($completed, $original->fresh()->completed_at);
+        $this->post(route('academic.select'), ['plan_id' => $this->plan('TECEN')->id]);
+        $this->confirmSelection($user);
+        $this->get('/dashboard')->assertSee('1 de 24 materias aprobadas');
+    }
+
+    public function test_selecting_same_confirmed_plan_has_no_side_effects(): void
+    {
+        $user = User::factory()->create();
+        $original = $this->configureAcademic($user);
+        $before = $original->fresh()->getAttributes();
+        $this->actingAs($user)->post(route('academic.select'), ['plan_id' => $original->study_plan_id])->assertRedirect(route('career.index'));
+        $this->assertSame($before, $original->fresh()->getAttributes());
+        $this->assertNull(app(AcademicProgress::class)->candidate($user));
+        $this->assertDatabaseCount('academic_enrollments', 1);
+    }
+
+    public function test_final_confirmation_requires_current_owned_reviewed_draft(): void
+    {
+        $user = User::factory()->create();
+        $this->configureAcademic($user);
+        $other = User::factory()->create();
+        $this->configureAcademic($other);
+        $this->actingAs($user)->post(route('academic.select'), ['plan_id' => $this->plan('TECEN')->id]);
+        $candidate = app(AcademicProgress::class)->candidate($user);
+        $this->post(route('academic.finish'), ['candidate_id' => $candidate->id])->assertSessionHasErrors('academic');
+        $this->get(route('academic.summary'));
+        $this->post(route('academic.finish'), ['candidate_id' => app(AcademicProgress::class)->active($other)->id])->assertSessionHasErrors('academic');
+        app(AcademicProgress::class)->save($user, [$this->course('215')->id => ['status' => 'regularized']], draft: true);
+        $this->post(route('academic.finish'), ['candidate_id' => $candidate->id])->assertSessionHasErrors('academic');
+        $this->assertSame($this->plan()->id, app(AcademicProgress::class)->active($user)->study_plan_id);
+        $this->confirmSelection($user);
+    }
+
+    public function test_candidate_changes_cannot_touch_confirmed_or_foreign_plan_and_initial_onboarding_is_required(): void
+    {
+        $user = User::factory()->create();
+        $other = User::factory()->create();
+        $this->configureAcademic($user);
+        $this->configureAcademic($other);
+        $this->actingAs($user)->post(route('academic.select'), ['plan_id' => $this->plan('TECEN')->id]);
+        $this->post(route('academic.save'), ['entries' => [$this->course('215')->id => ['status' => 'approved'], $this->course('294')->id => ['status' => 'approved']]])->assertNotFound();
+        $this->assertDatabaseHas('course_progress', ['plan_course_id' => $this->course('215')->id, 'status' => 'pending']);
+        $this->post(route('academic.save'), ['entries' => [$this->course('215')->id => ['status' => 'approved']], 'user_id' => $other->id])->assertSessionHasErrors('user_id');
+        $this->assertNull(app(AcademicProgress::class)->candidate($other));
+        $this->assertSame(0, app(AcademicProgress::class)->summary(app(AcademicProgress::class)->active($other))['approved']);
+        $new = User::factory()->create();
+        $this->actingAs($new)->post(route('academic.select'), ['plan_id' => $this->plan()->id]);
+        $this->post(route('academic.cancel'));
+        $this->get('/dashboard')->assertRedirect(route('academic.draft'));
+        $this->assertNull(app(AcademicProgress::class)->active($new)->completed_at);
+    }
+
+    public function test_inline_save_cancel_and_filter_removal_keep_context_and_ownership(): void
+    {
+        $user = User::factory()->create();
+        $this->configureAcademic($user);
+        $this->setState($user, '294', 'in_progress');
+        $id = $this->course('294')->id;
+        $component = Livewire::actingAs($user)->test(CareerBrowser::class, ['year' => '1', 'statusFilter' => 'in_progress'])
+            ->call('edit', $id)->set('status', 'approved')->set('approvalMethod', 'promotion')->call('cancel');
+        $this->assertDatabaseHas('course_progress', ['plan_course_id' => $id, 'status' => 'in_progress']);
+        $component->call('edit', $id)->set('status', 'regularized')->call('save')
+            ->assertSet('year', '1')->assertSet('statusFilter', 'in_progress')->assertSee('ya no coincide con el filtro')->assertDontSee('Editar estado de Inglés I');
+        $this->actingAs($user)->post(route('career.update', $id), ['status' => 'in_progress', 'return_to' => 'career', 'year' => 1, 'filter_status' => 'approved'])
+            ->assertRedirect(route('career.index', ['year' => 1, 'status' => 'approved']).'#resultados');
+        Livewire::actingAs($user)->test(CareerBrowser::class)->call('edit', $this->course('215')->id)->assertNotFound();
+        $user->forceFill(['email_verified_at' => null])->save();
+        auth()->setUser($user->fresh());
+        Livewire::test(CareerBrowser::class)->assertForbidden();
+    }
+
+    public function test_additive_migration_recovers_an_interrupted_legacy_switch_without_losing_progress(): void
+    {
+        $user = User::factory()->create();
+        $original = $this->configureAcademic($user);
+        $this->setState($user, '294', 'approved', 'promotion');
+        $completed = $original->fresh()->completed_at;
+        $draft = app(AcademicProgress::class)->select($user, $this->plan('TECEN')->id);
+        // Reproduce the old M03 state, exclusively inside the test transaction.
+        $original->update(['is_active' => false]);
+        $draft->update(['is_active' => true]);
+        DB::statement('DROP INDEX one_candidate_plan_per_user');
+        Schema::table('academic_enrollments', fn (Blueprint $table) => $table->dropColumn('is_candidate'));
+        $migration = require database_path('migrations/2026_10_23_000001_distinguish_candidate_from_confirmed_plan.php');
+        $migration->up();
+        $this->assertTrue($original->fresh()->is_active);
+        $this->assertEquals($completed, $original->fresh()->completed_at);
+        $this->assertFalse($draft->fresh()->is_active);
+        $this->assertTrue($draft->fresh()->is_candidate);
+        $this->assertSame(23, $original->progress()->count());
+        $this->assertSame(24, $draft->progress()->count());
+        $this->assertSame('promotion', $original->progress()->where('plan_course_id', $this->course('294')->id)->sole()->approval_method);
     }
 }

@@ -24,6 +24,8 @@ Conectar a `127.0.0.1:5433`, base `estuflow`, usuario `estuflow`, contraseña **
 
 ## Revisar M03
 
+La [corrección del 23/10](docs/evidence/m03-correction/checks.md) recupera la composición M02, simplifica la carga y edición de materias y conserva la carrera confirmada mientras se prepara un cambio. Cancelar o interrumpir no activa el candidato.
+
 Después de verificar el email, elegí carrera/plan, guardá tu situación por año y revisá el resumen antes de confirmar. Mi carrera permite filtros y edición; Inicio refleja sólo el plan activo. Cambiar de plan conserva el progreso anterior.
 
 [Guía completa M03](docs/m03.md): fuentes, modelo, importación sobre la base M02 existente, actualización sin perder datos, reglas pendientes y recorrido manual. [Checks y capturas M03](docs/evidence/m03/checks.md). `setup.sh` y `start.sh` importan el catálogo de forma idempotente después de aplicar únicamente migraciones pendientes.

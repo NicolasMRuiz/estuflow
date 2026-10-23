@@ -57,7 +57,7 @@ class Advisory
         }
         $state = $definite >= $rule['minimum_final_passed_courses'] && $specificDefinite >= $rule['minimum_specific_final_passed_courses'] ? 'complete' : ($possible >= $rule['minimum_final_passed_courses'] && $specificPossible >= $rule['minimum_specific_final_passed_courses'] ? 'uncertain' : 'missing');
 
-        return ['state' => $state, 'text' => $rule['source_text'], 'observed' => "Del año anterior: {$definite} finales declarados, {$specificDefinite} de formación específica E. Se evalúa a la fecha de inscripción del calendario académico; fecha no provista.", 'ambiguous' => $possible - $definite];
+        return ['state' => $state, 'text' => $rule['source_text'], 'observed' => "Declaraste {$definite} finales aprobados del año anterior, {$specificDefinite} de formación específica. El instituto evalúa esta condición a la fecha de inscripción.", 'ambiguous' => $possible - $definite];
     }
 
     /** @return array<string, mixed> */

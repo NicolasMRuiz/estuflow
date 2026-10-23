@@ -17,9 +17,15 @@ class CourseEditor extends Component
 
     public string $approvalMethod = 'unspecified';
 
-    public function mount(int $courseId, AcademicProgress $progress): void
+    /** @var array<string, mixed> */
+    #[Locked]
+    public array $context = [];
+
+    /** @param array<string, mixed> $context */
+    public function mount(int $courseId, AcademicProgress $progress, array $context = []): void
     {
         $this->courseId = $courseId;
+        $this->context = $context;
         $this->authorizeCourse($progress);
         $row = $progress->active(Auth::user())->progress->firstWhere('plan_course_id', $courseId);
         $this->status = $row->status;
@@ -33,7 +39,14 @@ class CourseEditor extends Component
         if ($this->status !== 'approved') {
             $this->approvalMethod = 'unspecified';
         }
-        session()->flash('status', 'Estado guardado.');
+        if (($this->context['return_to'] ?? null) === 'career') {
+            $removed = ($this->context['filter_status'] ?? '') !== '' && $this->context['filter_status'] !== $this->status;
+            session()->flash('status', $removed ? 'Guardamos los cambios. La materia ya no coincide con el filtro elegido.' : 'Guardamos los cambios.');
+            $this->redirect(route('career.index', ['year' => $this->context['year'] ?? '', 'status' => $this->context['filter_status'] ?? '']).($removed ? '#resultados' : '#materia-'.$this->courseId));
+
+            return;
+        }
+        session()->flash('status', 'Guardamos los cambios.');
         $this->redirectRoute('career.detail', ['course' => $this->courseId]);
     }
 

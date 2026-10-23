@@ -61,6 +61,20 @@ Las capturas M02 se guardan en `docs/evidence/m02/`, con login y dashboard a 390
 
 El resultado real de los comandos, la revisión visual final y las limitaciones están en `docs/evidence/m02/checks.md`; este documento describe la implementación y el alcance de revisión, no reemplaza esos resultados ni implica aceptación visual de Nicolás.
 
-## M03
+## Corrección M03 · 23 de octubre de 2026
 
-Elección explícita con radios, borrador por año, resumen, filtros GET y detalle con tres contextos de correlativas. Labels asociados a selects, errores inline y aviso de guardado con role=status; controles de 48 px y textos largos con reflow. Formularios básicos y navegación móvil alternativa funcionan sin JavaScript. Los estados se expresan con texto además del color. [Capturas y alcance de verificación](evidence/m03/checks.md).
+La referencia visual es M02 en `9f31538`, especialmente `docs/evidence/m02/dashboard-1440x900.png`, su Blade y CSS. Las capturas M03 del 13/10 registran una implementación que el usuario rechazó; no constituyen aprobación visual. La aprobación de esta corrección queda a cargo de Nicolás.
+
+Se conserva el saludo con avatar y bloque de cuenta, banner breve y grilla M02: Avance de carrera / Próximas actividades, luego Materias en curso / Correlativas. Las mismas cuatro tarjetas se apilan en ese orden. El indicador SVG representa aprobadas/total con un arco proporcional, texto accesible y numerador/denominador. Los conteos compactos viven en su pie, con singular/plural natural. Las listas se limitan a tres materias y llevan a sus detalles/filtros reales. Calendario sigue próximo, sin eventos inventados.
+
+`x-action`, `x-status-badge`, `x-progress-counts`, `x-dashboard-panel`, `x-progress-fields` y `x-plan-source` comparten controles y estilos. Botones primarios/secundarios no agregan márgenes de contexto: los controlan las barras de acciones. La autenticación conserva sus separaciones mediante reglas de sus propios formularios. Controles principales de 48 px, borde/foco visibles y texto de estado además de color.
+
+Etiquetas: Pendiente, Cursando, Final pendiente (`regularized`, sin cambiar datos), Aprobada. El método opcional ofrece Final / Promoción cuando corresponde / No lo especifico. La UI usa nombres comprensibles de carrera; el título oficial y los datos de trazabilidad viven en Datos del plan, desplegable secundario. No hay claves de plan, siglas ni frases de extracción en el contenido principal.
+
+Configuración en tres pasos con indicador compartido. Años plegables nativos, primero abierto al empezar; el año con error se abre y su control recibe foco. El método sólo se muestra al aprobar. Aplicar un estado a un año cambia el borrador visible; informa alcance/cantidad, deja métodos sin especificar y permite deshacer antes de guardar. Guardar borrador y Continuar son POST explícitos, conservando todos los años plegados. La barra permanece accesible y pasa a posición normal en poca altura/zoom. El resumen muestra cantidades y detalles plegables, sin checkbox redundante.
+
+Mi carrera tiene cabecera y conteos compactos, filtros alineados y acciones Ver detalle / Editar estado. La edición inline reutiliza campos y validación; Guardar cambios actualiza la lista/conteos sin redirigir, Cancelar no persiste. Si deja de coincidir con un filtro, se avisa y se conserva el filtro. El detalle ofrece formulario normal como alternativa sin JavaScript y retorno al contexto filtrado. La información se organiza en Mi estado, Para cursar y Para rendir el final; las correlativas de cursada y de final para inscripción permanecen diferenciadas. Las dudas sobre promociones y práctica final siguen visibles donde afectan la orientación.
+
+Un cambio de carrera se prepara como candidato persistente. La selección confirmada, su finalización y dashboard siguen disponibles hasta confirmar el resumen. Cancelar en cualquier paso conserva la selección previa; interrumpir y volver a ingresar permite retomar el candidato. Elegir el mismo plan no reinicia la configuración. Ver contrato y migración en [M03](m03.md).
+
+El flujo sin JavaScript usa detalles nativos, formularios POST y enlaces al editor por página. El método es opcional y permanece disponible en esa alternativa. La carga por año y edición inline son mejoras progresivas; ninguna regla académica se delega al navegador. [Evidencia de corrección](evidence/m03-correction/checks.md) con recorridos, capturas comparables y límites reales de la inspección.

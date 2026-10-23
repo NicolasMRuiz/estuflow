@@ -8,7 +8,7 @@
     @livewireStyles
 </head>
 <body class="dashboard-page" x-data="{ menuOpen: false }" @keydown.escape.window="if (menuOpen) { menuOpen = false; $refs.menuButton.focus() }">
-    <noscript><style>@media(max-width:800px){.sidebar{display:flex}.mobile-bar button{display:none}}</style></noscript>
+    <noscript><style>.approval-field[x-cloak]{display:block!important}@media(max-width:800px){.sidebar{display:flex}.mobile-bar button{display:none}}</style></noscript>
     <a href="#contenido" class="skip-link">Ir al contenido</a>
     <header class="mobile-bar">
         <x-brand />

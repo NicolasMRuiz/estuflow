@@ -15,7 +15,7 @@ class AcademicEnrollment extends Model
     /** @return array<string, string> */
     protected function casts(): array
     {
-        return ['is_active' => 'boolean', 'completed_at' => 'datetime'];
+        return ['is_active' => 'boolean', 'is_candidate' => 'boolean', 'completed_at' => 'datetime'];
     }
 
     /** @return BelongsTo<StudyPlan, $this> */

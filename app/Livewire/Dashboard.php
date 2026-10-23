@@ -23,6 +23,8 @@ class Dashboard extends Component
         $rows = $enrollment->progress->keyBy('plan_course_id');
         $currentCourses = $enrollment->plan->courses->filter(fn ($course) => $rows[$course->id]->status === 'in_progress');
 
-        return view('livewire.dashboard', ['user' => Auth::user(), 'enrollment' => $enrollment, 'counts' => $progress->summary($enrollment), 'currentCourses' => $currentCourses]);
+        $suggestedCourses = $enrollment->plan->courses->filter(fn ($course) => $rows[$course->id]->status === 'pending')->take(3);
+
+        return view('livewire.dashboard', ['user' => Auth::user(), 'enrollment' => $enrollment, 'counts' => $progress->summary($enrollment), 'currentCourses' => $currentCourses->take(3), 'suggestedCourses' => $suggestedCourses]);
     }
 }

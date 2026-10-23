@@ -43,6 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::post('/configuracion-academica/materias', [AcademicController::class, 'saveDraft'])->name('academic.save');
     Route::get('/configuracion-academica/resumen', [AcademicController::class, 'summary'])->name('academic.summary');
     Route::post('/configuracion-academica/confirmar', [AcademicController::class, 'finish'])->name('academic.finish');
+    Route::post('/configuracion-academica/cancelar', [AcademicController::class, 'cancel'])->name('academic.cancel');
     Route::middleware(AcademicConfigured::class)->group(function (): void {
         Route::get('/mi-carrera', [AcademicController::class, 'career'])->name('career.index');
         Route::get('/mi-carrera/{course}', [AcademicController::class, 'detail'])->whereNumber('course')->name('career.detail');

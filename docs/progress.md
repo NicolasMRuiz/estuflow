@@ -33,3 +33,7 @@ PostgreSQL de desarrollo publicado exclusivamente en `127.0.0.1:5433`, configura
 ## Pendiente de producto
 
 Aceptación visual de Nicolás y confirmación académica de las ambigüedades documentadas. Faltan las otras nueve carreras sin fuente, agenda, calendario y planificador. Las integraciones Google/Brevo reales y Microsoft siguen con el estado informado en M02; los checks no las acreditan.
+
+## Corrección integral M03 · 23 de octubre de 2026
+
+La presentación inicial de M03 no estaba aceptada. Se recupera la composición M02 con datos reales y anillo proporcional; controles coherentes, lenguaje de estudiante, tres pasos compactos y edición cotidiana con filtros conservados. El cambio de carrera ahora mantiene la selección confirmada hasta confirmar el candidato; cancelación, interrupción y retorno conservan estados. Catálogo/reglas/autenticación/configuración externa permanecen. [Evidencia nueva](evidence/m03-correction/checks.md); la aprobación visual final corresponde a Nicolás.

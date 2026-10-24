@@ -4,7 +4,12 @@ if [[ -n "${CODEX_ENVIRONMENT_ID:-}" && -n "${HTTPS_PROXY:-}" ]]; then
   python3 scripts/cloud-setup.py
   source scripts/common.sh
 fi
-docker run --rm --user "$LOCAL_UID:$LOCAL_GID" -v "$PWD:/app" -w /app \
+APP_HOST_PATH="$PWD"
+if command -v cygpath >/dev/null 2>&1; then
+  APP_HOST_PATH="$(cygpath -m "$PWD")"
+  export MSYS2_ARG_CONV_EXCL="${MSYS2_ARG_CONV_EXCL:+$MSYS2_ARG_CONV_EXCL;}/app"
+fi
+docker run --rm --user "$LOCAL_UID:$LOCAL_GID" -v "$APP_HOST_PATH:/app" -w /app \
   php:8.4-cli-bookworm@sha256:f1d32fb402fffba0b3dd8ba8c0aca474c9e9f04395fa846eedea77c503257dee php scripts/init-env.php
 docker compose build app
 docker compose run --rm --no-deps app composer install --no-interaction --prefer-dist

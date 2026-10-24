@@ -40,7 +40,7 @@ services:
     healthcheck:
       test: ["CMD", "php", "artisan", "environment:check"]
       interval: 15s
-      timeout: 5s
+      timeout: 10s
       retries: 10
     restart: unless-stopped
 
@@ -55,7 +55,7 @@ services:
     healthcheck:
       test: ["CMD", "php", "artisan", "environment:check"]
       interval: 15s
-      timeout: 5s
+      timeout: 10s
       retries: 10
     restart: unless-stopped
 

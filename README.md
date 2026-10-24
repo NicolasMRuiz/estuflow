@@ -1,20 +1,20 @@
 # EstuFlow
 
-Un espacio personal para organizar el recorrido académico: elegir carrera y plan, registrar el estado de las materias, consultar correlativas, planificar eventos con recordatorios, guardar notas y leer novedades. Mi perfil reúne datos personales, seguridad, accesos y configuración académica. El Planificador está pendiente.
+Espacio personal para organizar el recorrido académico: carrera y plan, progreso de materias, correlativas, eventos, recordatorios, notas y novedades. Mi perfil reúne datos personales, seguridad y accesos. El Planificador está pendiente.
 
-Laravel 13, PHP 8.4, Livewire 4, Blade y Tailwind 4; PostgreSQL 18 y Redis. Docker ejecuta PHP, Composer, Node, correo local y procesos en segundo plano.
+Laravel 13, PHP 8.4, Livewire 4, Blade y Tailwind 4; PostgreSQL 18 y Redis. Docker ejecuta PHP, Composer, Node, correo y procesos en segundo plano.
 
-## Preparar el equipo
+## Requisitos
 
-- **macOS:** Git, Bash y Docker Desktop en ejecución con Compose v2.
-- **Windows:** Docker Desktop con backend WSL2 y contenedores Linux; Ubuntu integrada. Los comandos del proyecto se ejecutan en **Bash dentro de Ubuntu/WSL**, desde su sistema de archivos Linux.
-- **Linux:** Git, Bash y Docker Engine con plugin Compose v2 —o Docker Desktop— y acceso al daemon.
+- Git, Bash y Docker Desktop/Engine con Docker Compose v2, iniciado y usando contenedores Linux.
+- En Windows: Git for Windows y su terminal **Git Bash**. No hace falta instalar Ubuntu, abrir una terminal WSL ni instalar PHP, Composer o Node en el equipo.
+- En macOS y Linux: usar Terminal con Bash y Docker disponible para el usuario.
 
-La [guía de instalación](docs/installation.md) incluye los pasos de PowerShell para preparar WSL2, requisitos y soluciones a fallos de arranque. No hace falta instalar PHP, Composer o Node en el anfitrión.
+Docker Desktop administra su propio backend de contenedores. En Windows, sus requisitos pueden incluir una característica de virtualización de Windows; no se necesita una distro Ubuntu para ejecutar estos comandos. La [guía de instalación](docs/installation.md) explica la preparación y los problemas habituales.
 
-## Primera instalación
+## Arranque
 
-Mientras esta entrega esté en revisión, seleccionar su rama publicada:
+En Windows, abrir Git Bash en la carpeta del proyecto. En macOS/Linux, abrir Bash allí. Para un checkout nuevo:
 
 ```bash
 git clone --branch codex/m05-perfil https://github.com/NicolasMRuiz/estuflow.git
@@ -23,13 +23,55 @@ cd estuflow
 ./scripts/start.sh
 ```
 
-Abrir [EstuFlow](http://localhost:8000) y [Mailpit](http://localhost:8025). Crear una cuenta y verificarla desde el correo capturado en Mailpit. Después, configurar la carrera. Los puertos se pueden ajustar en el `.env` generado; [detalles](docs/installation.md#puertos-y-configuración).
+Si ya tenés el checkout abierto, omití `git clone` y `cd` y ejecutá sólo los dos scripts. `setup.sh` crea la configuración local si falta, instala dependencias dentro de Docker, compila los recursos y aplica migraciones pendientes; no borra ni reinicia la base. `start.sh` levanta y comprueba todos los servicios.
 
-Cada equipo crea su propia base y configuración privada: Git no traslada usuarios, contraseñas, volúmenes ni `.env` de otro equipo.
+Abrir [EstuFlow](http://localhost:8000) y [Mailpit](http://localhost:8025). Crear una cuenta, verificarla desde Mailpit y configurar la carrera. Cada equipo tiene su propio `.env` y base; Git no transporta cuentas, claves ni volúmenes.
 
-## Actualizar, iniciar y parar
+Para el uso diario, ejecutar `./scripts/start.sh`. Para apagar web, worker, scheduler y Mailpit: `./scripts/stop.sh`. PostgreSQL y Redis conservan sus datos. Los puertos predeterminados y cómo cambiarlos están en [instalación](docs/installation.md#puertos-y-configuración).
 
-Con el checkout limpio y desde Bash:
+## Proveedores opcionales
+
+Una instalación nueva usa Mailpit: los correos quedan capturados localmente y no se envían a destinatarios externos. Para activar proveedores, editá las líneas existentes de `.env` (no agregues claves duplicadas) y nunca pegues secretos en Git, capturas o chat.
+
+**Google:** crear credenciales OAuth para aplicación Web y autorizar este callback en Google Cloud:
+
+```dotenv
+GOOGLE_ENABLED=true
+GOOGLE_CLIENT_ID=ID_DE_CLIENTE
+GOOGLE_CLIENT_SECRET=SECRETO_DE_CLIENTE
+GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
+```
+
+**Microsoft:** registrar una aplicación Web en Entra ID y autorizar este callback:
+
+```dotenv
+MICROSOFT_ENABLED=true
+MICROSOFT_CLIENT_ID=ID_DE_APLICACION
+MICROSOFT_CLIENT_SECRET=VALOR_DEL_SECRETO
+MICROSOFT_REDIRECT_URI=http://localhost:8000/auth/microsoft/callback
+MICROSOFT_TENANT_ID=common
+```
+
+`common` permite cuentas personales y organizacionales, sujeto a las políticas de la organización.
+
+**Brevo:** activar email transaccional, verificar el remitente y usar el login SMTP más una clave SMTP (no la API key):
+
+```dotenv
+MAIL_MAILER=smtp
+MAIL_HOST=smtp-relay.brevo.com
+MAIL_PORT=587
+MAIL_SCHEME=smtp
+MAIL_REQUIRE_TLS=true
+MAIL_USERNAME=LOGIN_SMTP
+MAIL_PASSWORD=CLAVE_SMTP
+MAIL_FROM_ADDRESS=REMITENTE_VERIFICADO
+```
+
+Después de editar `.env`, ejecutar `./scripts/start.sh` para recargar configuración y procesos. El botón de OAuth inicia un acceso real al proveedor; Brevo puede enviar correos reales. Los ejemplos no prueban credenciales, consentimientos ni entrega. Ver pasos completos, scopes, verificación y pruebas manuales: [Google/Microsoft](docs/oauth.md) y [correo/Brevo](docs/mail.md).
+
+## Actualizar y comprobar
+
+Para actualizar un checkout existente, primero guardá tus cambios locales y luego:
 
 ```bash
 ./scripts/stop.sh
@@ -38,19 +80,7 @@ git pull --ff-only
 ./scripts/start.sh
 ```
 
-`setup.sh` instala las dependencias fijadas, compila recursos y aplica migraciones pendientes e importación idempotente del catálogo. Conserva los archivos de entorno y sus claves. `start.sh` limpia la caché de configuración, aplica pendientes y recrea app, worker y scheduler para cargar el código/configuración actualizados; comprueba readiness y el login.
-
-Para el uso diario: `./scripts/start.sh`. Para parar: `./scripts/stop.sh`; detiene web, worker, scheduler y Mailpit, conservando PostgreSQL y Redis. Los avisos requieren el equipo y esos procesos activos.
-
-## Uso y configuración
-
-- [Mi perfil y seguridad](docs/profile.md): nombre, doble confirmación de email, contraseña y carrera.
-- [Demostración CRUD en tres minutos](docs/demo.md): eventos y notas, con persistencia entre sesiones.
-- [Correo local y Brevo opcional](docs/mail.md), [Google/Microsoft opcionales](docs/oauth.md). Una instalación nueva usa Mailpit y proveedores deshabilitados; las credenciales personales no se distribuyen con Git. Microsoft sigue pendiente de prueba real.
-- [PostgreSQL desde DataGrip](docs/datagrip.md): conexión sólo en loopback, separada de las pruebas.
-- [Calendario, avisos y notas](docs/m04.md), [carrera y materias](docs/m03.md).
-
-## Verificación y documentación
+Para validar el código, ejecutar desde Bash:
 
 ```bash
 ./scripts/check.sh
@@ -58,4 +88,4 @@ Para el uso diario: `./scripts/start.sh`. Para parar: `./scripts/stop.sh`; detie
 ./scripts/e2e.sh
 ```
 
-Ejecutar PHPUnit y E2E secuencialmente; usan exclusivamente PostgreSQL de pruebas y correo/proveedores aislados. [Pruebas y aislamiento](docs/testing.md), [arquitectura](docs/architecture.md), [interfaz](docs/ui.md), [alcance y progreso](docs/progress.md) y [evidencia M05](docs/evidence/m05/checks.md).
+Ejecutar `test.sh` y `e2e.sh` secuencialmente; usan una base PostgreSQL de pruebas aislada. Más información: [DataGrip](docs/datagrip.md), [perfil y seguridad](docs/profile.md), [calendario y notas](docs/m04.md), [pruebas](docs/testing.md), [arquitectura](docs/architecture.md), [interfaz](docs/ui.md), [alcance](docs/progress.md) y [evidencia M05](docs/evidence/m05/checks.md).

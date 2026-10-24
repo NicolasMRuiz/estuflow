@@ -55,7 +55,7 @@ El audit anterior informó Vite 8.3.2 (directa dev) con seis advisories, incluid
 | macOS ARM64 + Docker Linux ARM64, existente | setup/start/repetición/stop-start, checks/PostgreSQL/E2E, capturas | PASS: regresión final 174/1266 y 15 E2E, más checks/operación y capturas. |
 | macOS ARM64 + Docker Linux ARM64, limpio | Clone temporal sólo de versionados, proyecto/puertos/volúmenes separados | PASS, operación HTTP/SMTP y repetición completas. |
 | Linux AMD64, GitHub Actions | Checkout limpio, setup/start/stop-start/check/test/e2e | PASS en push y PR sobre `5952438`. |
-| Windows/WSL2 (PC de Nico) | Guía oficial y revisión de scripts, sin PC disponible | **NO EJECUTADO**. Checklist en installation.md; Linux CI no lo acredita. |
+| Windows + Git Bash + Docker Desktop Linux | Setup/start en el checkout local, login con CSRF y healthchecks | PASS: app, worker y scheduler saludables. `check.sh`, `test.sh`, `e2e.sh` y clone limpio en Windows no ejecutados. |
 | macOS Intel / Linux ARM64 nativo / otras arquitecturas | Sin anfitrión disponible | **NO EJECUTADO**; contenedores ARM64 sobre Mac no equivalen a Linux nativo. |
 | Brevo real y Google login/reauth real | Se preservó la configuración privada, sin enviar/consultar para tests | **NO EJECUTADO**, pruebas manuales separadas. |
 | Microsoft real | Permanece deshabilitado/configuración pendiente del usuario | **NO EJECUTADO**. |
